@@ -1,0 +1,18 @@
+<p-dialog header="Image Upload" [modal]="true" [(visible)]="display" (visibleChange)="visibleChange($event)"
+    [style]="{ width: '70vw' }">
+    <div class="card">
+        <p-fileUpload name="demo[]" url="./upload.php" (onUpload)="onUpload($event)" [multiple]="true" accept="image/*"
+            [maxFileSize]="1000000">
+            <ng-template pTemplate="content">
+                <ul *ngIf="uploadedFiles.length">
+                    <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+                </ul>
+            </ng-template>
+        </p-fileUpload>
+    </div>
+    <!-- <ng-template pTemplate="footer">
+        <button pButton pRipple type="button" label="Cancel" icon="pi pi-times"
+            class="p-button-outlined p-button-secondary" (click)="visibleChange(false)"></button>
+        <button pButton pRipple label="Save" type="button" class="p-button-info"></button>
+    </ng-template> -->
+</p-dialog>

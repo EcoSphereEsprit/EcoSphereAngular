@@ -22,7 +22,7 @@ export class AppConfigComponent implements OnInit {
     constructor(
         public layoutService: LayoutService,
         public menuService: MenuService
-    ) {}
+    ) { }
 
     get visible(): boolean {
         return this.layoutService.state.configSidebarVisible;
@@ -131,7 +131,7 @@ export class AppConfigComponent implements OnInit {
     replaceThemeLink(href: string, onComplete: Function, linkId: string) {
         const id = linkId;
         const themeLink = <HTMLLinkElement>document.getElementById(id);
-        const cloneLinkElement = <HTMLLinkElement>themeLink.cloneNode(true);                                
+        const cloneLinkElement = <HTMLLinkElement>themeLink.cloneNode(true);
 
         cloneLinkElement.setAttribute("href", href);
         cloneLinkElement.setAttribute("id", id + "-clone");
