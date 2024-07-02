@@ -15,6 +15,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { RippleModule } from 'primeng/ripple';
 import { DialogModule } from 'primeng/dialog';
 import { FileUploadModule } from 'primeng/fileupload';
+import { AdministrationRoutingModule } from './administration-routing.module';
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import { FileUploadModule } from 'primeng/fileupload';
         InputNumberModule,
         RippleModule,
         DialogModule,
+        AdministrationRoutingModule,
         FileUploadModule
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],  // Add this line if needed
