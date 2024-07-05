@@ -4,6 +4,7 @@ import { BlogCreateComponent } from './components/blog/blog-create/blog-create.c
 import { BlogListComponent } from './components/blog/blog-list/blog-list.component';
 import { BlogDetailComponent } from './components/blog/blog-detail/blog-detail.component';
 import { BlogEditComponent } from './components/blog/blog-edit/blog-edit.component';
+import { BlogStatComponent } from './components/blog-stat/blog-stat.component';
 
 @NgModule({
     imports: [RouterModule.forChild([
@@ -14,8 +15,10 @@ import { BlogEditComponent } from './components/blog/blog-edit/blog-edit.compone
         { path: 'edit/:id', component: BlogEditComponent },
         { path: 'list', component: BlogListComponent },
         { path: 'create', component: BlogCreateComponent },
+        { path: 'stat', component: BlogStatComponent },
         { path: '**', redirectTo: '/notfound' }
     ])],
+    
     exports: [RouterModule]
 })
 

@@ -138,13 +138,13 @@ export class ProductService {
       }
 
 
-      getProductPhoto(url: string): Observable<Blob> {
-        const token = localStorage.getItem("token");
-        console.log("]]]]]]]]]]]]]]]]]]]]]]]]]]]]]", token)
-        const headers = new HttpHeaders({
-           'Authorization': `Bearer ${token}`
-        });
-        console.log(url)
-        return this.http.get(url, { headers, responseType: 'blob' });
-      }
+        getProductPhoto(url: string): Observable<Blob> {
+            const token = localStorage.getItem("token");
+            console.log("]]]]]]]]]]]]]]]]]]]]]]]]]]]]]", token)
+            const headers = new HttpHeaders({
+            'Authorization': `Bearer ${token}`
+            });
+            console.log(url)
+            return this.http.get(url, { headers, responseType: 'blob' });
+        }
 }

@@ -44,6 +44,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('userId', response.userId);
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('avatrUrl', response.avatrUrl);
+        localStorage.setItem('username', response.username);
         this.messageService.add({ key: 'tst', severity: 'success', summary: 'Success Message', detail: 'Login successful' });
         this.router.navigate(['/auth/verification']);
       },
