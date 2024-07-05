@@ -408,17 +408,17 @@ export class AppMenuComponent implements OnInit {
                     },
                     {
                         label: 'shopping-cart',
-                        icon: 'pi pi-fw pi-plus',
+                        icon: 'pi pi-fw pi-shopping-cart',
                         routerLink: ['ecommerce/shopping-cart']
                     },
                     {
                         label: 'Command details',
-                        icon: 'pi pi-fw pi-plus',
+                        icon: 'pi pi-fw pi-shopping-bag',
                         routerLink: ['gestion/crud_commande']
                     },
                     {
                         label: 'history',
-                        icon: 'pi pi-fw pi-plus',
+                        icon: 'pi pi-fw pi-history',
                         routerLink: ['ecommerce/order-summary']
                     },
                     // {
@@ -568,17 +568,17 @@ export class AppMenuComponent implements OnInit {
                     
                     {
                         label: 'shopping-cart',
-                        icon: 'pi pi-fw pi-plus',
+                        icon: 'pi pi-fw pi-shopping-cart',
                         routerLink: ['ecommerce/shopping-cart']
                     },
                     {
                         label: 'Command details',
-                        icon: 'pi pi-fw pi-plus',
+                        icon: 'pi pi-fw pi-shopping-bag',
                         routerLink: ['gestion/crud_commande']
                     },
                     {
                         label: 'history',
-                        icon: 'pi pi-fw pi-plus',
+                        icon: 'pi pi-fw pi-history',
                         routerLink: ['ecommerce/order-summary']
                     },
                     // {
