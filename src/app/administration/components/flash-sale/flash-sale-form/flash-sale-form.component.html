@@ -1,14 +1,15 @@
 <p-dialog header="Image Upload" [modal]="true" [(visible)]="display" (visibleChange)="visibleChange($event)"
     [style]="{ width: '70vw' }">
     <div class="card">
-        <p-fileUpload name="demo[]" url="./upload.php" (onUpload)="onUpload($event)" [multiple]="true" accept="image/*"
-            [maxFileSize]="1000000">
+        <p-fileUpload name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" (onUpload)="onUpload($event)"
+            [multiple]="false" accept="image/*" [maxFileSize]="1000000">
             <ng-template pTemplate="content">
                 <ul *ngIf="uploadedFiles.length">
                     <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
                 </ul>
             </ng-template>
         </p-fileUpload>
+        <!-- url="./upload.php"  -->
     </div>
     <!-- <ng-template pTemplate="footer">
         <button pButton pRipple type="button" label="Cancel" icon="pi pi-times"

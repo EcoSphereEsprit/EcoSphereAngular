@@ -19,27 +19,18 @@ const routes: Routes = [
         children: [
 
             { path: '', loadChildren: () => import('./demo/components/dashboards/dashboards.module').then(m => m.DashboardsModule) },
-
-
-            {
-                path: 'blog', loadChildren: () => BlogAppModule//,canActivate: [NgxPermissionsGuard], data: { permissions: { only: ['ROLE_Demande Credit Client', 'ROLE_Traitement Demandes'] } }
-            },
+            { path: 'blog', loadChildren: () => BlogAppModule/*,canActivate: [NgxPermissionsGuard], data: { permissions: { only: ['ROLE_Demande Credit Client', 'ROLE_Traitement Demandes'] } }*/ },
             { path: 'uikit', data: { breadcrumb: 'UI Kit' }, loadChildren: () => import('./demo/components/uikit/uikit.module').then(m => m.UIkitModule) },
-
             { path: 'productList', data: { breadcrumb: 'productList' }, loadChildren: () => import('./demo/components/uikit/uikit.module').then(m => m.UIkitModule) },
             { path: 'utilities', data: { breadcrumb: 'Utilities' }, loadChildren: () => import('./demo/components/utilities/utilities.module').then(m => m.UtilitiesModule) },
             { path: 'pages', data: { breadcrumb: 'Pages' }, loadChildren: () => import('./demo/components/pages/pages.module').then(m => m.PagesModule) },
-
             // { path: 'pages', data: { breadcrumb: 'crud' }, loadChildren: () => import('./demo/components/pages/pages.module').then(m => m.PagesModule) },
-
             { path: 'gestion', data: { breadcrumb: 'gestion' }, loadChildren: () => import('./components/pages/pages.module').then(m => m.PagesModule) },
             { path: 'documentation', data: { breadcrumb: 'Documentation' }, loadChildren: () => import('./demo/components/documentation/documentation.module').then(m => m.DocumentationModule) },
             { path: 'blocks', data: { breadcrumb: 'Prime Blocks' }, loadChildren: () => import('./demo/components/primeblocks/primeblocks.module').then(m => m.PrimeBlocksModule) },
             { path: 'ecommerce', data: { breadcrumb: 'E-Commerce' }, loadChildren: () => import('./components/ecommerce/ecommerce.module').then(m => m.EcommerceModule) },
             { path: 'apps', data: { breadcrumb: 'Apps' }, loadChildren: () => import('./demo/components/apps/apps.module').then(m => m.AppsModule) },
-            {
-                path: 'administration', data: { breadcrumb: 'Administration' }, loadChildren: () => AdministrationModule//,canActivate: [NgxPermissionsGuard], data: { permissions: { only: ['ROLE_Demande Credit Client', 'ROLE_Traitement Demandes'] } }
-            },
+            { path: 'administration', data: { breadcrumb: 'Administration' }, loadChildren: () => AdministrationModule/*,canActivate: [NgxPermissionsGuard], data: { permissions: { only: ['ROLE_Demande Credit Client', 'ROLE_Traitement Demandes'] } }*/ },
         ]
     },
     { path: 'aabb', loadChildren: () => import('./demo/components/landing/landing.module').then(m => m.LandingModule) },

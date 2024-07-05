@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MessageService } from 'primeng/api';
 
 @Component({
     selector: 'app-flash-sale-form',
@@ -10,6 +11,7 @@ export class FlashSaleFormComponent implements OnInit {
     @Input() display: boolean = false;
 
     @Output() displayChange = new EventEmitter<boolean>();
+    @Output() onFileUpload = new EventEmitter<void>();
 
     quantities: number[] = [1, 1, 1];
 
@@ -42,13 +44,12 @@ export class FlashSaleFormComponent implements OnInit {
     }
 
     onUpload(event: any) {
-        console.log(event);
-
+        // TODO Call upload & affect Image to product service
+        this.onFileUpload.emit();
         for (const file of event.files) {
             this.uploadedFiles.push(file);
         }
-
-        // this.messageService.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded' });
+        this.visibleChange(false);
     }
 
 }

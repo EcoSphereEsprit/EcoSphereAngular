@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SelectItem } from 'primeng/api';
+import { MessageService, SelectItem } from 'primeng/api';
 import { DataView } from 'primeng/dataview';
 import { Product } from 'src/app/demo/api/product';
 import { ProductService } from 'src/app/demo/service/product.service';
@@ -7,7 +7,7 @@ import { ProductService } from 'src/app/demo/service/product.service';
 @Component({
     selector: 'app-flash-sale',
     templateUrl: './flash-sale.component.html',
-    // styleUrls: ['./flash-sale.component.scss']
+    styleUrls: ['./flash-sale.component.scss']
 })
 export class FlashSaleComponent implements OnInit {
     products: Product[] = [];
@@ -26,10 +26,18 @@ export class FlashSaleComponent implements OnInit {
 
     displayDialog: boolean = false;
 
-    constructor(private productService: ProductService) { }
+    constructor(
+        private productService: ProductService,
+        private messageService: MessageService
+    ) { }
 
     ngOnInit() {
         // this.productService.getProductList().then(data => this.products = data);
+        this.productService.getProducts().then(data => this.products = data);
+
+        this.productService.getProductList().subscribe((data) => {
+            this.products = data
+        });
 
         this.sourceCities = [
             { name: 'San Francisco', code: 'SF' },
@@ -74,9 +82,11 @@ export class FlashSaleComponent implements OnInit {
     }
 
     disolayFormDialog() {
-        console.log('rrr');
-
         this.displayDialog = true;
+    }
+
+    onFileUpload() {
+        this.messageService.add({ key: 'mainMsgs', severity: 'info', summary: 'Success', detail: 'File Uploaded' });
     }
 
 }

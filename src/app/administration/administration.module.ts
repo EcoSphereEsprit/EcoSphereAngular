@@ -16,6 +16,8 @@ import { RippleModule } from 'primeng/ripple';
 import { DialogModule } from 'primeng/dialog';
 import { FileUploadModule } from 'primeng/fileupload';
 import { AdministrationRoutingModule } from './administration-routing.module';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 
 @NgModule({
@@ -39,8 +41,10 @@ import { AdministrationRoutingModule } from './administration-routing.module';
         RippleModule,
         DialogModule,
         AdministrationRoutingModule,
+        ToastModule,
         FileUploadModule
     ],
+    providers: [MessageService],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],  // Add this line if needed
 })
 export class AdministrationModule { }

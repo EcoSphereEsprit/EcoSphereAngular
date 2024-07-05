@@ -172,4 +172,12 @@ export class ProductService {
         console.log(url)
         return this.http.get(url, { headers, responseType: 'blob' });
     }
+
+
+    getProducts() {
+        return this.http.get<any>('assets/demo/data/products.json')
+            .toPromise()
+            .then(res => res.data as Product[])
+            .then(data => data);
+    }
 }
