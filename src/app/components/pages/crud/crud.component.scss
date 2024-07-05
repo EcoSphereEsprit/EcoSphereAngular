@@ -1,0 +1,37 @@
+/* Style pour le corps du modal */
+.modal-content {
+    background-color: #ffffff; /* Couleur de fond */
+    border: 1px solid rgb(134, 140, 155); /* Bordure */
+    border-radius: 0.25rem; /* Coins arrondis */
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15); /* Ombre */
+  }
+  
+  /* Style pour l'en-tête du modal */
+  .modal-header {
+    background-color: rgb(134, 140, 155); /* Couleur de fond de l'en-tête */
+    color: #ffffff; /* Couleur du texte de l'en-tête */
+  }
+  
+  /* Style pour le corps du modal */
+  .modal-body {
+    padding: 1rem; /* Espacement interne */
+  }
+  
+  /* Style pour le pied de page du modal */
+  .modal-footer {
+    background-color: #f8f9fa; /* Couleur de fond du pied de page */
+    border-top: 1px solid #ced4da; /* Bordure du haut */
+    padding: 1rem; /* Espacement interne */
+  }
+  
+  /* Style pour le bouton Cancel */
+  .modal-footer .btn-danger {
+    background-color:rgb(134, 140, 155);; /* Couleur de fond du bouton */
+    border-color: rgb(134, 140, 155);; /* Couleur de la bordure du bouton */
+  }
+  
+  /* Style pour le bouton de fermeture */
+  .modal-footer .close {
+    color: #6c757d; /* Couleur du texte du bouton de fermeture */
+  }
+  

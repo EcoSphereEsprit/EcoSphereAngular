@@ -80,14 +80,17 @@
         </td>
         <td>
           <div style="display: flex; align-items: center;">
-            <button pButton type="button" icon="pi pi-info-circle" (click)="showDetailsDialog(commande)">
-              Détails
-            </button>
-            <!-- Affichage conditionnel du bouton Annuler -->
-            <button *ngIf="!isAdmin()" pButton type="button" icon="pi pi-times"
-                    class="p-button-danger" (click)="showCancellationConfirmation(commande._id)">
-              Cancel
-            </button>
+            <button pButton type="button" icon="pi pi-info-circle" 
+                *ngIf="commande.statutLivraison !== 'annulée'" 
+                (click)="showDetailsDialog(commande)">
+          Détails
+        </button>
+        <!-- Affichage conditionnel du bouton Annuler -->
+        <button *ngIf="!isAdmin() && commande.statutLivraison !== 'annulée'"
+                pButton type="button" icon="pi pi-times"
+                class="p-button-danger" (click)="showCancellationConfirmation(commande._id)">
+          Cancel
+        </button>
           </div>
         </td>
       </tr>
@@ -167,20 +170,31 @@
   </ng-template>
 </p-dialog>
 
-<!-- Dialog for Cancellation Confirmation -->
 <dialog #cancelConfirmationModal class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title">Confirmation d'annulation</h5>
+        <h5 class="modal-title">Cancel Order</h5>
+        <!-- Bouton de fermeture -->
+      
       </div>
       <div class="modal-body">
-        Êtes-vous sûr de vouloir annuler la commande ?
+        <div class="flex align-items-center justify-content-center">
+          <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+          <span>Are you sure you want to cancel this order?</span>
+        </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="cancelConfirmationModal.close()">Fermer</button>
-        <button *ngIf="!isAdmin()" type="button" class="btn btn-danger" (click)="updateLivraisonStatut(selectedCommande?._id,'annulée')">Confirmer</button>
+        <!-- Bouton Cancel avec style Danger -->
+        <button *ngIf="!isAdmin() && selectedCommande?.statutLivraison !== 'annulée'"
+                type="button" class="btn btn-danger"
+                (click)="updateLivraisonStatut(selectedCommande?._id, 'annulée')">Cancel</button>
+                <button type="button" class="close" aria-label="Close" (click)="cancelConfirmationModal.close()">
+                  <span aria-hidden="true">&times;</span>
+                </button>
       </div>
     </div>
   </div>
 </dialog>
+
+
