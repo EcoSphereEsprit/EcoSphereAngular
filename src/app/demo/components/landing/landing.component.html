@@ -5,8 +5,7 @@
             <div class="header-left-elements flex align-items-center justify-content-between">
                 <div class="layout-topbar-logo flex align-items-center" routerLink="/">
                     <img src="/assets/layout/images/logo-dark.png" alt="layout" class="logo" style="height: 32px">
-                    <img src="/assets/layout/images/appname-dark.png" alt="layout" class="appname ml-2"
-                        style="height: 12px">
+
                 </div>
 
                 <ul #menu id="menu" style="top: 0px; right: 0%"
@@ -38,20 +37,7 @@
                         
                         
                     </li>
-                    <li>
-                        <a pRipple pStyleClass="@grandparent" enterClass="ng-hidden" enterActiveClass="px-fadein"
-                            leaveToClass="ng-hidden"
-                            class="flex m-0 md:ml-5 md:px-0 px-3 py-3 text-gray-800 font-medium line-height-3 hover:text-gray-800 cursor-pointer">
-                            <span>Buy Now</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a routerLink="/ecommerce/shopping-cart" pRipple pStyleClass="@grandparent" enterClass="ng-hidden"
-                            enterActiveClass="px-fadein" leaveToClass="ng-hidden"
-                            class="flex m-0 lg:ml-5 lg:px-0 px-3 py-3 text-gray-800 font-medium line-height-3 hover:text-gray-800 cursor-pointer">
-                            <span>Features</span>
-                        </a>
-                    </li>
+                    
                     <li>
                         <a pRipple (click)="navigateToProducts()" enterClass="ng-hidden" enterActiveClass="px-fadein"
                             leaveToClass="ng-hidden"
@@ -66,8 +52,6 @@
                             <span>Blogs</span>
                         </a>
                     </li>
-
-                /
                     <li>
                         <a *ngIf="isAdmin()" pRipple (click)="navigateToBlogStat()" enterClass="ng-hidden" enterActiveClass="px-fadein"
                             leaveToClass="ng-hidden"
@@ -125,8 +109,7 @@
 
         <div class="header-text" style="padding: 100px 60px;">
             <h1 class="mb-0 text-gray-800" style="font-size: 80px; line-height: 95px;">This is EcoShepere</h1>
-            <h2 class="mt-0 font-medium text-4xl text-gray-700">Modern, fresh and groovy</h2>
-            <a href="/" class="p-button text-gray-700 bg-cyan-500 border-cyan-500 font-bold border-round"
+            <a href="/" routerLink="/productList/list" class="p-button text-gray-700 bg-cyan-500 border-cyan-500 font-bold border-round"
                 style="mix-blend-mode: multiply; padding: 0.858rem 1.142rem">
                 <span class="p-button-text">Dive in</span>
             </a>
@@ -209,12 +192,7 @@
                             <li class="flex align-items-center justify-content-center text-xl p-2 text-center">10GB
                                 Storage</li>
                         </ul>
-                        <div class="flex align-items-center justify-content-center">
-                            <button
-                                class="active-buy-button p-button-outlined p-button-secondary p-button-text p-button p-component bg-cyan-500 text-white border-round py-2 font-semibold">
-                                <span aria-hidden="true" class="p-button-label">Buy now</span>
-                            </button>
-                        </div>
+                        
                     </div>
                 </div>
                 <div class="col-12 lg:col-3">
@@ -308,8 +286,7 @@
                     <div class="layout-footer-logo flex align-items-center" routerLink="/">
                         <img src="/assets/layout/images/logo-dark.png" alt="atlantis-layout" class="logo"
                             style="height: 32px">
-                        <img src="/assets/layout/images/appname-dark.png" alt="atlantis-layout" class="appname ml-2"
-                            style="height: 12px">
+
                         <span class="text-gray-700 opacity-70" style="margin-left: 2.5rem;">Copyright -
                             PrimeTek</span>
                     </div>

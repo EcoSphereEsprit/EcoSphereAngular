@@ -5,9 +5,20 @@
     </ng-container>
 </ul> -->
 
-<ul class="layout-menu">
-    <ng-container *ngFor="let item of model; let i = index;">
-        <li app-menuitem *ngIf="!item.separator && role ==='ADMIN' && enableShowMenu" [item]="item" [index]="i" [root]="true"></li>
-        <li  *ngIf="item.separator && role ==='ADMIN' && enableShowMenu" class="menu-separator"></li>
+<ul class="layout-menu" *ngIf="role ==='USER'">
+    <ng-container *ngFor="let item of modelUser; let i = index ;">
+        <li app-menuitem *ngIf="!item.separator  && enableShowMenu" [item]="item" [index]="i" [root]="true"></li>
+        <li  *ngIf="item.separator && enableShowMenu" class="menu-separator"></li>
     </ng-container>
+
+    
+</ul>
+
+<ul class="layout-menu" *ngIf="role ==='ADMIN'">
+    <ng-container *ngFor="let item of modelAsmin; let i = index ;">
+        <li app-menuitem *ngIf="!item.separator  && enableShowMenu" [item]="item" [index]="i" [root]="true"></li>
+        <li  *ngIf="item.separator  && enableShowMenu" class="menu-separator"></li>
+    </ng-container>
+
+    
 </ul>
