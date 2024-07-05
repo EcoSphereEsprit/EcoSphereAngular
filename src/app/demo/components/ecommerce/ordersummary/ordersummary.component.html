@@ -1,16 +1,26 @@
 <!-- order-summary.component.html -->
 <div *ngFor="let commande of commandes" class="card" [id]="'invoice-' + commande._id">
-    <span class="text-700 text-xl">Merci pour votre commande !</span>
-    <div class="text-900 font-bold text-4xl my-2">Commande Réussie 🚀</div>
+    <span class="text-700 text-xl">MThank you for your Order!</span>
+    <div class="text-900 font-bold text-4xl my-2">Order Successful 🚀</div>
     <p class="text-700 text-xl mt-0 mb-4 p-0">
       
-      “L’environnement est l’affaire de tous, protégeons-le pour les générations futures.”    </p>
-    <div style="height:3px;background:linear-gradient(90deg, var(--primary-color) 0%, rgba(33, 150, 243, 0) 50%);"></div>
+      "The environment is everyone's business, let's protect it for future generations."    </p>
+      <div style="height:3px;background:linear-gradient(90deg, var(--primary-color) 0%, rgba(33, 150, 243, 0) 50%);"></div>
   
     <div class="flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between py-5">
       <div class="mb-3 sm:mb-0">
-        <span class="font-medium text-xl text-900 mr-2">Numéro de commande :</span>
+        <span class="font-medium text-xl text-900 mr-2">Order Number :</span>
         <span class="font-medium text-xl text-blue-500">{{commande.numCommande}}</span>
+        <br>
+
+        <span class="font-medium text-xl text-900 mr-2">Payment Status :</span>
+
+        <span class="font-medium text-xl text-blue-500">{{commande.statutPaiement}}</span>
+        <br>
+
+        <span class="font-medium text-xl text-900 mr-2">Delivery Status  :</span>
+        <span class="font-medium text-xl text-blue-500">{{commande.statutLivraison}}</span>
+
       </div>
     </div>
   
@@ -20,9 +30,10 @@
           <img [src]="produit.idProduit?.image" class="w-3rem sm:w-8rem flex-shrink-0 mr-3 shadow-2" />
           <div class="flex flex-column">
             <span class="text-900 font-semibold text-xl mb-2">{{produit.idProduit?.name}}</span>
-            <span class="text-900 font-medium">Quantité : {{produit.quantite}}</span>
+            <span class="text-900 font-medium">Quantity : {{produit.quantite}}</span>
           </div>
-          <span class="text-900 font-medium text-lg ml-auto">{{produit.prixUnitaire | currency:'USD'}}</span>
+          <span class="text-900 font-medium text-lg ml-auto">{{produit.prixUnitaire | currency:'TND'}}</span>
+
         </li>
       </ul>
     </div>
