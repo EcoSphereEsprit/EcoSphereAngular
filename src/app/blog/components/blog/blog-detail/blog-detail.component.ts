@@ -6,12 +6,14 @@ import { Comment } from 'src/app/Entity/comment';
 import { CommentService } from 'src/app/blog/services/comment.service';
 @Component({
     templateUrl: './blog-detail.component.html'
-})
+})  
 export class BlogDetailComponent implements OnInit{
     blog!: Blog;
+    avatarUrl: string = '';
     constructor(private route: ActivatedRoute, private blogService: BlogService, private router: Router,private commentService: CommentService) {}
     ngOnInit() {
         const blogId = this.route.snapshot.paramMap.get('id');
+        this.getAvatarUrlFromLocalStorage();
         if (blogId) {
             this.blogService.getBlogById(blogId).subscribe({
                 next: (blog) => {
@@ -24,6 +26,9 @@ export class BlogDetailComponent implements OnInit{
         }
        
     }
+    getAvatarUrlFromLocalStorage() {
+      this.avatarUrl = localStorage.getItem('avatrUrl') || ''; // Retrieve avatar URL from local storage
+    }
     
     comments: Comment[] = [
         
@@ -35,25 +40,30 @@ export class BlogDetailComponent implements OnInit{
       });
     }
     deleteBlog() {
-        if (!this.blog || !this.blog._id) {
+      if (!this.blog || !this.blog._id) {
           console.error('Invalid blog or blog ID');
           return;
-        }
-    
-        this.blogService.deleteBlog(this.blog._id).subscribe({
-          next: () => {
-            console.log('Blog deleted successfully');
-            this.navigateToList()
-            // Optionally navigate to the list view or another page after deletion
-            
-          },
-          error: (error) => {
-            console.error('Error deleting blog:', error);
-          }
-        });
       }
+
+      if (confirm('Are you sure you want to delete this blog post?')) {
+          this.blogService.deleteBlog(this.blog._id).subscribe({
+              next: () => {
+                  console.log('Blog deleted successfully');
+                  this.router.navigate(['/blog/list']);
+              },
+              error: (error) => {
+                  console.error('Error deleting blog:', error);
+              }
+          });
+      }
+  }
     navigateToList() {
         this.router.navigate(['/blog/list']); // Navigate to your blog list route
     }
+
+    isAdmin(): boolean {
+      const role = localStorage.getItem('role');
+      return role === 'ADMIN';
+  }
 
 }

@@ -59,7 +59,22 @@
                             <span>Products</span>
                         </a>
                     </li>
-                    
+                    <li>
+                        <a pRipple (click)="navigateToBlogList()" enterClass="ng-hidden" enterActiveClass="px-fadein"
+                            leaveToClass="ng-hidden"
+                            class="flex m-0 md:ml-5 md:px-0 px-3 py-3 text-gray-800 font-medium line-height-3 hover:text-gray-800 cursor-pointer">
+                            <span>Blogs</span>
+                        </a>
+                    </li>
+
+                
+                    <li>
+                        <a *ngIf="isAdmin()" pRipple (click)="navigateToBlogStat()" enterClass="ng-hidden" enterActiveClass="px-fadein"
+                            leaveToClass="ng-hidden"
+                            class="flex m-0 md:ml-5 md:px-0 px-3 py-3 text-gray-800 font-medium line-height-3 hover:text-gray-800 cursor-pointer">
+                            <span>Blogs Stat</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
 

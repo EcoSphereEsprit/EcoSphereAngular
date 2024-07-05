@@ -4,13 +4,34 @@
 </div>
 <ul class="list-none p-0 m-0">
     <li *ngFor="let comment of totalComments" class="flex p-3 mb-3 border-1 surface-border border-round">
-        <div class="flex-grow-1">
+        <div class="flex-grow-1" *ngIf="editingComment !== comment">
+            <span class="text-xl text-900 mr-4">{{comment.user}}</span>
             <span class="font-semibold text-900">{{comment.content}}</span>
             <p class="font-semibold text-600 m-0 text-sm">{{comment.date}}</p>
         </div>
-        <div class="flex">
-            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-text mr-2"></button>
-            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-text" (click)="deleteComment(comment._id)"></button>
+        
+        <div class="flex-grow-1" *ngIf="editingComment === comment">
+            <textarea [(ngModel)]="updatedContent" rows="3" class="w-full"></textarea>
+            <p-calendar [(ngModel)]="updatedDate" dateFormat="yy-mm-dd"></p-calendar>
         </div>
+
+        <div class="flex">
+            <!-- Edit button -->
+            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-text mr-2"
+                    (click)="editComment(comment)" *ngIf="comment.userId == CurrentUser && !editingComment"></button>
+            
+            <!-- Update button (visible only when editingComment matches the current comment) -->
+            <button pButton pRipple icon="pi pi-check" class="p-button-rounded p-button-text mr-2"
+                    (click)="updateComment()" *ngIf="editingComment === comment"></button>
+            
+            <!-- Cancel Edit button (visible only when editingComment matches the current comment) -->
+            <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-text mr-2"
+                    (click)="cancelEdit()" *ngIf="editingComment === comment"></button>
+            
+            <!-- Delete button -->
+            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-text"
+                    (click)="deleteComment(comment._id)" *ngIf="comment.userId == CurrentUser"></button>
+        </div>
+        
     </li>
 </ul>

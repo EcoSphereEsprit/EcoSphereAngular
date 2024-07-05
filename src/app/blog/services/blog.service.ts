@@ -21,12 +21,19 @@ export class BlogService {
 
 
   createBlog(blogData: FormData): Observable<any> {
-    
-    return this.http.post(`${this.baseUrl}/blogs`, blogData);
-  }
+    const jwt = localStorage.getItem('token') ?? ''
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${jwt}`
+    });
+    return this.http.post(`${this.baseUrl}/blogs`, blogData, { headers });  }
 
   updateBlog(blogId: string, blogData: FormData): Observable<any> {
-    return this.http.put(`${this.baseUrl}/blogs/${blogId}`, blogData);
+    const jwt = localStorage.getItem('token') ?? ''
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${jwt}`
+    });
+
+    return this.http.put(`${this.baseUrl}/blogs/${blogId}`, blogData, { headers });
   }
 
   getBlogById(blogId: string): Observable<any> {
@@ -34,8 +41,16 @@ export class BlogService {
   }
 
   deleteBlog(blogId: string): Observable<any> {
+    const jwt = localStorage.getItem('token') ?? ''
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${jwt}`
+    });
     
-    return this.http.delete(`${this.baseUrl}/blogs/${blogId}`);
+    return this.http.delete(`${this.baseUrl}/blogs/${blogId}`, { headers });
+  }
+
+  searchBlogs(name: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/blogs/search`, { params: { name } });
   }
 
 }
