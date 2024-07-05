@@ -92,7 +92,7 @@ export class CheckoutComponent implements OnInit {
     const commandeData = {
       numCommande: `CMD${Math.floor(Math.random() * 10000)}`,
       produits: this.cartItems.map(item => ({
-        idProduit: '665a3242c0e86fbef95cda57', // Replace with actual product ID
+        idProduit: item.id, // Replace with actual product ID
         quantite: item.quantity,
         prixUnitaire: item.price
       })),
@@ -138,7 +138,7 @@ export class CheckoutComponent implements OnInit {
     const commandeData = {
       numCommande: `CMD${Math.floor(Math.random() * 10000)}`,
       produits: this.cartItems.map(item => ({
-        idProduit: '665a3242c0e86fbef95cda57', // Replace with actual product ID
+        idProduit: item.id, // Replace with actual product ID
         quantite: item.quantity,
         prixUnitaire: item.price
       })),

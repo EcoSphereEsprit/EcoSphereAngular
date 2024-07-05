@@ -1,0 +1,39 @@
+:host ::ng-deep .card {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+:host ::ng-deep .gradient-line {
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color) 0%, rgba(33, 150, 243, 0) 50%);
+    margin-bottom: 20px;
+}
+
+:host ::ng-deep .border-round {
+    border-radius: 8px;
+}
+
+:host ::ng-deep .p-4 {
+    padding: 1rem;
+}
+
+:host ::ng-deep .mb-4 {
+    margin-bottom: 1rem;
+}
+
+:host ::ng-deep .p-button-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+:host ::ng-deep .text-700 {
+    color: #6c757d;
+}
+
+:host ::ng-deep .text-900 {
+    color: #343a40;
+}
+
+:host ::ng-deep .text-blue-500 {
+    color: #007bff;
+}

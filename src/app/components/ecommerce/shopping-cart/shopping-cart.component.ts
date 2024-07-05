@@ -17,6 +17,7 @@ export class ShoppingCartComponent implements OnInit {
     constructor(private router: Router) {
         const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
         this.cart = cartItems;
+        console.log("cart", this.cart)
         this.calculateTotals();
     }
 
@@ -68,7 +69,6 @@ export class ShoppingCartComponent implements OnInit {
         localStorage.setItem('paymentMethod', this.paymentMethod);
     }
 
- 
     checkout() {
         console.log('Checkout initiated:');
         console.log('Payment Method:', this.paymentMethod);

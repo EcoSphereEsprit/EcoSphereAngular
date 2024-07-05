@@ -15,19 +15,36 @@ export class ProductOverviewComponent implements OnInit {
     selectedImageIndex: number = 0;
     quantity: number = 1;  // Initial quantity
 
-    product: Product = { id: '', name: '', prix: 0 };
+    product: Product  = {
+        _id : "",
+        name: '',
+        prix: '',
+        quantite_stock: '1',
+        brand: '',
+        categorie: "",
+        couleur: 'Blue',
+        available: true,
+        description: '',
+        image: {
+            name: "default",
+            objectURL: ""
+        }
+    };
+
+    colorOptions: any[] = [
+        { name: 'Black', background: "bg-gray-900" },
+        { name: 'Orange', background: "bg-orange-500" },
+        { name: 'Green', background: "bg-green-500" },
+        { name: 'Red', background: "bg-red-500" },
+        { name: 'Blue', background: "bg-blue-500" },
+        { name: 'Grey', background: "bg-gray-500" }
+    ];
 
     constructor(private productService: ProductService, private router: Router) { }
 
     ngOnInit(): void {
-        this.images = [
-            'product-overview-3-1.png',
-            'product-overview-3-2.png',
-            'product-overview-3-3.png',
-            'product-overview-3-4.png'
-        ];
+        let productId: any = localStorage.getItem('chartId');  
 
-        const productId = '665a3242c0e86fbef95cda57';
         this.productService.getProductById(productId).then(data => {
             this.product = data;
         }).catch(error => {
@@ -36,22 +53,19 @@ export class ProductOverviewComponent implements OnInit {
     }
 
     addToCart() {
-        // Clear cart from local storage
-        localStorage.removeItem('cart');
-
         const cartItem = {
-            id: this.product.id,
+            id: this.product._id,
             name: this.product.name,
             price: this.product.prix,
             quantity: this.quantity,
-            image: this.images[this.selectedImageIndex] // Assuming this should be 'image' instead of 'Image'
+            image: this.product.image
         };
 
         // Retrieve existing cart items from local storage
         const cart = JSON.parse(localStorage.getItem('cart') || '[]');
 
         // Check if the product already exists in the cart
-        const existingItemIndex = cart.findIndex((item: any) => item.id === this.product.id);
+        const existingItemIndex = cart.findIndex((item: any) => item.id === this.product._id);
         if (existingItemIndex !== -1) {
             // If the product exists, update the quantity
             cart[existingItemIndex].quantity += this.quantity;

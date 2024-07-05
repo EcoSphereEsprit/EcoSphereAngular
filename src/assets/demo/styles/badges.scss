@@ -21,6 +21,11 @@
         color: var(--green-800);
     }
 
+    &.status-false {
+        background: var(--pink-200);
+        color: var(--pink-800);
+    }
+
     &.status-lowstock {
         background: var(--yellow-200);
         color: var(--yellow-800);
@@ -41,6 +46,9 @@
     }
     &.status-true {
         color: var(--green-500);
+    }
+    &.status-false {
+        color: var(--pink-500);
     }
 
     &.status-lowstock {

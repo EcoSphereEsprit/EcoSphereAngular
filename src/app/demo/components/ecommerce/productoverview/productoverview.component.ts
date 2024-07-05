@@ -15,19 +15,27 @@ export class ProductOverviewComponent implements OnInit {
     selectedImageIndex: number = 0;
     quantity: number = 1;  // Quantité initiale
 
-    product: Product = { id: '', name: '', prix: 0 }; // Initialiser le produit avec id
+    product: Product = {
+        _id : "",
+        name: '',
+        prix: '',
+        quantite_stock: '1',
+        brand: '',
+        categorie: "",
+        couleur: 'Blue',
+        available: true,
+        description: '',
+        image: {
+            name: "default",
+            objectURL: ""
+        }
+    };; // Initialiser le produit avec id
 
     constructor(private productService: ProductService, private router: Router) { } // Injecter le Router
 
     ngOnInit(): void {
-        this.images = [
-            'product-overview-3-1.png',
-            'product-overview-3-2.png',
-            'product-overview-3-3.png',
-            'product-overview-3-4.png'
-        ];
 
-        const productId = '665a3242c0e86fbef95cda57';
+        const productId : string = localStorage.getItem('chartId') || "";
         this.productService.getProductById(productId).then(data => {
             this.product = data;
         });
@@ -35,18 +43,18 @@ export class ProductOverviewComponent implements OnInit {
 
     addToCart() {
         const cartItem = {
-            id: this.product.id,
+            id: this.product._id,
             name: this.product.name,
             price: this.product.prix,
             quantity: this.quantity ,
-            Image:this.images // Ajouter la quantité
+            Image: this.product.image 
         };
 
         // Récupérer les éléments existants dans le local storage
         const cart = JSON.parse(localStorage.getItem('cart') || '[]');
 
         // Vérifier si le produit existe déjà dans le panier
-        const existingItemIndex = cart.findIndex((item: any) => item.id === this.product.id);
+        const existingItemIndex = cart.findIndex((item: any) => item.id === this.product._id);
         if (existingItemIndex !== -1) {
             // Si le produit existe déjà, augmenter la quantité
             cart[existingItemIndex].quantity += this.quantity;

@@ -42,7 +42,9 @@ export class ListDemoComponent implements OnInit, AfterViewInit {
 
     constructor(private productService: ProductService , private CategoryService : CategoryService, public router: Router, private route: ActivatedRoute , private sanitizer: DomSanitizer) { }
 
-    ngOnInit() {              
+    ngOnInit() {   
+        
+        this.role =  localStorage.getItem("role") || "";
         this.productService.getProductList().subscribe((products : any) => {
             products.forEach((p : any) => {
 
@@ -120,6 +122,8 @@ export class ListDemoComponent implements OnInit, AfterViewInit {
               
             },  (err : any)=> {
                 console.log(err);
+                this.products = [] ;
+
     
             });  
         } 
@@ -129,6 +133,8 @@ export class ListDemoComponent implements OnInit, AfterViewInit {
               
             },  (err : any)=> {
                 console.log(err);
+                this.products = [] ;
+
     
             });  
         }
@@ -139,9 +145,14 @@ export class ListDemoComponent implements OnInit, AfterViewInit {
               
             },  (err : any)=> {
                 console.log(err);
+                this.products = [] ;
+
     
             });  
         }
+
+        else if (this.filterOption === "available")
+            this.products = this.products.filter((p:any)=> p.available) ;
     }
 
     onFilter(dv: DataView, event: Event) {
@@ -196,6 +207,7 @@ export class ListDemoComponent implements OnInit, AfterViewInit {
     }
     editProduct(product : any)
     {
+        localStorage.setItem('productToEdit', JSON.stringify(product));  
         this.router.navigate(['/ecommerce/new-product'], { queryParams: { product : product } });
     }
 
@@ -210,7 +222,13 @@ export class ListDemoComponent implements OnInit, AfterViewInit {
 
       }
     
+      addToChart(product: any)
+      {
+        localStorage.setItem('chartId', product._id);  
+        this.router.navigate(['/ecommerce/product-overview']);
 
+
+      }
     
 
 

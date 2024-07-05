@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { CrudRoutingModule } from './crud-routing.module';
 import { CrudComponent } from './crud.component';
 import { TableModule } from 'primeng/table';
+import { ChartModule } from 'primeng/chart';
+
 import { FileUploadModule } from 'primeng/fileupload';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
@@ -34,6 +36,7 @@ import { DialogModule } from 'primeng/dialog';
 		DropdownModule,
 		RadioButtonModule,
 		InputNumberModule,
+		ChartModule,
 		DialogModule
 	],
 	declarations: [CrudComponent]

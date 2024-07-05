@@ -7,7 +7,7 @@
                     <input pInputText type="text" placeholder="Product Name" label="Product Name" [(ngModel)]="product.name">
                 </div>
                 <div class="col-12 lg:col-4 field">
-                    <input pInputText type="text" placeholder="Price" label="Price" [(ngModel)]="product.prix">
+                    <input pInputText type="number" min="0"  placeholder="Price" label="Price" [(ngModel)]="product.prix">
                 </div>
                 <div class="col-12 lg:col-4 field">
                     <input pInputText type="number"  min="0" placeholder="Quantity" label="Quantity" [(ngModel)]="product.quantite_stock">
@@ -33,7 +33,8 @@
                             </div>
                         </ng-template>
                     </p-fileUpload> -->
-                    <input type="file" autocomplete="off" pInputText placeholder="Profile picture" class="block mb-3" style="max-width: 320px; min-width: 270px;" (change)="onFileSelected($event)">
+                    <img *ngIf="product.image" [src]="product.image" alt="Product Image" style="max-width: 320px; height: auto;">
+                    <input type="file" autocomplete="off" pInputText placeholder="Picture" class="block mb-3" style="max-width: 320px; min-width: 270px;" (change)="onFileSelected($event)">
 
                 </div>
             </div>

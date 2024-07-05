@@ -34,6 +34,9 @@ export class CrudComponent implements OnInit {
     ];
   }
 
+  goToHistorique() {
+    window.location.href = 'http://localhost:4200/#/ecommerce/order-summary';
+  }
   loadCommandes(): void {
     const isAdmin = this.isAdmin();
 

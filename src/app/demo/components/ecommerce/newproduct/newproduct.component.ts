@@ -7,6 +7,7 @@ import { Component, ViewChildren, QueryList, ElementRef, OnInit } from '@angular
 import { Router } from '@angular/router';
 
 interface Product {
+    _id : string ;
     name: string;
     prix: string;
     quantite_stock: string;
@@ -41,10 +42,26 @@ export class NewProductComponent implements OnInit {
 
     }
     ngOnInit(): void {
-        this.CategoryService.getCategories().subscribe((categories: any) => {
-            this.allCatgories = categories
-            this.categoriesList = categories.map((category : any)=> category.name);
-            this.product.categorie = this.categoriesList[0]
+        const productToEdit : any= localStorage.getItem('productToEdit');
+        if (productToEdit != "" && productToEdit != null) {
+            this.product = JSON.parse(productToEdit);
+        }
+            this.CategoryService.getCategories().subscribe((categories: any) => {
+         
+            if (productToEdit != "" && productToEdit != null) {
+                this.allCatgories = categories
+                this.categoriesList = categories.map((category : any)=> category.name);
+                //let cat = this.allCatgories.filter((c : any)=> c._id ===  JSON.parse(productToEdit).categorie)[0].name
+
+                this.product.categorie = this.categoriesList[0]
+                
+            }
+            else
+            {
+                this.allCatgories = categories
+                this.categoriesList = categories.map((category : any)=> category.name);
+                this.product.categorie = this.categoriesList[0]
+            }
         }, (err)=> {
             console.log(err);
 
@@ -67,6 +84,7 @@ export class NewProductComponent implements OnInit {
 ];
 
     product: Product = {
+        _id : "",
         name: '',
         prix: '',
         quantite_stock: '1',
@@ -123,26 +141,52 @@ export class NewProductComponent implements OnInit {
 
     createNewProduct()
     {
-        let body : any = this.product ; 
-        let image : any = this.product.image;
-        body.file = image;
-        body.description = body.description.replace(/<p>/g, "");
-        body.description = body.description.replace(/<\/p>/g, "");
+        const productToEdit : any= localStorage.getItem('productToEdit');
+        if (productToEdit == "" || productToEdit == null)
+            {
+                let body : any = this.product ; 
+                let image : any = this.product.image;
+                body.file = image;
+                body.description = body.description.replace(/<p>/g, "");
+                body.description = body.description.replace(/<\/p>/g, "");
+        
+                //body.ImageName = image.file.name
+               // body.protocol = "http"
+                body.categorie = this.allCatgories.filter((c: any)=> c.name === this.product.categorie)[0]._id ;
+                //Imen the createNewProduct2 is using the form DATA
+                this.ProductService.createNewProduct2(body).subscribe((result: any) => {
+                    this.router.navigate(["/productList/list"]);
+        
+                    console.log(result);
+        
+                }, (err : any)=> {
+                    console.log(err);
+        
+                });
 
-        body.ImageName = image.file.name
-        body.protocol = "http"
-        body.categorie = this.allCatgories.filter((c: any)=> c.name === this.product.categorie)[0]._id ;
-        //Imen the createNewProduct2 is using the form DATA
-        this.ProductService.createNewProduct2(body).subscribe((result: any) => {
-            this.router.navigate(["/productList/list"]);
+            }
+            else
+            {
+                let body : any = this.product ; 
+                let image : any = this.product.image;
+                body.file = image;
+                body.description = body.description.replace(/<p>/g, "");
+                body.description = body.description.replace(/<\/p>/g, "");
+        
+                body.categorie = this.allCatgories.filter((c: any)=> c.name === this.product.categorie)[0]._id ;
+                this.ProductService.updateProduct(this.product._id,body as any).subscribe((result: any) => {
+                    this.router.navigate(["/productList/list"]);
+                    localStorage.setItem('productToEdit', "");  
 
-            console.log(result);
+                    console.log(result);
+        
+                }, (err : any)=> {
+                    console.log(err);
+        
+                });
 
-        }, (err : any)=> {
-            console.log(err);
-
-        });
-
+            }
+       
     }
 
     onFileSelected(event: any) {
@@ -167,5 +211,10 @@ export class NewProductComponent implements OnInit {
         {
             this.router.navigate(["/productList/list"]);
         }
+
+        ngOnDestroy() {
+            localStorage.setItem('productToEdit', "");  
+            console.log('Component destroyed and resources cleaned up');
+          }
         
 }

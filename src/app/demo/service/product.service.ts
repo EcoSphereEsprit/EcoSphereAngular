@@ -66,6 +66,31 @@ export class ProductService {
 
         return this.http.post<any>(`${this.baseUrl}/addProduit`, formData, { headers });
       }
+
+      updateProduct(id : string , body: any): Observable<any> {
+        const token = localStorage.getItem("token");
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${token}`
+        });
+        const formData: FormData = new FormData();
+        formData.append('name', body.name);
+        formData.append('description', body.description);
+        formData.append('prix', body.prix);
+        formData.append('quantite_stock', body.quantite_stock);
+        formData.append('categorie', body.categorie);
+        formData.append('brand', body.brand);
+        formData.append('couleur', body.couleur);
+        formData.append('available', body.available);
+        // formData.append('ImageName', body.ImageName);
+        // formData.append('protocol', body.protocol);
+        //formData.append('file', body.file.file ? body.file.file : body.file);
+        
+        formData.append('image', body.file.file ? body.file.file : body.file);  
+        
+        console.log("Create new product", body.file)
+
+        return this.http.put<any>(`${this.baseUrl}/Produits/${id}`, formData, { headers });
+      }
       getProductList(): Observable<any> {
         const token = localStorage.getItem("token");
         const headers = new HttpHeaders({

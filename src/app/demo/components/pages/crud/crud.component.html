@@ -58,6 +58,32 @@
                 </ng-template>
             </p-table>
         </div>
+        <div class="flex justify-content-center">
+            <div class="col-12 md:col-4">
+                <div class="card">
+                    <div class="font-medium line-height-4">Categories distribution</div>
+                    <div class="country-graph">
+                        <div class="flex justify-content-center">
+                            <p-chart type="doughnut" id="country-chart" [data]="countryChart"
+                                [options]="countryChartOptions" [style]="{ width: '75%' }"></p-chart>
+                        </div>
+                    </div>
+                    <div class="country-content">
+                        <ul class="m-0 p-0 border-none outline-none list-none">
+                            <li *ngFor="let category of categoriesList" class="flex justify-content-between align-items-center py-2 border-bottom-1 surface-border">
+                                <div class="flex justify-content-between align-items-center">
+                                 
+                                    <span>{{ category.name }}</span>
+                                </div>
+                                <span>{{ getpercentFormula(category.Nbr_produits) }}%</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+          
 
         <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Category Details" [modal]="true" class="p-fluid">
             <ng-template pTemplate="content">

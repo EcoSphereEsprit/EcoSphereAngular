@@ -8,7 +8,7 @@
         <div class="col-12 lg:col-6 h-full px-4 py-4 md:px-6">
             <div *ngIf="cartItems.length > 0">
                 <div *ngFor="let item of cartItems; let i = index" class="flex flex-column lg:flex-row flex-wrap lg:align-items-center py-2 mt-3 surface-border">
-                    <img [src]="'assets/demo/images/ecommerce/productoverview/product-overview-3-1.png'" class="w-8rem h-8rem flex-shrink-0 mb-3" alt="product" />
+                    <img [src]="item.image" class="w-8rem h-8rem flex-shrink-0 mb-3" alt="product" />
                     <div class="flex-auto lg:ml-3">
                         <div class="flex align-items-center justify-content-between mb-3">
                             <span class="text-900 font-bold">{{ item.name }}</span>
