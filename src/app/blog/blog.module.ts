@@ -19,6 +19,8 @@ import { NewCommentComponent } from "./components/blog/blog-detail/new-comment/n
 import { BlogListCardComponent } from "./components/blog/blog-list/blog-list-card/blog-list-card.component";
 import { BlogListComponent } from "./components/blog/blog-list/blog-list.component";
 import { BlogEditComponent } from './components/blog/blog-edit/blog-edit.component';
+import { BlogStatComponent } from './components/blog-stat/blog-stat.component';
+import { ChartModule } from 'primeng/chart';
 
 @NgModule({
     imports: [
@@ -32,7 +34,9 @@ import { BlogEditComponent } from './components/blog/blog-edit/blog-edit.compone
         EditorModule,
         BlogAppRoutingModule,
         FormsModule,
+        ChartModule,
         AvatarModule,
+        
         DataViewModule,
         DropdownModule,
     ],
@@ -42,7 +46,7 @@ import { BlogEditComponent } from './components/blog/blog-edit/blog-edit.compone
         BlogListCardComponent,
         BlogCommentsComponent, 
         NewCommentComponent, 
-        BlogDetailComponent, BlogEditComponent
+        BlogDetailComponent, BlogEditComponent, BlogStatComponent
     ]
 })
 export class BlogAppModule { }
