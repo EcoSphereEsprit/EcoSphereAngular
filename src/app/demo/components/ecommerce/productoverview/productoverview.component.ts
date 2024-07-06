@@ -7,7 +7,7 @@ import { Router } from '@angular/router'; // Importer le Router
     templateUrl: './productoverview.component.html',
 })
 export class ProductOverviewComponent implements OnInit {
-    
+
     color: string = 'bluegray';
     size: string = 'M';
     liked: boolean = false;
@@ -16,7 +16,7 @@ export class ProductOverviewComponent implements OnInit {
     quantity: number = 1;  // Quantité initiale
 
     product: Product = {
-        _id : "",
+        _id: "",
         name: '',
         prix: '',
         quantite_stock: '1',
@@ -35,7 +35,7 @@ export class ProductOverviewComponent implements OnInit {
 
     ngOnInit(): void {
 
-        const productId : string = localStorage.getItem('chartId') || "";
+        const productId: string = localStorage.getItem('chartId') || "";
         this.productService.getProductById(productId).then(data => {
             this.product = data;
         });
@@ -46,8 +46,8 @@ export class ProductOverviewComponent implements OnInit {
             id: this.product._id,
             name: this.product.name,
             price: this.product.prix,
-            quantity: this.quantity ,
-            Image: this.product.image 
+            quantity: this.quantity,
+            Image: this.product.image
         };
 
         // Récupérer les éléments existants dans le local storage

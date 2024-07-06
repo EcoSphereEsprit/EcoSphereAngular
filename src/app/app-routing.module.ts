@@ -7,6 +7,7 @@ import { BlogAppModule } from './blog/blog.module';
 
 
 import { authGuard } from './auth.guard';
+import { AdministrationModule } from './administration/administration.module';
 
 
 
@@ -16,19 +17,15 @@ const routerOptions: ExtraOptions = {
 
 const routes: Routes = [
 
+
     { path: '', redirectTo: 'landing', pathMatch: 'full' }, // Redirect root path to /landing
     {
         path: '', component: AppLayoutComponent,
         children: [
 
             { path: '', loadChildren: () => import('./demo/components/dashboards/dashboards.module').then(m => m.DashboardsModule) },
-
-           
-            {
-                path: 'blog', loadChildren: () => BlogAppModule//,canActivate: [NgxPermissionsGuard], data: { permissions: { only: ['ROLE_Demande Credit Client', 'ROLE_Traitement Demandes'] } }
-            },
+            { path: 'blog', loadChildren: () => BlogAppModule/*,canActivate: [NgxPermissionsGuard], data: { permissions: { only: ['ROLE_Demande Credit Client', 'ROLE_Traitement Demandes'] } }*/ },
             { path: 'uikit', data: { breadcrumb: 'UI Kit' }, loadChildren: () => import('./demo/components/uikit/uikit.module').then(m => m.UIkitModule) },
-
             { path: 'productList', data: { breadcrumb: 'productList' }, loadChildren: () => import('./demo/components/uikit/uikit.module').then(m => m.UIkitModule) },
             { path: 'utilities', data: { breadcrumb: 'Utilities' }, loadChildren: () => import('./demo/components/utilities/utilities.module').then(m => m.UtilitiesModule) },
             { path: 'pages', data: { breadcrumb: 'Pages' }, loadChildren: () => import('./demo/components/pages/pages.module').then(m => m.PagesModule) },
@@ -40,7 +37,7 @@ const routes: Routes = [
             { path: 'blocks', data: { breadcrumb: 'Prime Blocks' }, loadChildren: () => import('./demo/components/primeblocks/primeblocks.module').then(m => m.PrimeBlocksModule) },
             { path: 'ecommerce', data: { breadcrumb: 'E-Commerce' }, loadChildren: () => import('./components/ecommerce/ecommerce.module').then(m => m.EcommerceModule), canActivate: [authGuard]  },
             { path: 'apps', data: { breadcrumb: 'Apps' }, loadChildren: () => import('./demo/components/apps/apps.module').then(m => m.AppsModule) }
-      
+      { path: 'administration', data: { breadcrumb: 'Administration' }, loadChildren: () => AdministrationModule/*,canActivate: [NgxPermissionsGuard], data: { permissions: { only: ['ROLE_Demande Credit Client', 'ROLE_Traitement Demandes'] } }*/ },
         ]
     },
     { path: 'landing', loadChildren: () => import('./demo/components/landing/landing.module').then(m => m.LandingModule), canActivate: [authGuard] },

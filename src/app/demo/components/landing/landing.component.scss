@@ -190,3 +190,12 @@
 
 
 }
+
+.card-img {
+    border-radius: 20px;
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+    object-fit: cover;
+    /* Ensure the image covers the card without stretching */
+}

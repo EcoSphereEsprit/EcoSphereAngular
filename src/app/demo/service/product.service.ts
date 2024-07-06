@@ -9,13 +9,14 @@ import { Observable } from 'rxjs';
 export class ProductService {
 
     public baseUrl = "http://localhost:9090/produit"
-  
+
 
     constructor(private http: HttpClient) { }
 
     // Ajoutez cette méthode
     getProductById(productId: string) {
-     
+        console.log(productId);
+
         return this.http.get<any>(`http://localhost:9090/produit/getProduitById/${productId}`)
             .toPromise()
             .then(res => res as Product);
@@ -29,20 +30,20 @@ export class ProductService {
     }
 
 
-    //Imen's part of the API 
+    //Imen's part of the API
 
     createNewProduct(body: any): Observable<any> {
         const token = localStorage.getItem("token");
         const headers = new HttpHeaders({
             'Authorization': `Bearer ${token}`
-        });        
+        });
         console.log("Create new product", body)
 
         return this.http.post<any>(`${this.baseUrl}/addProduit`, body, { headers });
-      }
+    }
 
 
-      createNewProduct2(body: any): Observable<any> {
+    createNewProduct2(body: any): Observable<any> {
         const token = localStorage.getItem("token");
         const headers = new HttpHeaders({
             'Authorization': `Bearer ${token}`
@@ -59,15 +60,15 @@ export class ProductService {
         // formData.append('ImageName', body.ImageName);
         // formData.append('protocol', body.protocol);
         //formData.append('file', body.file.file ? body.file.file : body.file);
-        
-        formData.append('image', body.file.file ? body.file.file : body.file);  
-        
+
+        formData.append('image', body.file.file ? body.file.file : body.file);
+
         console.log("Create new product", body.file)
 
         return this.http.post<any>(`${this.baseUrl}/addProduit`, formData, { headers });
-      }
+    }
 
-      updateProduct(id : string , body: any): Observable<any> {
+    updateProduct(id: string, body: any): Observable<any> {
         const token = localStorage.getItem("token");
         const headers = new HttpHeaders({
             'Authorization': `Bearer ${token}`
@@ -84,31 +85,31 @@ export class ProductService {
         // formData.append('ImageName', body.ImageName);
         // formData.append('protocol', body.protocol);
         //formData.append('file', body.file.file ? body.file.file : body.file);
-        
-        formData.append('image', body.file.file ? body.file.file : body.file);  
-        
+
+        formData.append('image', body.file.file ? body.file.file : body.file);
+
         console.log("Create new product", body.file)
 
         return this.http.put<any>(`${this.baseUrl}/Produits/${id}`, formData, { headers });
-      }
-      getProductList(): Observable<any> {
+    }
+    getProductList(): Observable<any> {
         const token = localStorage.getItem("token");
         const headers = new HttpHeaders({
             'Authorization': `Bearer ${token}`
         });
-        return this.http.get<any>(`${this.baseUrl}/Getproduits`,  { headers });
-      }
+        return this.http.get<any>(`${this.baseUrl}/Getproduits`, { headers });
+    }
 
-      filterProductsByPrice(minPrice : number , maxPrice : number): Observable<any> {
+    filterProductsByPrice(minPrice: number, maxPrice: number): Observable<any> {
         const token = localStorage.getItem("token");
 
         const headers = new HttpHeaders({
             'Authorization': `Bearer ${token}`
         });
-        return this.http.get<any>(`${this.baseUrl}/prix?min=${minPrice}&max=${maxPrice}`,  { headers });
-      }
+        return this.http.get<any>(`${this.baseUrl}/prix?min=${minPrice}&max=${maxPrice}`, { headers });
+    }
 
-      filterProductsByCategory(categoryName: string): Observable<any> {
+    filterProductsByCategory(categoryName: string): Observable<any> {
         const token = localStorage.getItem("token");
 
         const headers = new HttpHeaders({
@@ -123,7 +124,7 @@ export class ProductService {
         const headers = new HttpHeaders({
             'Authorization': `Bearer ${token}`
         });
-        return this.http.get<any>(`${this.baseUrl}/getProduitByName/search?name=${productName}`,   { headers });
+        return this.http.get<any>(`${this.baseUrl}/getProduitByName/search?name=${productName}`, { headers });
     }
 
     filterProductsByavailability(productId: string): Observable<any> {
@@ -132,7 +133,7 @@ export class ProductService {
         const headers = new HttpHeaders({
             'Authorization': `Bearer ${token}`
         });
-        return this.http.get<any>(`${this.baseUrl}/produit?name=${productId}` ,  { headers });
+        return this.http.get<any>(`${this.baseUrl}/produit?name=${productId}`, { headers });
     }
 
     sortByDate(type: string): Observable<any> {
@@ -141,7 +142,7 @@ export class ProductService {
         const headers = new HttpHeaders({
             'Authorization': `Bearer ${token}`
         });
-        return this.http.get<any>(`${this.baseUrl}/sortedDate?order=${type}`,   { headers });
+        return this.http.get<any>(`${this.baseUrl}/sortedDate?order=${type}`, { headers });
     }
 
     deleteProduct(id: string): Observable<any> {
@@ -150,18 +151,28 @@ export class ProductService {
         const headers = new HttpHeaders({
             'Authorization': `Bearer ${token}`
         });
-        return this.http.delete<any>(`${this.baseUrl}/Produits/${id}`,   { headers });
+        return this.http.delete<any>(`${this.baseUrl}/Produits/${id}`, { headers });
     }
-    loadImageWithAuthorization(imageURL : string) {
+    loadImageWithAuthorization(imageURL: string) {
         const token = localStorage.getItem("token");
         const headers = new HttpHeaders({
             'Authorization': `Bearer ${token}`
         });
-      
-        return this.http.get(imageURL, { headers, responseType: 'blob' })
-          
-      }
 
+        return this.http.get(imageURL, { headers, responseType: 'blob' })
+
+    }
+
+
+
+
+
+    getProducts() {
+        return this.http.get<any>('assets/demo/data/products.json')
+            .toPromise()
+            .then(res => res.data as Product[])
+            .then(data => data);
+    }
 
         getProductPhoto(url: string): Observable<Blob> {
             const token = localStorage.getItem("token");
@@ -172,4 +183,5 @@ export class ProductService {
             console.log(url)
             return this.http.get(url, { headers, responseType: 'blob' });
         }
+
 }
