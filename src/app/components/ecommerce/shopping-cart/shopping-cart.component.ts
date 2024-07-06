@@ -13,7 +13,8 @@ export class ShoppingCartComponent implements OnInit {
     shippingCost: number = 0;
     paymentMethod: string = 'card'; // Default payment method
     total: number = 0;
-
+    isLoggedIn !: boolean
+    buttonText !: string
     constructor(private router: Router) {
         const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
         this.cart = cartItems;
@@ -23,6 +24,15 @@ export class ShoppingCartComponent implements OnInit {
 
     ngOnInit() {
         this.syncLocalStorage();
+        const isloggedinValue = localStorage.getItem('isLoggedIn') ?? ''
+        if(isloggedinValue == 'true'){
+          this.isLoggedIn = true
+          this.buttonText ='Valider la commande'
+        }
+        else{
+          this.isLoggedIn = false
+          this.buttonText ='Log in to validate'
+        }
     }
 
     updateQuantity(index: number, quantity: number) {

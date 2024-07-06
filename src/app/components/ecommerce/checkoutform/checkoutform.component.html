@@ -27,7 +27,7 @@
                     </div>
                 </div>
             </div>
-            <div *ngIf="cartItems.length === 0" class="text-900">Votre panier est vide.</div>
+            <div *ngIf="cartItems.length === 0" class="text-900">Your cart is empty.</div>
         </div>
 
         <!-- Checkout Form -->
@@ -35,47 +35,47 @@
             <form [formGroup]="checkoutForm" (ngSubmit)="processCheckout()" class="w-full">
                 <!-- Contact Information -->
                 <div class="field mb-6">
-                    <span class="block font-medium mb-5">Informations de Contact</span>
-                    <input id="email" placeholder="Email" type="email" class="p-inputtext w-full mb-4" formControlName="email">
-                    <input id="phoneNumber" placeholder="Numéro de téléphone" type="text" class="p-inputtext w-full mb-4" formControlName="phoneNumber">
-                    <p-checkbox formControlName="newsletter" label="Envoyez-moi des nouvelles et des offres" class="text-900"></p-checkbox>
+                    <span class="block font-medium mb-5">Contact Information</span>
+                    <input id="email" placeholder="Email" type="email" class="p-inputtext w-full mb-4" formControlName="email" [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('email')}">
+                    <input id="phoneNumber" placeholder="Phone Number" type="text" class="p-inputtext w-full mb-4" formControlName="phoneNumber" [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('phoneNumber')}">
+                    <p-checkbox formControlName="newsletter" label="Send me news and offers" class="text-900"></p-checkbox>
                 </div>
 
                 <!-- Shipping Information -->
                 <div class="field mb-4">
-                    <span class="block font-medium mb-5">Expédition</span>
-                    <input id="name" placeholder="Prénom" type="text" class="p-inputtext w-full mb-4" formControlName="name">
-                    <input id="lastname" placeholder="Nom de famille" type="text" class="p-inputtext w-full mb-4" formControlName="lastName">
-                    <input id="address" placeholder="Adresse" type="text" class="p-inputtext w-full mb-4" formControlName="address">
-                    <input id="address2" placeholder="Appartement, suite, etc." type="text" class="p-inputtext w-full mb-4" formControlName="address2">
-                    <input id="pc" placeholder="Code postal" type="text" class="p-inputtext w-full mb-4" formControlName="postalCode">
-                    <input id="city" placeholder="Ville" type="text" class="p-inputtext w-full mb-4" formControlName="city">
-                    <p-checkbox formControlName="saveInfo" [binary]="true" label="Enregistrer pour le prochain achat" class="text-900"></p-checkbox>
+                    <span class="block font-medium mb-5">Shipping</span>
+                    <input id="name" placeholder="First Name" type="text" class="p-inputtext w-full mb-4" formControlName="name" [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('name')}">
+                    <input id="lastname" placeholder="Last Name" type="text" class="p-inputtext w-full mb-4" formControlName="lastName" [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('lastName')}">
+                    <input id="address" placeholder="Address" type="text" class="p-inputtext w-full mb-4" formControlName="address" [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('address')}">
+                    <input id="address2" placeholder="Apartment, suite, etc." type="text" class="p-inputtext w-full mb-4" formControlName="address2">
+                    <input id="pc" placeholder="Postal Code" type="text" class="p-inputtext w-full mb-4" formControlName="postalCode" [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('postalCode')}">
+                    <input id="city" placeholder="City" type="text" class="p-inputtext w-full mb-4" formControlName="city" [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('city')}">
+                    <p-checkbox formControlName="saveInfo" [binary]="true" label="Save for next purchase" class="text-900"></p-checkbox>
                 </div>
 
                 <!-- Payment Method -->
                 <div class="field mb-4">
-                    <span class="block font-medium mb-5">Méthode de Paiement</span>
+                    <span class="block font-medium mb-5">Payment Method</span>
                     <div class="flex items-center mb-2">
                         <input type="radio" id="card" name="paymentMethod" value="card" [checked]="paymentMethod === 'card'" (change)="updatePaymentMethod('card')">
-                        <label for="card" class="ml-2 text-900">Paiement par carte</label>
+                        <label for="card" class="ml-2 text-900">Card Payment</label>
                     </div>
                     <div class="flex items-center">
                         <input type="radio" id="cash" name="paymentMethod" value="cash" [checked]="paymentMethod === 'cash'" (change)="updatePaymentMethod('cash')">
-                        <label for="cash" class="ml-2 text-900">Paiement à la Livraison (+7dt de frais de livraison)</label>
+                        <label for="cash" class="ml-2 text-900">Cash on Delivery (+7dt delivery fee)</label>
                     </div>
                 </div>
 
                 <!-- Total Amount -->
                 <div class="mt-6">
-                    <span class="block font-medium mb-2">Montant Total :</span>
+                    <span class="block font-medium mb-2">Total Amount:</span>
                     <span class="text-2xl font-bold">{{ total.toFixed(2) }} Dinar </span>
                 </div>
 
                 <!-- Confirm Order Button -->
                 <div class="flex justify-end mt-6">
-                    <button *ngIf="paymentMethod === 'cash'" type="submit" class="p-button p-button-primary">Confirmer Commande</button>
-                    <button *ngIf="paymentMethod === 'card'" type="button" (click)="showCardPopup = true" class="p-button p-button-primary">Procéder au Paiement</button>
+                    <button *ngIf="paymentMethod === 'cash' && checkoutForm.valid" type="submit" class="p-button p-button-primary">Confirm Order</button>
+                    <button *ngIf="paymentMethod === 'card' && checkoutForm.valid" type="button" (click)="showCardPopup = true" class="p-button p-button-primary">Proceed to Payment</button>
                 </div>
             </form>
         </div>
@@ -83,28 +83,26 @@
 </div>
 
 <!-- Card Payment Popup -->
-
-    <!-- Card Payment Popup -->
-<p-dialog header="Paiement par carte" [(visible)]="showCardPopup" [modal]="true" [closable]="false" [dismissableMask]="true" [style]="{ width: '350px' }">
+<p-dialog header="Card Payment" [(visible)]="showCardPopup" [modal]="true" [closable]="false" [dismissableMask]="true" [style]="{ width: '350px' }">
     <form [formGroup]="cardForm" (ngSubmit)="submitCardDetails()" class="p-fluid">
         <div class="field mb-4">
-            <label for="cardNumber" class="block">Numéro de carte</label>
-            <input id="cardNumber" type="text" pInputText formControlName="cardNumber">
+            <label for="cardNumber" class="block">Card Number</label>
+            <input maxlength="10"  minlength="10" oninput="checkPaymentButton()"id="cardNumber" type="text" pInputText formControlName="cardNumber" [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('cardNumber')}">
         </div>
         <div class="field mb-4">
-            <label for="cardCode" class="block">Code de sécurité</label>
-            <input id="cardCode" type="text" pInputText formControlName="cardCode">
+            <label for="cardCode" class="block">Security Code</label>
+            <input id="cardCode" type="text" pInputText formControlName="cardCode" [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('cardCode')}">
         </div>
-        <button type="button" pButton label="Envoyer le code" (click)="generateAndSendSecretCode()"></button>
+        <button type="button" id="sendcode" pButton label="Send Code" (click)="generateAndSendSecretCode()" [disabled]="!cardForm.valid"></button>
 
         <div class="field mb-4 mt-4">
-            <label for="secretCodeInput" class="block">Code secret</label>
-            <input id="secretCodeInput" type="text" pInputText formControlName="secretCodeInput">
+            <label for="secretCodeInput" class="block">Secret Code</label>
+            <input id="secretCodeInput" type="text" pInputText formControlName="secretCodeInput" [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('secretCodeInput')}">
         </div>
         <div class="flex justify-between">
-            <button type="submit" pButton (click)="confirmOrderPayment()" class="p-button p-button-primary" label="Confirmer paiement"></button>
+            <button type="submit" pButton (click)="confirmOrderPayment()" class="p-button p-button-primary" label="Confirm Payment" [disabled]="!cardForm.get('secretCodeInput')"></button>
             <button type="button" pButton icon="pi pi-times" class="p-button-text" (click)="showCardPopup = false"></button>
+        
         </div>
     </form>
 </p-dialog>
-

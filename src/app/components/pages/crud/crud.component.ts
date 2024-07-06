@@ -6,6 +6,7 @@ import { Table } from 'primeng/table';
 
 @Component({
   templateUrl: './crud.component.html',
+  styleUrls: ['./crud.component.scss'],
   providers: [MessageService]
 })
 export class CrudComponent implements OnInit {

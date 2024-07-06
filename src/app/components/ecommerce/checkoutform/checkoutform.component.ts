@@ -11,6 +11,7 @@ import { EmailService } from '../../../service/email.service';
 })
 export class CheckoutComponent implements OnInit {
 
+
   checkoutForm!: FormGroup;
   cartItems: any[] = [];
   total: number = 0;
@@ -224,8 +225,21 @@ export class CheckoutComponent implements OnInit {
       this.calculateTotal();
     }
   }
-
-
+  isFieldInvalid(field: any): any {
+    return this.checkoutForm.get(field)?.invalid && this.checkoutForm.get(field)?.dirty;
+  }
+   checkPaymentButton() {
+    const cardNumber = (document.getElementById('cardNumber') as HTMLInputElement).value;
+    const securityCode = (document.getElementById('securityCode') as HTMLInputElement).value;
+    const paymentButton = document.getElementById('paymentButton') as HTMLButtonElement;
+  
+    if (cardNumber.length === 10 && securityCode.length === 3) {
+      paymentButton.disabled = false;
+    } else {
+      paymentButton.disabled = true;
+    }
+  }
+  
   removeItem(index: number) {
     this.cartItems.splice(index, 1);
 }

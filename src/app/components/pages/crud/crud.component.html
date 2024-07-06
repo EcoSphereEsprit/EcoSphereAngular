@@ -11,7 +11,6 @@
       <ng-template pTemplate="right">
         <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
         <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
-        <button pButton pRipple label="Historique des Facturation" icon="pi pi-calendar" class="p-button-secondary" (click)="goToHistorique()"></button>
 
       </ng-template>
     </p-toolbar>
@@ -21,8 +20,11 @@
         <span class="block mt-2 md:mt-0 p-input-icon-left">
           <i class="pi pi-search"></i>
           <input pInputText type="text" (input)="onGlobalFilter(dt, $event)"
-                 placeholder="Rechercher par numéro de commande ou nom de produit..." class="w-full sm:w-auto"/>
+                 placeholder="Find By Order Number..." class="w-full sm:w-auto"/>
         </span>
+
+        <button pButton pRipple label="Billing history" icon="pi pi-calendar" class="p-button-secondary" (click)="goToHistorique()"></button>
+        <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
       </div>
     </ng-template>
 
@@ -31,11 +33,11 @@
         <th style="width: 3rem">
           <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
         </th>
-        <th pSortableColumn="numCommande">Numéro de Commande <p-sortIcon field="numCommande"></p-sortIcon></th>
-        <th pSortableColumn="produit">Nom des Produits <p-sortIcon field="numCommande"></p-sortIcon></th>
-        <th pSortableColumn="statut">Statut <p-sortIcon field="statut"></p-sortIcon></th>
-        <th pSortableColumn="prixTotal">Prix Total <p-sortIcon field="prixTotal"></p-sortIcon></th>
-        <th pSortableColumn="modePaiement">Mode de Paiement <p-sortIcon field="modePaiement"></p-sortIcon></th>
+        <th pSortableColumn="numCommande">Order Number <p-sortIcon field="numCommande"></p-sortIcon></th>
+        <th pSortableColumn="produit">Products <p-sortIcon field="numCommande"></p-sortIcon></th>
+        <th pSortableColumn="statut">Delivery Status <p-sortIcon field="statut"></p-sortIcon></th>
+        <th pSortableColumn="prixTotal">Total to Pay <p-sortIcon field="prixTotal"></p-sortIcon></th>
+        <th pSortableColumn="modePaiement">Payment Method <p-sortIcon field="modePaiement"></p-sortIcon></th>
         <th></th>
       </tr>
     </ng-template>
@@ -46,18 +48,18 @@
           <p-tableCheckbox #dt [value]="commande"></p-tableCheckbox>
         </td>
         <td style="min-width: 10rem;">
-          <span class="p-column-title">Numéro de Commande</span>
+          <span class="p-column-title">Order Number</span>
           {{commande.numCommande}}
         </td>
         <td style="min-width: 10rem;">
-          <span class="p-column-title">Nom des Produits</span>
+          <span class="p-column-title">Product Ordered</span>
           <ng-container *ngFor="let produit of commande.produits">
             <div>{{ produit?.idProduit?.name }}</div>
           </ng-container>
         </td>
       
           <td style="min-width: 10rem;">
-            <span class="p-column-title">Statut Livraison</span>
+            <span class="p-column-title">Delivery Status</span>
             <ng-container *ngIf="isAdmin(); else statusDisplay">
               <p-dropdown [options]="livraisonStatusOptions"
                           [(ngModel)]="commande.statutLivraison"
@@ -69,23 +71,26 @@
             </ng-template>
           </td>        
         <td style="min-width: 8rem;">
-          <span class="p-column-title">Prix Total</span>
+          <span class="p-column-title">Total To Pay</span>
           {{commande.prixTotal | currency:'USD'}}
         </td>
         <td style="min-width: 10rem;">
-          <span class="p-column-title">Mode de Paiement</span>
+          <span class="p-column-title">Payment Method</span>
           {{commande.modePaiement}}
         </td>
         <td>
           <div style="display: flex; align-items: center;">
-            <button pButton type="button" icon="pi pi-info-circle" (click)="showDetailsDialog(commande)">
-              Détails
-            </button>
-            <!-- Affichage conditionnel du bouton Annuler -->
-            <button *ngIf="!isAdmin()" pButton type="button" icon="pi pi-times"
-                    class="p-button-danger" (click)="showCancellationConfirmation(commande._id)">
-              Annuler
-            </button>
+            <button pButton type="button" icon="pi pi-info-circle" 
+                *ngIf="commande.statutLivraison !== 'annulée'" 
+                (click)="showDetailsDialog(commande)">
+          Détails
+        </button>
+        <!-- Affichage conditionnel du bouton Annuler -->
+        <button *ngIf="!isAdmin() && commande.statutLivraison !== 'annulée'"
+                pButton type="button" icon="pi pi-times"
+                class="p-button-danger" (click)="showCancellationConfirmation(commande._id)">
+          Cancel
+        </button>
           </div>
         </td>
       </tr>
@@ -94,51 +99,51 @@
 </div>
 
 <!-- Dialog pour les détails de commande -->
-<p-dialog [(visible)]="displayDetailsDialog" [style]="{ width: '800px' }" header="Détails de la Commande" [modal]="true">
+<p-dialog [(visible)]="displayDetailsDialog" [style]="{ width: '800px' }" header="Command Details" [modal]="true">
   <ng-template pTemplate="content">
     <div class="p-grid">
       <div class="p-col-12">
         <!-- Détails de la commande -->
         <div class="field">
-          <label for="numCommande">Numéro de Commande</label>
+          <label for="numCommande">Order Number</label>
           <input type="text" pInputText id="numCommande" [value]="selectedCommande?.numCommande" disabled>
         </div>
         <div class="field">
-          <label for="statut">Statut</label>
+          <label for="statut">Delivery Status</label>
           <input type="text" pInputText id="statut" [value]="selectedCommande?.statutLivraison" disabled>
         </div>
         <div class="field">
-          <label for="prixTotal">Prix Total</label>
+          <label for="prixTotal">Total to pay</label>
           <input type="text" pInputText id="prixTotal" [value]="selectedCommande?.prixTotal | currency:'TND'" disabled>
         </div>
         <div class="field">
-          <label for="modePaiement">Mode de Paiement</label>
+          <label for="modePaiement">Payment Method</label>
           <input type="text" pInputText id="modePaiement" [value]="selectedCommande?.modePaiement" disabled>
         </div>
 
         <!-- Informations de livraison -->
         <div>
-          <h5>Informations de Livraison</h5>
+          <h5>Delivery Info</h5>
           <p>
-            Nom: {{ selectedCommande?.infosLivraison?.nom }}<br>
-            Prénom: {{ selectedCommande?.infosLivraison?.prenom }}<br>
+            Name: {{ selectedCommande?.infosLivraison?.nom }}<br>
+            First Name : {{ selectedCommande?.infosLivraison?.prenom }}<br>
             Adresse: {{ selectedCommande?.infosLivraison?.adresse }}<br>
-            Ville: {{ selectedCommande?.infosLivraison?.ville }}<br>
+            Village: {{ selectedCommande?.infosLivraison?.ville }}<br>
             Code Postal: {{ selectedCommande?.infosLivraison?.codePostal }}<br>
-            Pays: {{ selectedCommande?.infosLivraison?.pays }}<br>
-            Téléphone: {{ selectedCommande?.infosLivraison?.telephone }}
+            Country: {{ selectedCommande?.infosLivraison?.pays }}<br>
+            Phone Number: {{ selectedCommande?.infosLivraison?.telephone }}
           </p>
         </div>
 
         <!-- Informations sur les produits -->
         <div>
-          <h5>Informations sur les Produits</h5>
+          <h5>Products Info</h5>
           <table class="table">
             <thead>
               <tr>
-                <th>Nom du Produit</th>
-                <th>Quantité</th>
-                <th>Prix Unitaire</th>
+                <th>Product Name</th>
+                <th>Quantity Desired</th>
+                <th>Unit Price</th>
               </tr>
             </thead>
             <tbody>
@@ -146,12 +151,12 @@
                 <tr *ngFor="let produit of selectedCommande?.produits">
                   <td>{{ produit?.idProduit?.name }}</td>
                   <td>{{ produit?.quantite }}</td>
-                  <td>{{ produit?.prixUnitaire | currency:'USD' }}</td>
+                  <td>{{ produit?.prixUnitaire | currency:'TND' }}</td>
                 </tr>
               </ng-container>
               <ng-template #noProducts>
                 <tr>
-                  <td colspan="3">Aucun produit trouvé</td>
+                  <td colspan="3">No Products found!!!</td>
                 </tr>
               </ng-template>
             </tbody>
@@ -165,20 +170,31 @@
   </ng-template>
 </p-dialog>
 
-<!-- Dialog for Cancellation Confirmation -->
 <dialog #cancelConfirmationModal class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title">Confirmation d'annulation</h5>
+        <h5 class="modal-title">Cancel Order</h5>
+        <!-- Bouton de fermeture -->
+      
       </div>
       <div class="modal-body">
-        Êtes-vous sûr de vouloir annuler la commande ?
+        <div class="flex align-items-center justify-content-center">
+          <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+          <span>Are you sure you want to cancel this order?</span>
+        </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="cancelConfirmationModal.close()">Fermer</button>
-        <button *ngIf="!isAdmin()" type="button" class="btn btn-danger" (click)="updateLivraisonStatut(selectedCommande?._id,'annulée')">Confirmer</button>
+        <!-- Bouton Cancel avec style Danger -->
+        <button *ngIf="!isAdmin() && selectedCommande?.statutLivraison !== 'annulée'"
+                type="button" class="btn btn-danger"
+                (click)="updateLivraisonStatut(selectedCommande?._id, 'annulée')">Cancel</button>
+                <button type="button" class="close" aria-label="Close" (click)="cancelConfirmationModal.close()">
+                  <span aria-hidden="true">&times;</span>
+                </button>
       </div>
     </div>
   </div>
 </dialog>
+
+

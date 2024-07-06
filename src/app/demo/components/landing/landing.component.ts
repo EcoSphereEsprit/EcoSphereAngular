@@ -63,6 +63,10 @@ export class LandingComponent implements OnDestroy, OnInit {
         })
     }
 
+    navigateToBlogList() {
+        this.router.navigate(['/blog/list']);
+      }
+
     createBlobUrl(blob: Blob): string {
         return window.URL.createObjectURL(blob);
     }
@@ -107,4 +111,14 @@ export class LandingComponent implements OnDestroy, OnInit {
     navigateToProducts() {
         this.router.navigate(["/productList/list"]);
     }
+    navigateToBlogStat() {
+        this.router.navigate(['/blog/stat']); 
+      }
+      isAdmin(): boolean {
+        const role = localStorage.getItem('role');
+        return role === 'ADMIN';
+      }
+    
+
+
 }

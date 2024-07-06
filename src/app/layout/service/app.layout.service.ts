@@ -32,12 +32,11 @@ export class LayoutService {
 
     config: AppConfig = {
         ripple: false,
-        menuMode: 'static',
+        menuMode: localStorage.getItem('role')  == 'ADMIN' ?  'static' : 'horizontal',
         colorScheme: 'dark',
         theme: 'magenta',
         scale: 14,
     };
-
     state: LayoutState = {
         staticMenuDesktopInactive: false,
         overlayMenuActive: false,

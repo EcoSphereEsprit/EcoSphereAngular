@@ -1,17 +1,33 @@
 <div class="card">
-    <p-dataView [value]="totalBlogs" [paginator]="true" [rows]="3" filterBy="title" [sortField]="sortField" [sortOrder]="-1" layout="grid">
-      <ng-template pTemplate="header">
-        <div class="flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between gap-3">
-          <span class="text-xl text-900 font-semibold">Articles</span>
-          <p-dropdown [options]="sortOptions" [(ngModel)]="sortField" placeholder="Sort by" styleClass="w-full md:w-15rem"></p-dropdown>
-        </div>
-      </ng-template>
-  
-      <ng-template let-blog pTemplate="gridItem">
-        <div class="col-12 md:col-4">
-          <app-blog-list-card [blog]="blog" (blogClicked)="onBlogSelected($event)"></app-blog-list-card>
-        </div>
-      </ng-template>
-    </p-dataView>
+  <div style="display: flex; justify-content: center; width: 100%; padding: 10px;">
+    <div style="display: flex; width: 100%; max-width: 800px;">
+      <input type="text" pInputText placeholder="Rechercher " [(ngModel)]="searchQuery" (input)="onSearchInputChange(searchQuery)" style="flex: 1; margin-right: 10px;" />
+      <button *ngIf="isAdmin()" pButton pRipple class="p-button-primary" label="Create Blog" icon="pi pi-plus" (click)="navigateToCreateBlog()" style="flex-shrink: 0;"></button>
+    </div>
   </div>
   
+
+  
+
+  <p-dataView [value]="blogs" [paginator]="true" [rows]="3" filterBy="title" [sortField]="sortField" [sortOrder]="-1" layout="grid">
+    <ng-template pTemplate="header">
+      <div class="flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between gap-3">
+        <span class="text-xl text-900 font-semibold">Our Blogs</span>
+        <!-- Here's the new dropdown for sorting -->
+        <p-dropdown [options]="sortOptions" [(ngModel)]="sortField" placeholder="Sort by" (onChange)="applySort()"></p-dropdown>
+      </div>
+      <ul>
+        <li *ngFor="let blog of blogs">
+          {{ blog.title }} 
+        </li>
+      </ul>
+
+    </ng-template>
+
+    <ng-template let-blog pTemplate="gridItem">
+      <div class="col-12 md:col-4">
+        <app-blog-list-card [blog]="blog" (blogClicked)="onBlogSelected($event)"></app-blog-list-card>
+      </div>
+    </ng-template>
+  </p-dataView>
+</div>
