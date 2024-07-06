@@ -83,7 +83,9 @@ export class ProfileCreateComponent implements OnInit {
         ).subscribe(
             response => {
                 // Handle success response
+                localStorage.setItem('avatrUrl',response.image)
                 this.messageService.add({ key: 'tst', severity: 'success', summary: 'Success Message', detail: 'user updated' });
+                window.location.reload();
             },
             error => {
                 // Handle error response

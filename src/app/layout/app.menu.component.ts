@@ -24,7 +24,7 @@ export class AppMenuComponent implements OnInit {
           });
     }
     ngOnInit() {
-        this.role = localStorage.getItem("role");
+        this.role = localStorage.getItem("role") ?? '';
 
 
         this.modelAsmin = [

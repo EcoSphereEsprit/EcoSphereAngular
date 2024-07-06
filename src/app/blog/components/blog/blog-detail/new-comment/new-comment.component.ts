@@ -11,12 +11,21 @@ export class NewCommentComponent implements OnInit {
   content: string = '';
   date: string = '';
   username : any;
-  
-  constructor(private commentService: CommentService, private router: Router) {}
+  isLoggedIn !: boolean
+  constructor(private commentService: CommentService, private router: Router) {
+    
+  }
 
   ngOnInit() {
     this.username = localStorage.getItem('username') ;
     this.date = new Date().toISOString().slice(0, 10);
+    const isloggedinValue = localStorage.getItem('isLoggedIn') ?? ''
+    if(isloggedinValue == 'true'){
+      this.isLoggedIn = true
+    }
+    else{
+      this.isLoggedIn = false
+    }
   }
   getUsernameUrlFromLocalStorage() {
     this.username = localStorage.getItem('username') ; // Retrieve avatar URL from local storage

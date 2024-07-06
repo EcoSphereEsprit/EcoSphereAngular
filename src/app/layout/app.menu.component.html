@@ -5,7 +5,7 @@
     </ng-container>
 </ul> -->
 
-<ul class="layout-menu" *ngIf="role ==='USER'">
+<ul class="layout-menu" *ngIf="role ==='USER' || role === ''">
     <ng-container *ngFor="let item of modelUser; let i = index ;">
         <li app-menuitem *ngIf="!item.separator  && enableShowMenu" [item]="item" [index]="i" [root]="true"></li>
         <li  *ngIf="item.separator && enableShowMenu" class="menu-separator"></li>

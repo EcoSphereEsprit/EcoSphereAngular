@@ -35,25 +35,23 @@
                 <button pButton type="button" icon="pi pi-cog" class="p-button-text p-button-secondary text-color-secondary p-button-rounded flex-shrink-0" (click)="onConfigButtonClick()"></button>
             </li>
 
-            <li #profile class="profile-item topbar-item " >
+            <li class="ml-3">
+                <button pButton type="button" label="Login" class="p-button-text p-button-secondary text-color-secondary p-button-rounded flex-shrink-0" routerLink="/auth/login" *ngIf="isloggedIn === false"></button>
+            </li>
+            
+            <li #profile class="profile-item topbar-item " *ngIf="isloggedIn === true">
                 <a pStyleClass="@next" enterClass="ng-hidden" enterActiveClass="px-scalein" leaveToClass="ng-hidden" leaveActiveClass="px-fadeout" [hideOnOutsideClick]="true" pRipple class="cursor-pointer">
-                    <img class="border-circle" src="assets/demo/images/avatar/square/avatar-m-1.jpg">
+                    <img class="border-circle" [src]="avatarImageUrl">
                 </a>
 
                 <ul class="topbar-menu active-topbar-menu p-4 w-15rem z-5 ng-hidden border-round">
                     <li role="menuitem" class="m-0 mb-3">
-                        <a href="#" class="flex align-items-center hover:text-primary-500 transition-duration-200" pStyleClass="@grandparent" enterClass="ng-hidden" enterActiveClass="px-scalein" leaveToClass="ng-hidden" leaveActiveClass="px-fadeout">
+                        <a href="#" routerLink="/profile" class="flex align-items-center hover:text-primary-500 transition-duration-200" pStyleClass="@grandparent" enterClass="ng-hidden" enterActiveClass="px-scalein" leaveToClass="ng-hidden" leaveActiveClass="px-fadeout">
                             <i class="pi pi-fw pi-lock mr-2"></i>
                             <span>Privacy</span>
                         </a>
                     </li>
-                    <li role="menuitem" class="m-0 mb-3">
-                        <a href="#" class="flex align-items-center hover:text-primary-500 transition-duration-200" pStyleClass="@grandparent" enterClass="ng-hidden" enterActiveClass="px-scalein" leaveToClass="ng-hidden" leaveActiveClass="px-fadeout">
-                            <i class="pi pi-fw pi-cog mr-2"></i>
-                            <span>Settings</span>
-                        </a>
-                    </li>
-                    <li role="menuitem" class="m-0">
+                    <li role="menuitem" class="m-0" (click)="logout()">
                         <a href="#" class="flex align-items-center hover:text-primary-500 transition-duration-200" pStyleClass="@grandparent" enterClass="ng-hidden" enterActiveClass="px-scalein" leaveToClass="ng-hidden" leaveActiveClass="px-fadeout">
                             <i class="pi pi-fw pi-sign-out mr-2"></i>
                             <span>Logout</span>

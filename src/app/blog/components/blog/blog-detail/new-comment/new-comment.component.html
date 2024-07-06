@@ -1,10 +1,10 @@
-<div class="text-xl text-900 mb-4 font-bold mt-8">Post a Comment</div>
+<div class="text-xl text-900 mb-4 font-bold mt-8" *ngIf="isLoggedIn">Post a Comment</div>
 
 <form (ngSubmit)="addComment()">
   <div class="mb-3 p-fluid">
-    <textarea rows="6" pInputTextarea placeholder="Your comment" [(ngModel)]="content" name="content" required></textarea>
+    <textarea rows="6" pInputTextarea placeholder="Your comment" [(ngModel)]="content" name="content" required *ngIf="isLoggedIn"></textarea>
   </div>
   <div class="flex justify-content-end">
-    <button pButton pRipple label="Post Comment" type="submit"></button>
+    <button pButton pRipple label="Post Comment" type="submit" *ngIf="isLoggedIn"></button>
   </div>
 </form>

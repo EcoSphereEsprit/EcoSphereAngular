@@ -78,6 +78,7 @@
             </div>
         </div>
         <!-- Bouton de validation de la commande -->
-        <button pButton type="button" label="Confirm Command" class="mt-4" (click)="checkout()"></button>
+
+        <button pButton type="button" [label]="buttonText" class="mt-4" (click)="checkout()" [disabled]="!isLoggedIn"></button>
     </div>
 </div>
