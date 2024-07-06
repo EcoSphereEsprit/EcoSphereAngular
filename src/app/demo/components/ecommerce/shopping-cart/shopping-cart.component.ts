@@ -1,13 +1,76 @@
-import { Component } from '@angular/core';
-import { SelectItem } from 'primeng/api';
+import { Router } from '@angular/router'; // Importer le Router
+import { Component, OnInit } from '@angular/core';
 
 @Component({
-    templateUrl: './shopping-cart.component.html'
+    templateUrl: './shopping-cart.component.html',
+    styleUrls: ['./shopping-cart.component.scss']
 })
-export class ShoppingCartComponent {
+export class ShoppingCartComponent implements OnInit {
 
-    constructor() { }
+    cart: any[] = [];
+    total: number = 0;
+    subtotal: number = 0;
+    vat: number = 0;
+    shippingCost: number = 0;
+    paymentMethod: string = 'card'; // Default payment method
 
-    quantityOptions: SelectItem[] = [{ label: '1', value: 1 }, { label: '2', value: 2 }, { label: '3', value: 3 }, { label: '4', value: 4 }];
-    
+    constructor( private router: Router) {
+        const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
+        this.cart = cartItems;
+
+        this.calculateTotals();
+    }
+
+    ngOnInit() {
+        this.syncLocalStorage();
+    }
+
+    updateQuantity(index: number, quantity: number) {
+      this.cart[index].quantity = quantity;
+      this.calculateTotals();
+      this.syncLocalStorage();
+  }
+
+  removeItem(index: number) {
+      this.cart.splice(index, 1);
+      this.calculateTotals();
+      this.syncLocalStorage();
+  }
+
+  calculateTotals() {
+      let subtotal = 0;
+
+      for (let item of this.cart) {
+          item.subtotal = item.price * item.quantity;
+          subtotal += item.subtotal;
+      }
+
+      this.total = subtotal;
+  }
+
+  updatePaymentMethod(method: string) {
+      this.paymentMethod = method;
+      this.syncLocalStorage();
+  }
+
+  syncLocalStorage() {
+      localStorage.setItem('cartItems', JSON.stringify(this.cart)); // Adjusted to 'cartItems'
+      localStorage.setItem('total', JSON.stringify(this.total));
+      localStorage.setItem('paymentMethod', this.paymentMethod);
+  }
+
+  checkout() {
+      console.log('Checkout initiated:');
+      console.log('Payment Method:', this.paymentMethod);
+      console.log('Total:', this.total.toFixed(2));
+      console.log('Cart Items:');
+
+      this.cart.forEach(item => {
+          console.log('- Name:', item.name);
+          console.log('  Quantity:', item.quantity);
+          console.log('  Image:', item.image); // Ensure image property is set in your cart items
+      });
+
+      this.router.navigateByUrl('/ecommerce/checkout-form');
+  }
 }

@@ -3,14 +3,21 @@ interface InventoryStatus {
     value: string;
 }
 export interface Product {
-    id?: string;
-    code?: string;
+    _id? : string ;
     name?: string;
+    prix?: string;
+    quantite_stock?: string;
+    brand?: string;
+    categorie?: string;
+    couleur?: string;
+    available?: boolean;
     description?: string;
-    price?: number;
-    quantity?: number;
-    inventoryStatus?: InventoryStatus;
-    category?: string;
-    image?: string;
-    rating?: number;
+    image?: Image;
+}
+
+
+interface Image {
+    name: string;
+    objectURL: string;
+    file ?: File
 }

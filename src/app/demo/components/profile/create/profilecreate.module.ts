@@ -9,7 +9,9 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ProfileCreateComponent } from './profilecreate.component';
 import { ProfileCreateRoutingModule } from './profilecreate-routing.module';
-
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
+import { ToastModule } from 'primeng/toast';
 @NgModule({
 	imports: [
 		CommonModule,
@@ -20,7 +22,10 @@ import { ProfileCreateRoutingModule } from './profilecreate-routing.module';
 		InputTextModule,
 		DropdownModule,
 		FileUploadModule,
-		InputTextareaModule
+		InputTextareaModule,
+		ToastModule,
+        MessagesModule,
+        MessageModule
 	],
 	declarations: [ProfileCreateComponent]
 })

@@ -94,17 +94,17 @@ export class EcommerceDashboardComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.customerService.getCustomersLarge().then(customers => {
+        this.customerService.getCustomersLarge().then((customers : any) => {
             this.customersTable = customers;
             // @ts-ignore
             this.customersTable.forEach(customer => customer.date = new Date(customer.date));
         });
-        this.customerService.getCustomersLarge().then(customers => {
+        this.customerService.getCustomersLarge().then((customers : any) => {
             this.customersTable1 = customers;
             // @ts-ignore
             this.customersTable1.forEach(customer => customer.date = new Date(customer.date));
         });
-        this.customerService.getCustomersMedium().then(customers => {
+        this.customerService.getCustomersMedium().then((customers : any) => {
             this.customersTable2 = customers;
             // @ts-ignore
             this.customersTable2.forEach(customer => customer.date = new Date(customer.date));

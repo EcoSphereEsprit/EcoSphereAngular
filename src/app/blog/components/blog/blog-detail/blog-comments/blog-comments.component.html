@@ -1,0 +1,16 @@
+<div class="flex align-items-center mb-4 font-bold">
+    <span class="text-xl text-900 mr-4">Comments</span>
+    <span class="inline-flex align-items-center justify-content-center w-2rem h-2rem border-1 surface-border border-round">{{totalComments.length}}</span>
+</div>
+<ul class="list-none p-0 m-0">
+    <li *ngFor="let comment of totalComments" class="flex p-3 mb-3 border-1 surface-border border-round">
+        <div class="flex-grow-1">
+            <span class="font-semibold text-900">{{comment.content}}</span>
+            <p class="font-semibold text-600 m-0 text-sm">{{comment.date}}</p>
+        </div>
+        <div class="flex">
+            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-text mr-2"></button>
+            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-text" (click)="deleteComment(comment._id)"></button>
+        </div>
+    </li>
+</ul>

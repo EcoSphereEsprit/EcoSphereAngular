@@ -4,7 +4,7 @@ import { BlogDetailComponent } from './blog-detail.component';
 
 @NgModule({
     imports: [RouterModule.forChild([
-        { path: '', component: BlogDetailComponent }
+        { path: 'home', component: BlogDetailComponent }
     ])],
     exports: [RouterModule]
 })

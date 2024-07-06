@@ -6,10 +6,12 @@ import { ButtonModule } from 'primeng/button';
 import { RouterModule } from '@angular/router';
 import { StyleClassModule } from 'primeng/styleclass';
 import { AppConfigModule } from 'src/app/layout/config/app.config.module';
-import { AnimateEnterDirective } from './animateenter.directive'; 
+import { AnimateEnterDirective } from './animateenter.directive';
+import { CardModule } from 'primeng/card';
 
 @NgModule({
     imports: [
+        CardModule,
         CommonModule,
         LandingRoutingModule,
         ButtonModule,

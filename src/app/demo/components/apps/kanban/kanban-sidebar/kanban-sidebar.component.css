@@ -1,0 +1,33 @@
+:host ::ng-deep .p-autocomplete {
+  display: block;
+}
+
+:host ::ng-deep .p-autocomplete .p-autocomplete-multiple-container {
+  gap: 0.5rem;
+}
+
+:host ::ng-deep .p-autocomplete .p-autocomplete-multiple-container .p-autocomplete-token {
+  background: var(--surface-ground);
+  border: 1px solid var(--surface-border);
+}
+
+:host ::ng-deep .p-sidebar .p-sidebar-header {
+  display: none;
+}
+
+:host ::ng-deep .p-sidebar .p-sidebar-content {
+  padding: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  height: 100%;
+  overflow: auto;
+}
+/*# sourceMappingURL=kanban-sidebar.component.css.map */

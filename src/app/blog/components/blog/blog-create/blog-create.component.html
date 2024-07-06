@@ -1,0 +1,34 @@
+<div class="card">
+    <span class="block text-900 font-bold text-xl mb-4">Create a new post</span>
+    <div class="grid">
+        <div class="col-12 lg:col-12">
+            <p-fileUpload #fileUploader name="image" (onSelect)="onUpload($event)" [customUpload]="true" [showUploadButton]="false" [showCancelButton]="false" [auto]="true" styleClass="border-1 surface-border surface-card p-0 border-round mb-4">
+                <ng-template pTemplate="content">
+                    <div class="h-20rem m-1 border-round">
+                        <div *ngIf="!image" class="flex flex-column w-full h-full justify-content-center align-items-center cursor-pointer" (click)="fileUploader.advancedFileInput.nativeElement.click()">
+                            <i class="pi pi-fw pi-file text-4xl text-primary"></i>
+                            <span class="block font-semibold text-900 text-lg mt-3">Drop or select a cover image</span>
+                        </div>
+                        <div *ngIf="image" class="w-full h-full relative border-round p-0">
+                            <img [src]="objectURL" class="w-full h-full border-round" alt="blog cover">
+                            <button pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-primary text-sm absolute justify-content-center align-items-center" style="top: -10px; right: -10px;" (click)="$event.stopPropagation(); removeImage()"></button>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-fileUpload>
+            <div class="flex flex-column p-fluid">
+                <div class="mb-4">
+                    <input type="text" pInputText placeholder="Title" [(ngModel)]="title" name="title"/>
+                </div>
+                <div class="mb-4">
+                    <textarea rows="6" pInputTextarea placeholder="Content" [(ngModel)]="description" name="description" [autoResize]="true"></textarea>
+                </div>
+               
+            </div>
+        </div>
+        <div class="flex justify-content-between gap-3">
+            <button pButton pRipple class="p-button-danger flex-1 p-button-outlined" label="Discard" icon="pi pi-fw pi-trash" (click)="discard()"></button>
+            <button pButton pRipple class="p-button-primary flex-1" label="Publish" icon="pi pi-fw pi-check" (click)="createBlog()"></button>
+        </div>
+    </div>
+</div>

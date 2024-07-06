@@ -8,7 +8,11 @@ import { InputTextModule } from 'primeng/inputtext';
 import { RippleModule } from 'primeng/ripple';
 import { AppConfigModule } from 'src/app/layout/config/app.config.module';
 import { PasswordModule } from 'primeng/password';
+import { RouterModule,Routes } from '@angular/router';
 
+const routes: Routes = [
+    { path: ':uuid', component: NewPasswordComponent }
+  ];
 @NgModule({
     imports: [
         CommonModule,
@@ -18,7 +22,8 @@ import { PasswordModule } from 'primeng/password';
         InputTextModule,
         RippleModule,
         AppConfigModule,
-        PasswordModule
+        PasswordModule,
+        RouterModule.forChild(routes)
     ],
     declarations: [NewPasswordComponent]
 })

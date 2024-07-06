@@ -1,0 +1,46 @@
+<div class="card ">
+    <div class="grid mb-7">
+        <div class="col-12 lg:col-7">
+            <div class="flex">
+              
+                <div class="pl-3 w-10 flex">
+                    <img [src]="product.image" class="w-full border-2 border-transparent border-round"/>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 lg:col-4 py-3 lg:pl-6">
+            <div class="flex align-items-center text-xl font-medium text-900 mb-4">{{ product.name }}</div>
+            <div class="flex align-items-center justify-content-between mb-5">
+                <span class="text-900 font-medium text-3xl block">${{ product.prix }}</span>
+                
+            </div>
+
+            <div class=" surface-border border-round">
+                <span class="text-900 font-bold block border-bottom-1 surface-border p-3">Colors</span>
+                <div class="p-3 flex">
+                    <div *ngFor="let color of colorOptions" class="w-2rem h-2rem mr-2 border-1 surface-border border-circle cursor-pointer flex justify-content-center align-items-center" [class]="color.background" >
+                        <i class="pi pi-check text-sm text-white" *ngIf="product.couleur === color.name"></i>
+                    </div>
+                </div>
+            </div>
+
+
+            
+            <div class="font-bold text-900 mb-3">Quantity</div>
+            <div class="flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between">
+                <p-inputNumber [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" [min]="0" inputStyleClass="w-3rem text-center" [(ngModel)]="quantity"
+                    decrementButtonClass="p-button-text" incrementButtonClass="p-button-text" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"></p-inputNumber>
+                <div class="mt-3 sm:mt-0 sm:ml-5">
+                    <button pButton pRipple label="Add to Cart" class="w-full" [disabled]="quantity === 0" (click)="addToCart()"></button>
+                </div>
+            </div>
+
+            <div class="flex align-items-center mt-5">
+                <button pButton pRipple icon="pi pi-heart" class="p-button-rounded p-button-text" [ngClass]="{'surface-900 text-white': liked, 'text-600': !liked}" (click)="liked = !liked"></button>
+                <span class="ml-2 font-medium text-600">222</span>
+            </div>
+        </div>
+    </div>
+
+  
+</div>

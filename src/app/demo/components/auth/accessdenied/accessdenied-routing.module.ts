@@ -8,4 +8,4 @@ import { AccessdeniedComponent } from './accessdenied.component';
     ])],
     exports: [RouterModule]
 })
-export class AccessdeniedRoutingModule {}
+export class AccessdeniedRoutingModule { }

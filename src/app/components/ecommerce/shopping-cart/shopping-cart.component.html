@@ -1,0 +1,86 @@
+<div class="card">
+    <ul class="list-none p-0 m-0">
+        <!-- Liste des articles du panier -->
+        <li *ngFor="let item of cart; let i = index" class="flex flex-column md:flex-row py-6 border-top-1 border-bottom-1 surface-border md:align-items-center">
+            <!-- Image de l'article -->
+            <img [src]="item.image" class="w-12rem flex-shrink-0 mx-auto md:mx-0" />
+            <!-- Détails de l'article et contrôles -->
+            <div class="flex-auto py-5 md:pl-5">
+                <!-- Nom de l'article -->
+                <div class="flex flex-wrap align-items-start sm:align-items-center sm:flex-row sm:justify-content-between surface-border pb-6">
+                    <div class="w-full sm:w-6 flex flex-column">
+                        <span class="text-900 text-xl font-medium mb-3">{{ item.name }}</span>
+                    </div>
+                    <!-- Quantité et lien de suppression -->
+                    <div class="w-full sm:w-6 flex align-items-start justify-content-between mt-3 sm:mt-0">
+                        <!-- Entrée de quantité -->
+                        <div>
+                            <input type="number" class="quantity-input" [(ngModel)]="item.quantity" (input)="updateQuantity(i, item.quantity)" />
+                        </div>
+                        <!-- Sous-total et lien de suppression -->
+                        <div class="flex flex-column sm:align-items-end">
+                            <!-- Sous-total de l'article -->
+                            <span class="text-900 text-xl font-medium mb-2 sm:mb-3">DT{{ (item.price * item.quantity).toFixed(2) }}</span>
+                            <!-- Lien pour supprimer l'article -->
+                            <a class="cursor-pointer text-pink-500 font-medium text-sm hover:text-pink-600 transition-colors transition-duration-300" tabindex="0" (click)="removeItem(i)">Supprimer</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Détails supplémentaires de l'article -->
+                <div class="flex flex-column">
+                    <span class="inline-flex align-items-center mb-3">
+                        <i class="pi pi-envelope text-700 mr-2"></i>
+                        <span class="text-700 mr-2">Commandé aujourd'hui</span>
+                    </span>
+                    <span class="inline-flex align-items-center mb-3">
+                        <i class="pi pi-send text-700 mr-2"></i>
+                        <span class="text-700 mr-2">Livré d'ici le <span class="font-bold">23 déc.</span></span>
+                    </span>
+                    <span class="flex align-items-center">
+                        <i class="pi pi-exclamation-triangle text-700 mr-2"></i>
+                        <span class="text-700">Quelques articles restants</span>
+                    </span>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    <!-- Totaux et méthodes de paiement -->
+    <div class="mt-5">
+        <h5 class="font-medium text-900 mb-3">Détails de la commande</h5>
+        <div class="flex flex-column">
+            <div class="flex justify-content-between mb-3">
+                <span class="text-700">Sous-total</span>
+                <span class="text-900 font-medium">DT{{ subtotal.toFixed(2) }}</span>
+            </div>
+            <div class="flex justify-content-between mb-3">
+                <span class="text-700">TVA</span>
+                <span class="text-900 font-medium">DT{{ vat.toFixed(2) }}</span>
+            </div>
+            <div class="flex justify-content-between mb-3">
+                <span class="text-700">Frais de livraison</span>
+                <span class="text-900 font-medium">DT{{ shippingCost.toFixed(2) }}</span>
+            </div>
+            <div class="flex justify-content-between mb-3">
+                <span class="text-700">Total</span>
+                <span class="text-900 font-medium">DT{{ total.toFixed(2) }}</span>
+            </div>
+        </div>
+
+        <!-- Méthode de paiement -->
+        <h5 class="font-medium text-900 mb-3">Méthode de paiement</h5>
+        <div class="flex flex-column">
+            <div class="field-radiobutton">
+                <p-radioButton name="paymentMethod" value="card" [(ngModel)]="paymentMethod" (onClick)="updatePaymentMethod('card')"></p-radioButton>
+                <label for="card">Carte de crédit</label>
+            </div>
+          
+            <div class="field-radiobutton">
+                <p-radioButton name="paymentMethod" value="cod" [(ngModel)]="paymentMethod" (onClick)="updatePaymentMethod('cod')"></p-radioButton>
+                <label for="cod">Paiement à la livraison</label>
+            </div>
+        </div>
+        <!-- Bouton de validation de la commande -->
+        <button pButton type="button" label="Valider la commande" class="mt-4" (click)="checkout()"></button>
+    </div>
+</div>
