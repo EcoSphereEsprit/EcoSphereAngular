@@ -1,19 +1,54 @@
-<p-dialog header="Image Upload" [modal]="true" [(visible)]="display" (visibleChange)="visibleChange($event)"
+<p-dialog header="Flash Sale Form" [modal]="true" [(visible)]="display" (visibleChange)="visibleChange($event)"
     [style]="{ width: '70vw' }">
     <div class="card">
-        <p-fileUpload name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" (onUpload)="onUpload($event)"
-            [multiple]="false" accept="image/*" [maxFileSize]="1000000">
-            <ng-template pTemplate="content">
-                <ul *ngIf="uploadedFiles.length">
-                    <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
-                </ul>
-            </ng-template>
-        </p-fileUpload>
+        <form [formGroup]="flashSaleForm">
+            <div class="grid">
+                <label class="col-3">Current Price</label>
+                <div class="col-3">
+                    <p-inputNumber [style]="{'width':'100%'}" mode="currency" [maxFractionDigits]="3"
+                        [minFractionDigits]="3" currency="TND" formControlName="price"></p-inputNumber>
+                </div>
+
+                <label class="col-3">Discount Price</label>
+                <div class="col-3">
+                    <p-inputNumber [style]="{'width':'100%'}" mode="currency" [maxFractionDigits]="3"
+                        [minFractionDigits]="3" currency="TND" formControlName="discountPrice"></p-inputNumber>
+                    <br>
+                    <small
+                        *ngIf="formSubmitted && flashSaleForm.controls['discountPrice'].errors && flashSaleForm.controls['discountPrice'].errors?.['required']"
+                        style="color: red">Discount Price is mandatory !</small>
+                </div>
+                <label class="col-3">Start Date</label>
+                <div class="col-3">
+                    <p-calendar [style]="{'width':'100%'}" [showIcon]="true" dateFormat="dd/mm/yy" appendTo="body"
+                        formControlName="startDate"></p-calendar>
+                </div>
+
+                <label class="col-3">End Date</label>
+                <div class="col-3">
+                    <p-calendar [style]="{'width':'100%'}" [showIcon]="true" dateFormat="dd/mm/yy" appendTo="body"
+                        formControlName="endDate" [minDate]="minDateForFlashSale"></p-calendar>
+                    <br>
+                    <small
+                        *ngIf="formSubmitted && flashSaleForm.controls['endDate'].errors && flashSaleForm.controls['endDate'].errors?.['required']"
+                        style="color: red">End Date is mandatory !</small>
+                </div>
+            </div>
+            <h6>Image Upload</h6>
+            <p-fileUpload name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php"
+                (onUpload)="onUpload($event)" [multiple]="false" accept="image/*" [maxFileSize]="1000000">
+                <ng-template pTemplate="content">
+                    <ul *ngIf="uploadedFile">
+                        <li>{{uploadedFile.name}} - {{uploadedFile.size}} bytes</li>
+                    </ul>
+                </ng-template>
+            </p-fileUpload>
+        </form>
         <!-- url="./upload.php"  -->
     </div>
-    <!-- <ng-template pTemplate="footer">
+    <ng-template pTemplate="footer">
         <button pButton pRipple type="button" label="Cancel" icon="pi pi-times"
             class="p-button-outlined p-button-secondary" (click)="visibleChange(false)"></button>
-        <button pButton pRipple label="Save" type="button" class="p-button-info"></button>
-    </ng-template> -->
+        <button pButton pRipple label="Save" type="button" class="p-button-info" (click)="save()"></button>
+    </ng-template>
 </p-dialog>

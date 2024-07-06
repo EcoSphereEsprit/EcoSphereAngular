@@ -498,22 +498,17 @@ export class AppMenuComponent implements OnInit {
     initOldModel() {
         this.model = [
             {
-                label: 'Administration',
+                label: 'Products Reduction',
                 items: [
                     {
-                        label: 'Products',
-                        icon: 'pi pi-box',
-                        items: [
-                            {
-                                label: 'Flash Sales',
-                                icon: 'pi pi-home',
-                                routerLink: ['/administration/flash_sale']
-                            },
-                        ]
+                        label: 'Flash Sales',
+                        icon: 'pi pi-arrow-down-right',
+                        routerLink: ['/administration/flash_sale']
                     },
                     {
-                        label: 'User',
-                        icon: 'pi pi-user',
+                        label: 'Coupons',
+                        icon: 'pi pi-tags',
+                        routerLink: ['/administration/coupon']
                     },
                 ]
             },

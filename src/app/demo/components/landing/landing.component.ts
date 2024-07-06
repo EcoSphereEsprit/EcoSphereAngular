@@ -4,6 +4,8 @@ import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { Subscription } from 'rxjs';
 import { UserServiceService } from 'src/app/demo/service/user.service.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { FlashSaleService } from 'src/app/administration/services/flash-sale.service';
+import { FlashSale } from 'src/app/administration/models/flashSale';
 
 @Component({
     templateUrl: './landing.component.html',
@@ -15,12 +17,16 @@ export class LandingComponent implements OnDestroy, OnInit {
     avatarImageUrl!: SafeUrl;
     darkMode: boolean = false;
 
+    flashSaleList: FlashSale[] = [];
+    flashSalesToDisplay: FlashSale[] = [];
+
     isloggedIn !: boolean;
     constructor(
         public router: Router,
         private layoutService: LayoutService,
         private userService: UserServiceService,
-        private sanitizer: DomSanitizer
+        private sanitizer: DomSanitizer,
+        private flashSaleService: FlashSaleService
     ) {
 
         this.subscription = this.layoutService.configUpdate$.subscribe(config => {
@@ -45,6 +51,16 @@ export class LandingComponent implements OnDestroy, OnInit {
         } else {
             this.isloggedIn = false;
         }
+        this.flashSaleService.getFlashSales().subscribe({
+            next: (reponse) => {
+                console.log(reponse);
+                this.flashSaleList = reponse;
+                this.flashSalesToDisplay = this.flashSaleList.slice(-4);
+                console.log(this.flashSalesToDisplay);
+            }, error: (error) => {
+                console.log(error);
+            }
+        })
     }
 
     createBlobUrl(blob: Blob): string {

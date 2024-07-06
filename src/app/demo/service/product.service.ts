@@ -15,6 +15,7 @@ export class ProductService {
 
     // Ajoutez cette méthode
     getProductById(productId: string) {
+        console.log(productId);
 
         return this.http.get<any>(`http://localhost:9090/produit/getProduitById/${productId}`)
             .toPromise()

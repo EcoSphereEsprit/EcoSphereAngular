@@ -115,7 +115,7 @@
             </a>
         </div>
 
-        <div #features class="header-features" style="padding: 100px 60px;">
+        <!-- <div #features class="header-features" style="padding: 100px 60px;">
             <div class="grid">
                 <div class="col-12 md:col-6 lg:col-4 flex justify-content-center">
                     <div class=" header-feature-box mr-3 mb-4 border-round-3xl p-5 text-white">
@@ -160,11 +160,11 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 
     <div class="landing-wrapper px-6 pb-8 absolute w-full"
-        style="color: #44486D; background: linear-gradient(180deg, #F4F8FB 17.13%, #EEEEFA 65.89%);">
+        style="color: #009543; background: linear-gradient(180deg, #F4F8FB 17.13%, #eefaf6 65.89%);">
 
         <div #flashSale id="flashSale" class="flex flashSale flex-column pr-8"
             style="padding-left: 14rem; margin-bottom: 8.5rem;">
@@ -176,29 +176,33 @@
                 <div class="col-12 lg:col-6">
                     <div class="card flex justify-content-center p-0 mr-6 h-full w-full"
                         style="border-radius: 20px;box-shadow: 0px 10px 50px rgba(29, 15, 57, 0.13);">
-                        <img alt="Card Image" class="card-img"
-                            src="/assets/demo/images/product/image_flash_sale_1.jpg" />
+                        <a href="#/ecommerce/product-overview">
+                            <img alt="Card Image" class="card-img" src="{{flashSalesToDisplay[0].image}}" />
+                        </a>
                     </div>
                 </div>
                 <div class="col-12 lg:col-6">
                     <div class="card flex justify-content-center p-0 mr-6 h-full w-full"
                         style="border-radius: 20px;box-shadow: 0px 10px 50px rgba(29, 15, 57, 0.13);">
-                        <img alt="Card Image" class="card-img"
-                            src="/assets/demo/images/product/image_flash_sale_2.jpg" />
+                        <a href="#/ecommerce/product-overview">
+                            <img alt="Card Image" class="card-img" src="{{flashSalesToDisplay[1].image}}" />
+                        </a>
                     </div>
                 </div>
                 <div class="col-12 lg:col-6">
                     <div class="card flex justify-content-center p-0 mr-6 h-full w-full"
                         style="border-radius: 20px;box-shadow: 0px 10px 50px rgba(29, 15, 57, 0.13);">
-                        <img alt="Card Image" class="card-img"
-                            src="/assets/demo/images/product/image_flash_sale_3.jpg" />
+                        <a href="#/ecommerce/product-overview">
+                            <img alt="Card Image" class="card-img" src="{{flashSalesToDisplay[2].image}}" href="/" />
+                        </a>
                     </div>
                 </div>
                 <div class="col-12 lg:col-6">
                     <div class="card flex justify-content-center p-0 mr-6 h-full w-full"
                         style="border-radius: 20px;box-shadow: 0px 10px 50px rgba(29, 15, 57, 0.13);">
-                        <img alt="Card Image" class="card-img"
-                            src="/assets/demo/images/product/image_flash_sale_4.jpg" />
+                        <a href="#/ecommerce/product-overview">
+                            <img alt="Card Image" class="card-img" src="{{flashSalesToDisplay[3].image}}" />
+                        </a>
                     </div>
                 </div>
             </div>
