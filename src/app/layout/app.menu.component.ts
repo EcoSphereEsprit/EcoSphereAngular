@@ -29,26 +29,7 @@ export class AppMenuComponent implements OnInit {
 
         this.modelAsmin = [
 
-            {
-                label: 'Administration',
-                items: [
-                    {
-                        label: 'Products',
-                        icon: 'pi pi-box',
-                        items: [
-                            {
-                                label: 'Flash Sales',
-                                icon: 'pi pi-home',
-                                routerLink: ['/administration/flash_sale']
-                            },
-                        ]
-                    },
-                    {
-                        label: 'User',
-                        icon: 'pi pi-user',
-                    },
-                ]
-            },
+            
             {
                 label: 'Blog',
                 items: [
