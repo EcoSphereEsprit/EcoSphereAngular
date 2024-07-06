@@ -22,6 +22,7 @@ export class BlogListComponent implements OnInit {
   private searchSubject = new Subject<string>();
   role: any;
 
+
   constructor(private blogService: BlogService, private router: Router) { }
 
   ngOnInit() {
