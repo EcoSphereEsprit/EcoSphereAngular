@@ -15,7 +15,9 @@
         <span class="text-xl text-900 font-semibold">Our Blogs</span>
         <!-- Here's the new dropdown for sorting -->
         <p-dropdown [options]="sortOptions" [(ngModel)]="sortField" placeholder="Sort by" (onChange)="applySort()"></p-dropdown>
+        
       </div>
+
       <ul>
         <li *ngFor="let blog of blogs">
           {{ blog.title }} 

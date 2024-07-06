@@ -18,6 +18,7 @@ export class BlogListComponent implements OnInit {
   blogs: Blog[] = [];
   searchQuery: string = '';
   sortField: string = 'date'; // Default sort by date
+  
   totalBlogs: Blog[] = [];
   private searchSubject = new Subject<string>();
   role: any;
@@ -42,6 +43,7 @@ export class BlogListComponent implements OnInit {
 
   onSearchInputChange(query: string) {
     this.searchSubject.next(query);
+    this.applySort();
   }
 
   loadBlogs() {
@@ -72,6 +74,7 @@ export class BlogListComponent implements OnInit {
         return (b.comment || 0) - (a.comment || 0);
       });
     }
+    console.log('Sorted blogs:', this.blogs); // Debugging statement
   }
   
   onSearch() {
