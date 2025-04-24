@@ -1,0 +1,50 @@
+<div class="grid">
+    <div class="col-12">
+      <div class="card px-6 py-6">
+        
+          <ng-template pTemplate="left">
+            <div class="my-2">
+              <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" ></button>
+              <button pButton pRipple 
+                      label="Supprimer" 
+                      icon="pi pi-trash" 
+                      class="p-button-danger" 
+                      (click)="deleteSelectedSeances()" 
+                     >
+              </button>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="right">
+          </ng-template>
+  
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 3rem">
+              </th>
+              <th>Titre</th>
+              <th>Description</th>
+              <th>Date</th>
+              <th>Type de Note</th>
+              <th>Actions</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-seance>
+            <tr>
+              <td>
+              </td>
+              <td>{{seance.titre}}</td>
+              <td>{{seance.description}}</td>
+              <td>{{seance.date}}</td>
+              <td>{{seance.typeNote}}</td>
+              <td>
+                <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-success mr-2"></button>
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2" (click)="editSeance(seance.id)"></button>
+                <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-warning" (click)="deleteSeance(seance.id)"></button>
+              </td>
+            </tr>
+          </ng-template>
+      </div>
+    </div>
+  </div>
+  
+  

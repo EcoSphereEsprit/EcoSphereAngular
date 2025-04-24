@@ -3,15 +3,17 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AppLayoutModule } from './layout/app.layout.module';
-import { CriteresComponent } from './gestion-notes/CritereEvaluation/critere-evaluation/critere-evaluation.component';
-import { CriteresModule } from './gestion-notes/CritereEvaluation/critere-evaluation.module';
+import { SeanceComponent } from './gestion-notes/seance/seance/seance.component';
+import { SeanceModule } from './gestion-notes/seance/seance.module';
+
 
 @NgModule({
     declarations: [
-        AppComponent    ],
+        AppComponent
+    ],
     imports: [
         AppRoutingModule,
-        AppLayoutModule,CriteresModule  
+        AppLayoutModule
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy }
