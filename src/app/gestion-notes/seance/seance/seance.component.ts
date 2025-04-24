@@ -2,51 +2,85 @@ import { Component, OnInit } from '@angular/core';
 import { SeanceDTO } from '../seance.model';
 import { SeanceService } from '../seance.service';
 
+
+
 @Component({
   templateUrl: './seance.component.html',
-  styleUrls: ['./seance.component.scss']
+  styleUrls: ['./seance.component.scss'],
 })
 export class SeanceComponent implements OnInit {
-deleteSelectedSeances() {
-throw new Error('Method not implemented.');
-}
   seances: SeanceDTO[] = [];
+  selectedSeances: SeanceDTO[] = [];
+  seanceDialog = false;
+  deleteSeanceDialog = false;
+  seance: SeanceDTO = { titre: '', description: '', date: '', typeNote: 'INDIVIDUELLE' };
+  isEdit = false;
+isEditMode: any;
 
   constructor(private seanceService: SeanceService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadSeances();
   }
 
-  loadSeances() {
-    this.seanceService.getAllSeances().subscribe(
-      (seances) => {
-        this.seances = seances;
-      },
-      (error) => {
-        console.error('Erreur lors du chargement des séances', error);
-      }
-    );
+  loadSeances(): void {
+    this.seanceService.getAll().subscribe(data => this.seances = data);
   }
 
-  
-  editSeance(id: string) {
-    // Appeler une méthode pour modifier la séance
-    console.log('Modifier la séance avec ID:', id);
+  openNew(): void {
+    this.seance = { titre: '', description: '', date: '', typeNote: 'INDIVIDUELLE' };
+    this.seanceDialog = true;
+    this.isEdit = false;
   }
-  
-  deleteSeance(id: string) {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cette séance ?')) {
-      this.seanceService.deleteSeance(id).subscribe(
-        () => {
-          console.log('Séance supprimée');
-          this.loadSeances();  // Recharge la liste des séances après suppression
-        },
-        (error) => {
-          console.error('Erreur lors de la suppression de la séance', error);
-        }
-      );
+
+  editSeance(id: string): void {
+    this.seanceService.getById(id).subscribe(s => {
+      this.seance = s;
+      this.seanceDialog = true;
+      this.isEdit = true;
+    });
+  }
+
+  deleteSeance(id: string): void {
+    this.seanceService.getById(id).subscribe(s => {
+      this.seance = s;
+      this.deleteSeanceDialog = true;
+    });
+  }
+
+  confirmDelete(): void {
+    if (this.seance.id) {
+      this.seanceService.delete(this.seance.id).subscribe(() => {
+        this.loadSeances();
+        this.deleteSeanceDialog = false;
+      });
     }
   }
-  
+
+  deleteSelectedSeances(): void {
+    this.selectedSeances.forEach(s => {
+      if (s.id) {
+        this.seanceService.delete(s.id).subscribe(() => this.loadSeances());
+      }
+    });
+    this.selectedSeances = [];
+  }
+
+  saveSeance(): void {
+    if (this.isEdit && this.seance.id) {
+      this.seanceService.update(this.seance.id, this.seance).subscribe(() => {
+        this.loadSeances();
+        this.seanceDialog = false;
+      });
+    } else {
+      this.seanceService.create(this.seance).subscribe(() => {
+        this.loadSeances();
+        this.seanceDialog = false;
+      });
+    }
+  }
+
+  viewSeance(id: string): void {
+    this.seanceService.getById(id).subscribe(s => this.seance = s);
+  }
 }

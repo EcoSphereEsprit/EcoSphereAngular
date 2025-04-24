@@ -1,50 +1,66 @@
-<div class="grid">
-    <div class="col-12">
-      <div class="card px-6 py-6">
-        
-          <ng-template pTemplate="left">
-            <div class="my-2">
-              <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" ></button>
-              <button pButton pRipple 
-                      label="Supprimer" 
-                      icon="pi pi-trash" 
-                      class="p-button-danger" 
-                      (click)="deleteSelectedSeances()" 
-                     >
-              </button>
-            </div>
-          </ng-template>
-          <ng-template pTemplate="right">
-          </ng-template>
-  
-          <ng-template pTemplate="header">
-            <tr>
-              <th style="width: 3rem">
-              </th>
-              <th>Titre</th>
-              <th>Description</th>
-              <th>Date</th>
-              <th>Type de Note</th>
-              <th>Actions</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-seance>
-            <tr>
-              <td>
-              </td>
-              <td>{{seance.titre}}</td>
-              <td>{{seance.description}}</td>
-              <td>{{seance.date}}</td>
-              <td>{{seance.typeNote}}</td>
-              <td>
-                <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-success mr-2"></button>
-                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2" (click)="editSeance(seance.id)"></button>
-                <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-warning" (click)="deleteSeance(seance.id)"></button>
-              </td>
-            </tr>
-          </ng-template>
-      </div>
-    </div>
+<!-- Boutons d'action -->
+<div class="mb-3 flex gap-2">
+    <button pButton pRipple label="Nouvelle séance" icon="pi pi-plus" class="p-button-success" (click)="openNew()"></button>
+    <button pButton pRipple label="Supprimer les sélectionnées" icon="pi pi-trash" 
+            class="p-button-danger" [disabled]="!selectedSeances || !selectedSeances.length"
+            (click)="deleteSelectedSeances()">
+    </button>
   </div>
   
+  <!-- Tableau des séances -->
+  <p-table [value]="seances" [(selection)]="selectedSeances" dataKey="id" [paginator]="true" [rows]="10" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th>Titre</th>
+        <th>Description</th>
+        <th>Date</th>
+        <th>Type de Note</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-seance>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="seance"></p-tableCheckbox>
+        </td>
+        <td>{{ seance.titre }}</td>
+        <td>{{ seance.description }}</td>
+        <td>{{ seance.date | date: 'shortDate' }}</td>
+        <td>{{ seance.typeNote }}</td>
+        <td>
+          <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2" (click)="editSeance(seance.id!)"></button>
+          <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteSeance(seance.id!)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  
+  <!-- Modal de création/modification -->
+  <p-dialog header="{{ isEditMode ? 'Modifier la séance' : 'Nouvelle séance' }}" [(visible)]="seanceDialog" [modal]="true" [style]="{ width: '500px' }" [closable]="false">
+    <div class="p-fluid">
+      <div class="p-field">
+        <label for="titre">Titre</label>
+        <input id="titre" type="text" pInputText [(ngModel)]="seance.titre" required />
+      </div>
+      <div class="p-field">
+        <label for="description">Description</label>
+        <textarea id="description" pInputTextarea [(ngModel)]="seance.description"></textarea>
+      </div>
+      <div class="p-field">
+        <label for="date">Date</label>
+        <input id="date" type="date" pInputText [(ngModel)]="seance.date" required />
+      </div>
+      <div class="p-field">
+        <label for="typeNote">Type de Note</label>
+        <input id="typeNote" type="text" pInputText [(ngModel)]="seance.typeNote" required />
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <button pButton label="Annuler" icon="pi pi-times" class="p-button-text" (click)="seanceDialog = false"></button>
+      <button pButton label="Sauvegarder" icon="pi pi-check" (click)="saveSeance()" [disabled]="!seance.titre || !seance.date || !seance.typeNote"></button>
+    </ng-template>
+  </p-dialog>
   

@@ -18,10 +18,11 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { SeanceRoutingModule } from './seance-routing.module';
+import { SeanceComponent } from './seance/seance.component';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [SeanceComponent  ],
   imports: [
 
     CommonModule,
