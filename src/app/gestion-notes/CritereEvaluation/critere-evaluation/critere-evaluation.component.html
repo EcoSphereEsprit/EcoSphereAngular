@@ -1,0 +1,103 @@
+<div class="grid">
+    <div class="col-12">
+      <div class="card px-6 py-6">
+        <p-toast></p-toast>
+        <p-toolbar styleClass="mb-4">
+          <ng-template pTemplate="left">
+            <div class="my-2">
+              <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+              <button pButton pRipple 
+              label="Supprimer" 
+              icon="pi pi-trash" 
+              class="p-button-danger" 
+              (click)="deleteSelectedCriteres()" 
+              [disabled]="!selectedCriteres || !selectedCriteres.length">
+      </button>
+                  </div>
+          </ng-template>
+  
+          <ng-template pTemplate="right">
+          </ng-template>
+        </p-toolbar>
+  
+       
+        <p-table #dt [value]="criteres" [paginator]="true" [rows]="10" [(selection)]="selectedCriteres" selectionMode="multiple" dataKey="id">
+            <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 3rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+              </th>
+              <th>Nom</th>
+              <th>Description</th>
+              <th>Coefficient</th>
+              <th>Affectée à Sprint</th>
+
+              <th>Actions</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-critere>
+            <tr>
+              <td>
+                <p-tableCheckbox [value]="critere"></p-tableCheckbox>
+              </td>
+              <td>{{critere.nom}}</td>
+              <td>{{critere.description}}</td>
+              <td>{{critere.coefficient}}</td>
+              <td>{{critere.sprintId}}</td>
+
+              <td>
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editCritere(critere)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteCritere(critere)"></button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+  
+  <p-dialog [(visible)]="critereDialog" [style]="{width: '450px'}" header="Détails du Critère" [modal]="true" class="p-fluid">
+    <ng-template pTemplate="content">
+      <div class="field">
+        <label for="nom">Nom</label>
+        <input type="text" pInputText id="nom" [(ngModel)]="critere.nom" required autofocus />
+      </div>
+      <div class="field">
+        <label for="description">Description</label>
+        <input type="text" pInputText id="description" [(ngModel)]="critere.description" required />
+      </div>
+      <div class="field">
+        <label for="coefficient">Coefficient</label>
+        <input type="number" pInputText id="coefficient" [(ngModel)]="critere.coefficient" required />
+      </div>
+       <div class="field">
+        <label for="sprintId">Sélectionner un Sprint</label>
+<p-dropdown 
+  [options]="sprints" 
+  [(ngModel)]="selectedSprintId" 
+  optionLabel="titre" 
+  placeholder="Sélectionner un Sprint">
+</p-dropdown>
+
+
+    </div>
+
+    </ng-template>
+  
+    <ng-template pTemplate="footer">
+      <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text" (click)="critereDialog = false"></button>
+      <button pButton pRipple label="Sauvegarder" icon="pi pi-check" class="p-button-text" (click)="saveCritere()"></button>
+    </ng-template>
+  </p-dialog>
+  
+  <p-dialog [(visible)]="deleteCritereDialog" header="Confirmer" [modal]="true" [style]="{width:'450px'}">
+    <div class="flex align-items-center justify-content-center">
+      <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+      <span>Êtes-vous sûr de vouloir supprimer <b>{{critere.nom}}</b> ?</span>
+    </div>
+    <ng-template pTemplate="footer">
+      <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text" (click)="deleteCritereDialog = false"></button>
+      <button pButton pRipple label="Supprimer" icon="pi pi-check" class="p-button-text" (click)="confirmDelete()"></button>
+    </ng-template>
+  </p-dialog>
+  
