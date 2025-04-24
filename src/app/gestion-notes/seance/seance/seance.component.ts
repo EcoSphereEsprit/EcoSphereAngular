@@ -10,10 +10,14 @@ import { SeanceService } from '../seance.service';
 })
 export class SeanceComponent implements OnInit {
   seances: SeanceDTO[] = [];
+  typeNoteOptions = [
+    { label: 'INDIVIDUELLE', value: 'INDIVIDUELLE' },
+    { label: 'NOTE GROUPE', value: 'NOTE GROUPE' }
+  ];  
   selectedSeances: SeanceDTO[] = [];
   seanceDialog = false;
   deleteSeanceDialog = false;
-  seance: SeanceDTO = { titre: '', description: '', date: '', typeNote: 'INDIVIDUELLE' };
+  seance: SeanceDTO = { titre: '', description: '', date: '', typeNote: 'INDIVIDUELLE' ,Note :0};
   isEdit = false;
 isEditMode: any;
 
@@ -28,7 +32,7 @@ isEditMode: any;
   }
 
   openNew(): void {
-    this.seance = { titre: '', description: '', date: '', typeNote: 'INDIVIDUELLE' };
+    this.seance = { titre: '', description: '', date: '', typeNote: 'INDIVIDUELLE' , Note:0 };
     this.seanceDialog = true;
     this.isEdit = false;
   }

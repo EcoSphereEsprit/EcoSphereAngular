@@ -4,5 +4,6 @@ export interface SeanceDTO {
     description: string;
     date: string;
     typeNote: 'INDIVIDUELLE' | 'GROUPE';
+    Note:0
   }
   

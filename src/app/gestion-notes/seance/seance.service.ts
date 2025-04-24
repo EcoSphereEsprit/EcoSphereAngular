@@ -11,7 +11,7 @@ export class SeanceService {
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<SeanceDTO[]> {
-    return this.http.get<SeanceDTO[]>(this.apiUrl);
+    return this.http.get<SeanceDTO[]>('http://localhost:9091/api/seances');
   }
 
   getById(id: string): Observable<SeanceDTO> {

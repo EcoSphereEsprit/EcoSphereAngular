@@ -1,7 +1,7 @@
 <!-- Boutons d'action -->
 <div class="mb-3 flex gap-2">
     <button pButton pRipple label="Nouvelle séance" icon="pi pi-plus" class="p-button-success" (click)="openNew()"></button>
-    <button pButton pRipple label="Supprimer les sélectionnées" icon="pi pi-trash" 
+    <button pButton pRipple label="Supprimer les sélectionnées" icon="pi pi-trash"
             class="p-button-danger" [disabled]="!selectedSeances || !selectedSeances.length"
             (click)="deleteSelectedSeances()">
     </button>
@@ -18,6 +18,7 @@
         <th>Description</th>
         <th>Date</th>
         <th>Type de Note</th>
+        <th>Note</th>
         <th>Actions</th>
       </tr>
     </ng-template>
@@ -30,6 +31,7 @@
         <td>{{ seance.description }}</td>
         <td>{{ seance.date | date: 'shortDate' }}</td>
         <td>{{ seance.typeNote }}</td>
+        <td>{{ seance.Note }}</td>
         <td>
           <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2" (click)="editSeance(seance.id!)"></button>
           <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteSeance(seance.id!)"></button>
@@ -55,7 +57,19 @@
       </div>
       <div class="p-field">
         <label for="typeNote">Type de Note</label>
-        <input id="typeNote" type="text" pInputText [(ngModel)]="seance.typeNote" required />
+        <p-dropdown 
+          id="typeNote"
+          [options]="typeNoteOptions" 
+          [(ngModel)]="seance.typeNote"
+          placeholder="Sélectionner un type"
+          optionLabel="label"
+          [showClear]="true"
+          >
+        </p-dropdown>
+      </div>
+      <div class="p-field">
+        <label for="note">Note</label>
+        <input id="note" type="text" pInputText [(ngModel)]="seance.Note" required />
       </div>
     </div>
     <ng-template pTemplate="footer">
