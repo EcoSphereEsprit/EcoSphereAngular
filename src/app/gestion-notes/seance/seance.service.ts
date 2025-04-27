@@ -1,17 +1,16 @@
-
-  import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SeanceDTO } from './seance.model';
 
 @Injectable({ providedIn: 'root' })
 export class SeanceService {
-  private apiUrl = 'http://localhost:9091/api/seance';
+  private apiUrl = 'http://localhost:9092/api/seances';
 
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<SeanceDTO[]> {
-    return this.http.get<SeanceDTO[]>('http://localhost:9091/api/seances');
+    return this.http.get<SeanceDTO[]>(this.apiUrl);
   }
 
   getById(id: string): Observable<SeanceDTO> {
@@ -36,5 +35,21 @@ export class SeanceService {
 
   affecterSprint(seanceId: string, sprintId: string): Observable<SeanceDTO> {
     return this.http.put<SeanceDTO>(`${this.apiUrl}/${seanceId}/affecter-sprint/${sprintId}`, {});
+  }
+
+  getCriteresBySprintId(sprintId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/sprints/sprint/${sprintId}`);
+  }
+
+  private apiUrlcritere = 'http://localhost:9091/api/criteres';
+
+  getAllSprints(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrlcritere}/sprints`);
+  }
+
+  private apiUrlcriteresprint = 'http://localhost:9091/api/criteres/sprints/';
+
+  getCriteriaBySprint(sprintId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrlcriteresprint}${sprintId}`);
   }
 }

@@ -19,6 +19,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { SeanceRoutingModule } from './seance-routing.module';
 import { SeanceComponent } from './seance/seance.component';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { SeanceComponent } from './seance/seance.component';
     DropdownModule,
     RadioButtonModule,
     InputNumberModule,
-    DialogModule ,SeanceRoutingModule]
+    DialogModule ,SeanceRoutingModule,
+    MultiSelectModule ]
 })
 export class SeanceModule { }

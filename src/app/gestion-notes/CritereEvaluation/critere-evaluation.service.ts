@@ -32,4 +32,15 @@ export class CritereEvaluationService {
       body: { ids }  // Passer les IDs des critères à supprimer
     });
   }
-}
+
+  private apiUrlcritere = 'http://localhost:9091/api/criteres';
+
+
+  getAllSprints(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrlcritere}/sprints`);
+  }
+  
+
+  getCriteresBySprintId(sprintId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrlcritere}/sprints/sprint/${sprintId}`);
+}}

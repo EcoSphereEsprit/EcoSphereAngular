@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SeanceDTO } from '../seance.model';
 import { SeanceService } from '../seance.service';
-
-
+import { CritereEvaluationService } from '../../CritereEvaluation/critere-evaluation.service';
 
 @Component({
   templateUrl: './seance.component.html',
@@ -12,16 +11,26 @@ export class SeanceComponent implements OnInit {
   seances: SeanceDTO[] = [];
   typeNoteOptions = [
     { label: 'INDIVIDUELLE', value: 'INDIVIDUELLE' },
-    { label: 'NOTE GROUPE', value: 'NOTE GROUPE' }
-  ];  
+    { label: 'NOTE GROUPE', value: 'NOTE GROUPE' },
+  ];
   selectedSeances: SeanceDTO[] = [];
   seanceDialog = false;
   deleteSeanceDialog = false;
-  seance: SeanceDTO = { titre: '', description: '', date: '', typeNote: 'INDIVIDUELLE' ,Note :0};
+  seance: SeanceDTO = { titre: '', description: '', date: '', typeNote: 'INDIVIDUELLE', Note: 0, sprintId:"1" };
   isEdit = false;
-isEditMode: any;
+  isEditMode: any;
 
-  constructor(private seanceService: SeanceService) {}
+  // Variables for criteria
+  critereDialog = false;
+  criteresOptions: any[] = [];
+  selectedCriteres: any[] = [];
+  currentSeance!: SeanceDTO;
+
+  // Variables for sprints
+  sprints: any[] = [];
+  selectedSprintId!: string;
+
+  constructor(private seanceService: SeanceService, private critereService: CritereEvaluationService) {}
 
   ngOnInit(): void {
     this.loadSeances();
@@ -32,7 +41,7 @@ isEditMode: any;
   }
 
   openNew(): void {
-    this.seance = { titre: '', description: '', date: '', typeNote: 'INDIVIDUELLE' , Note:0 };
+    this.seance = { titre: '', description: '', date: '', typeNote: 'INDIVIDUELLE', Note: 0 ,sprintId:"1"};
     this.seanceDialog = true;
     this.isEdit = false;
   }
@@ -86,5 +95,41 @@ isEditMode: any;
 
   viewSeance(id: string): void {
     this.seanceService.getById(id).subscribe(s => this.seance = s);
+  }
+
+  openCritereDialog(seance: SeanceDTO): void {
+    this.currentSeance = seance;
+    this.loadCriteres();
+    this.selectedCriteres = [];
+    this.critereDialog = true;
+  }
+
+  saveCriteres(): void {
+    if (this.currentSeance.id && this.selectedCriteres.length > 0) {
+      const criteresNoms = this.selectedCriteres.map(c => c.nom);
+      this.seanceService.affecterCriteres(this.currentSeance.id, criteresNoms).subscribe(() => {
+        this.loadSeances();
+        this.critereDialog = false;
+      });
+    }
+  }
+
+  // Load sprints
+  loadCriteres(): void {
+    this.critereService.getAllSprints().subscribe(sprints => {
+      this.sprints = sprints;
+    });
+  }
+
+  // Load criteria for selected sprint
+  loadCriteresBySprint(): void {
+    if (this.selectedSprintId) {
+      this.critereService.getCriteresBySprintId(this.selectedSprintId).subscribe(criteres => {
+        this.criteresOptions = criteres.map(c => ({
+          nom: c.nom,
+          coefficient: c.coefficient,
+        }));
+      });
+    }
   }
 }

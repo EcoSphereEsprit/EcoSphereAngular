@@ -4,6 +4,7 @@ export interface SeanceDTO {
     description: string;
     date: string;
     typeNote: 'INDIVIDUELLE' | 'GROUPE';
-    Note:0
+    Note:0;
+    sprintId : string ;
   }
   
