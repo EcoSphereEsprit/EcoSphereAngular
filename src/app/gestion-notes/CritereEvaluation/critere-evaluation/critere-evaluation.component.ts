@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { CritereEvaluationDTO } from '../critere-evaluation.model';
 import { CritereEvaluationService } from '../critere-evaluation.service';
+import { SprintService } from './sprint.service';
 
 @Component({
   templateUrl: './critere-evaluation.component.html',
@@ -13,28 +14,21 @@ export class CriteresComponent implements OnInit {
   critereDialog: boolean = false;
   deleteCritereDialog: boolean = false;
   critere: CritereEvaluationDTO = {} as CritereEvaluationDTO;
-  sprints: any[] = [
-    { id: 1, titre: 'Sprint 1', description: 'Premier sprint du projet', dateDebut: '2025-01-01', dateFin: '2025-01-15' },
-    { id: 2, titre: 'Sprint 2', description: 'Deuxième sprint du projet', dateDebut: '2025-02-01', dateFin: '2025-02-15' },
-    { id: 3, titre: 'Sprint 3', description: 'Troisième sprint du projet', dateDebut: '2025-03-01', dateFin: '2025-03-15' },
-    { id: 4, titre: 'Sprint 4', description: 'Quatrième sprint du projet', dateDebut: '2025-04-01', dateFin: '2025-04-15' }
-  ];
-  selectedSprintId: any
+  sprints: any[] = [];
+  selectedSprintId: any;
   selectedCriteres: any[] = [];  // Liste des critères sélectionnés
 
   constructor(
     private critereService: CritereEvaluationService,
+    private sprintService: SprintService,  // Inject SprintService
     private messageService: MessageService
   ) {}
 
-  
   ngOnInit(): void {
     this.loadCriteres();
+    this.loadSprints();  // Load sprints on initialization
   }
-  
- 
-  
-  
+
   loadCriteres() {
     this.critereService.getAll().subscribe(
       (data) => {
@@ -46,8 +40,19 @@ export class CriteresComponent implements OnInit {
       }
     );
   }
-  
-  
+
+  loadSprints() {
+    this.sprintService.getAll().subscribe(
+      (data) => {
+        console.log('Données des sprints:', data);  // Debugger les données des sprints
+        this.sprints = data;
+      },
+      (error) => {
+        console.error('Erreur lors du chargement des sprints:', error);
+      }
+    );
+  }
+
   openNew() {
     this.critere = {} as CritereEvaluationDTO;
     this.critereDialog = true;
@@ -87,9 +92,6 @@ export class CriteresComponent implements OnInit {
       );
     }
   }
-  
-  
-  
 
   editCritere(critere: CritereEvaluationDTO) {
     this.critere = { ...critere };
@@ -109,26 +111,17 @@ export class CriteresComponent implements OnInit {
     });
   }
 
-
-  
-
-  // Méthode pour supprimer les critères sélectionnés
   deleteSelectedCriteres() {
     if (this.selectedCriteres.length > 0) {
-      // Demander une confirmation avant la suppression
       if (confirm('Êtes-vous sûr de vouloir supprimer ces critères ?')) {
-        // Envoi de la requête DELETE pour supprimer les critères
         this.critereService.deleteCriteres(this.selectedCriteres.map(critere => critere.id))
           .subscribe(
             () => {
-              // Message de succès
-              this.messageService.add({severity: 'success', summary: 'Succès', detail: 'Critères supprimés avec succès.'});
-              // Rafraîchir la liste des critères après suppression
+              this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Critères supprimés avec succès.' });
               this.loadCriteres();
             },
             (error) => {
-              // Message d'erreur
-              this.messageService.add({severity: 'error', summary: 'Erreur', detail: 'Une erreur s\'est produite lors de la suppression des critères.'});
+              this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Une erreur s\'est produite lors de la suppression des critères.' });
             }
           );
       }
