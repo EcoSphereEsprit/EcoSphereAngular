@@ -140,12 +140,17 @@ export class SeanceComponent implements OnInit {
   
   saveCriteres(): void {
     if (this.currentSeance?.id) {
+      // On filtre les critères sélectionnés par rapport aux valeurs de selectedCriteres
       const selectedIds = Object.keys(this.selectedCriteres).filter(nom => this.selectedCriteres[nom]);
+  
+      // Envoi des critères sélectionnés ou désélectionnés
       this.seanceService.affecterCriteres(this.currentSeance.id, selectedIds).subscribe(() => {
-        this.critereDialog = false;
+        this.critereDialog = false;  // Fermer le dialog après l'opération
+        this.loadSeances();          // Rafraîchir la liste des séances pour voir les changements
       });
     }
   }
+  
 
 
 }
