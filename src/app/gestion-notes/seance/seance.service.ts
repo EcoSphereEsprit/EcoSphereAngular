@@ -29,10 +29,17 @@ export class SeanceService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  affecterCriteres(id: string, criteres: string[]): Observable<SeanceDTO> {
-    return this.http.put<SeanceDTO>(`${this.apiUrl}/${id}/affecter-criteres-par-nom`, criteres);
-  }
 
+
+  private apiUrlcriteresseances = 'http://localhost:9091/api/criteres/';
+
+  affecterCriteres(id: string, criteres: string[]): Observable<void> {
+    return this.http.post<void>(`${this.apiUrlcriteresseances}affecter-criteres/${id}`, criteres);
+  }
+  
+  
+
+  
   affecterSprint(seanceId: string, sprintId: string): Observable<SeanceDTO> {
     return this.http.put<SeanceDTO>(`${this.apiUrl}/${seanceId}/affecter-sprint/${sprintId}`, {});
   }
@@ -52,4 +59,6 @@ export class SeanceService {
   getCriteriaBySprint(sprintId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrlcriteresprint}${sprintId}`);
   }
+
+  
 }

@@ -1,5 +1,5 @@
 export interface SeanceDTO {
-    id?: string;
+    id?: string |undefined;
     titre: string;
     description: string;
     date: string;

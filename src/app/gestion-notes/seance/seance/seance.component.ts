@@ -9,39 +9,47 @@ import { CritereEvaluationService } from '../../CritereEvaluation/critere-evalua
 })
 export class SeanceComponent implements OnInit {
   seances: SeanceDTO[] = [];
+  selectedSeances: SeanceDTO[] = [];
+  seanceDialog = false;
+  deleteSeanceDialog = false;
+  isEdit = false;
+  selectedSeanceId: string = 'string';
+
+  seance: SeanceDTO = { titre: '', description: '', date: '', typeNote: 'INDIVIDUELLE', Note: 0, sprintId: "1" };
+
   typeNoteOptions = [
     { label: 'INDIVIDUELLE', value: 'INDIVIDUELLE' },
     { label: 'NOTE GROUPE', value: 'NOTE GROUPE' },
   ];
-  selectedSeances: SeanceDTO[] = [];
-  seanceDialog = false;
-  deleteSeanceDialog = false;
-  seance: SeanceDTO = { titre: '', description: '', date: '', typeNote: 'INDIVIDUELLE', Note: 0, sprintId:"1" };
-  isEdit = false;
-  isEditMode: any;
 
-  // Variables for criteria
+  // Criteres & Sprint
   critereDialog = false;
+  sprints: any[] = [];
+  selectedSprintId: string = '';
   criteresOptions: any[] = [];
   selectedCriteres: any[] = [];
-  currentSeance!: SeanceDTO;
+  currentSeance?: SeanceDTO|undefined;
 
-  // Variables for sprints
-  sprints: any[] = [];
-  selectedSprintId!: string;
-
-  constructor(private seanceService: SeanceService, private critereService: CritereEvaluationService) {}
+  constructor(
+    private seanceService: SeanceService,
+    private critereService: CritereEvaluationService
+  ) {}
 
   ngOnInit(): void {
     this.loadSeances();
+    this.loadSprints(); // chargement au début
   }
 
   loadSeances(): void {
     this.seanceService.getAll().subscribe(data => this.seances = data);
   }
 
+  loadSprints(): void {
+    this.critereService.getAllSprints().subscribe(s => this.sprints = s);
+  }
+
   openNew(): void {
-    this.seance = { titre: '', description: '', date: '', typeNote: 'INDIVIDUELLE', Note: 0 ,sprintId:"1"};
+    this.seance = { titre: '', description: '', date: '', typeNote: 'INDIVIDUELLE', Note: 0, sprintId: "1" };
     this.seanceDialog = true;
     this.isEdit = false;
   }
@@ -93,43 +101,51 @@ export class SeanceComponent implements OnInit {
     }
   }
 
-  viewSeance(id: string): void {
-    this.seanceService.getById(id).subscribe(s => this.seance = s);
-  }
 
-  openCritereDialog(seance: SeanceDTO): void {
-    this.currentSeance = seance;
-    this.loadCriteres();
-    this.selectedCriteres = [];
-    this.critereDialog = true;
-  }
+  // Dans SeanceComponent
 
-  saveCriteres(): void {
-    if (this.currentSeance.id && this.selectedCriteres.length > 0) {
-      const criteresNoms = this.selectedCriteres.map(c => c.nom);
-      this.seanceService.affecterCriteres(this.currentSeance.id, criteresNoms).subscribe(() => {
-        this.loadSeances();
-        this.critereDialog = false;
-      });
-    }
-  }
-
-  // Load sprints
-  loadCriteres(): void {
-    this.critereService.getAllSprints().subscribe(sprints => {
-      this.sprints = sprints;
+onSprintChange(): void {
+  if (this.selectedSprintId) {
+    this.critereService.getCriteresBySprintId(this.selectedSprintId).subscribe(data => {
+      this.criteresOptions = data;
+      this.selectedCriteres = []; // reset sélection
     });
-  }
-
-  // Load criteria for selected sprint
-  loadCriteresBySprint(): void {
-    if (this.selectedSprintId) {
-      this.critereService.getCriteresBySprintId(this.selectedSprintId).subscribe(criteres => {
-        this.criteresOptions = criteres.map(c => ({
-          nom: c.nom,
-          coefficient: c.coefficient,
-        }));
-      });
-    }
+  } else {
+    this.criteresOptions = [];
+    this.selectedCriteres = [];
   }
 }
+
+openCritereDialog(seance: SeanceDTO): void {
+  this.currentSeance = seance;
+  this.critereDialog = true;
+  this.selectedSprintId = '';
+  this.criteresOptions = [];
+  this.selectedCriteres = [];
+
+  // Débogage : afficher l'ID de la séance
+  console.log('Séance sélectionnée pour affectation :', this.currentSeance.id);
+}
+
+saveCriteres() {
+  if (this.selectedCriteres.length > 0 && this.currentSeance?.id) {
+    // Extract the 'nom' from each selected criterion and pass as an array of strings
+    const criteresNom = this.selectedCriteres.map(criter => criter.nom);
+
+    // Pass the list of criterion names (nom) to the backend method
+    this.seanceService.affecterCriteres(this.currentSeance.id, criteresNom).subscribe(() => {
+      // Handle successful criteria assignment (e.g., close dialog)
+      this.critereDialog = false;
+    });
+  } else {
+    console.error('Selected criteria or Seance ID is missing.');
+  }
+}
+
+
+  
+}
+
+
+
+
