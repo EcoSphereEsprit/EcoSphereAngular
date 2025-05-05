@@ -54,6 +54,10 @@ export class SeanceService {
     return this.http.get<any[]>(`${this.apiUrlcritere}/sprints`);
   }
 
+  getCriteresBySeanceId(seanceId: string): Observable<any> {
+    return this.http.get<any>(`http://localhost:9092/api/seances/${seanceId}`);
+  }
+  
   private apiUrlcriteresprint = 'http://localhost:9091/api/criteres/sprints/';
 
   getCriteriaBySprint(sprintId: number): Observable<any> {

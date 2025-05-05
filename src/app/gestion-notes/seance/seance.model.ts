@@ -6,5 +6,6 @@ export interface SeanceDTO {
     typeNote: 'INDIVIDUELLE' | 'GROUPE';
     Note:0;
     sprintId : string ;
+    critereIds? :[];
   }
   

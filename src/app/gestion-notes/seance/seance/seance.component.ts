@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SeanceDTO } from '../seance.model';
 import { SeanceService } from '../seance.service';
 import { CritereEvaluationService } from '../../CritereEvaluation/critere-evaluation.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   templateUrl: './seance.component.html',
@@ -13,43 +14,54 @@ export class SeanceComponent implements OnInit {
   seanceDialog = false;
   deleteSeanceDialog = false;
   isEdit = false;
-  selectedSeanceId: string = 'string';
-
-  seance: SeanceDTO = { titre: '', description: '', date: '', typeNote: 'INDIVIDUELLE', Note: 0, sprintId: "1" };
+ 
+  seance: SeanceDTO = {
+    titre: '',
+    description: '',
+    date: '',
+    typeNote: 'INDIVIDUELLE',
+    Note: 0,
+    sprintId: '1',
+  };
 
   typeNoteOptions = [
     { label: 'INDIVIDUELLE', value: 'INDIVIDUELLE' },
     { label: 'NOTE GROUPE', value: 'NOTE GROUPE' },
   ];
 
-  // Criteres & Sprint
+  // Critère et sprint
   critereDialog = false;
   sprints: any[] = [];
   selectedSprintId: string = '';
   criteresOptions: any[] = [];
-  selectedCriteres: any[] = [];
-  currentSeance?: SeanceDTO|undefined;
+  selectedCriteres: { [id: string]: boolean } = {};
+  currentSeance?: SeanceDTO;
 
   constructor(
     private seanceService: SeanceService,
-    private critereService: CritereEvaluationService
+    private critereService: CritereEvaluationService,
   ) {}
+
 
   ngOnInit(): void {
     this.loadSeances();
-    this.loadSprints(); // chargement au début
   }
 
   loadSeances(): void {
     this.seanceService.getAll().subscribe(data => this.seances = data);
   }
 
-  loadSprints(): void {
-    this.critereService.getAllSprints().subscribe(s => this.sprints = s);
-  }
+
 
   openNew(): void {
-    this.seance = { titre: '', description: '', date: '', typeNote: 'INDIVIDUELLE', Note: 0, sprintId: "1" };
+    this.seance = {
+      titre: '',
+      description: '',
+      date: '',
+      typeNote: 'INDIVIDUELLE',
+      Note: 0,
+      sprintId: '1',
+    };
     this.seanceDialog = true;
     this.isEdit = false;
   }
@@ -79,10 +91,9 @@ export class SeanceComponent implements OnInit {
   }
 
   deleteSelectedSeances(): void {
-    this.selectedSeances.forEach(s => {
-      if (s.id) {
-        this.seanceService.delete(s.id).subscribe(() => this.loadSeances());
-      }
+    const idsToDelete = this.selectedSeances.map(s => s.id).filter(Boolean);
+    idsToDelete.forEach(id => {
+      this.seanceService.delete(id!).subscribe(() => this.loadSeances());
     });
     this.selectedSeances = [];
   }
@@ -101,51 +112,41 @@ export class SeanceComponent implements OnInit {
     }
   }
 
-
-  // Dans SeanceComponent
-
-onSprintChange(): void {
-  if (this.selectedSprintId) {
-    this.critereService.getCriteresBySprintId(this.selectedSprintId).subscribe(data => {
-      this.criteresOptions = data;
-      this.selectedCriteres = []; // reset sélection
-    });
-  } else {
-    this.criteresOptions = [];
-    this.selectedCriteres = [];
-  }
-}
-
-openCritereDialog(seance: SeanceDTO): void {
-  this.currentSeance = seance;
-  this.critereDialog = true;
-  this.selectedSprintId = '';
-  this.criteresOptions = [];
-  this.selectedCriteres = [];
-
-  // Débogage : afficher l'ID de la séance
-  console.log('Séance sélectionnée pour affectation :', this.currentSeance.id);
-}
-
-saveCriteres() {
-  if (this.selectedCriteres.length > 0 && this.currentSeance?.id) {
-    // Extract the 'nom' from each selected criterion and pass as an array of strings
-    const criteresNom = this.selectedCriteres.map(criter => criter.nom);
-
-    // Pass the list of criterion names (nom) to the backend method
-    this.seanceService.affecterCriteres(this.currentSeance.id, criteresNom).subscribe(() => {
-      // Handle successful criteria assignment (e.g., close dialog)
-      this.critereDialog = false;
-    });
-  } else {
-    console.error('Selected criteria or Seance ID is missing.');
-  }
-}
-
-
+  criteres: any[] = [];
+  seanceCritereIds: string[] = [];
   
+  loadCriteresBySprint(sprintId: string) {
+    this.critereService.getCriteresBySprintId(sprintId).subscribe(data => {
+      this.criteres = data;
+    });
+  }
+  
+  onSprintChange(sprintId: string) {
+    this.loadCriteresBySprint(sprintId);
+  }
+ 
+  openCritereDialog(seance: any) {
+    this.seance = { ...seance }; // Clone to avoid direct modifications
+  
+    // Ensure the sprintId is set correctly in the dialog
+    this.selectedSprintId = this.seance.sprintId; // Explicitly set the selectedSprintId (this helps bind the value)
+  
+    // Open the criteria dialog
+    this.critereDialog = true;
+  
+    // Load criteres based on the sprintId (as you are already doing)
+    this.loadCriteresBySprint(this.seance.sprintId);
+  }
+  
+  saveCriteres(): void {
+    if (this.currentSeance?.id) {
+      const selectedIds = Object.keys(this.selectedCriteres).filter(nom => this.selectedCriteres[nom]);
+      this.seanceService.affecterCriteres(this.currentSeance.id, selectedIds).subscribe(() => {
+        this.critereDialog = false;
+      });
+    }
+  }
+
+
 }
-
-
-
 

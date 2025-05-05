@@ -1,5 +1,3 @@
-<!-- seance.component.html -->
-
 <div class="card">
   <p-toolbar>
     <div class="p-toolbar-group-left">
@@ -14,8 +12,7 @@
         <th style="width: 3em">
           <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
         </th>
-        <th>Sprint </th>
-
+        <th>Sprint</th>
         <th>Titre</th>
         <th>Description</th>
         <th>Date</th>
@@ -27,9 +24,7 @@
 
     <ng-template pTemplate="body" let-seance>
       <tr>
-        <td>
-          <p-tableCheckbox [value]="seance"></p-tableCheckbox>
-        </td>
+        <td><p-tableCheckbox [value]="seance"></p-tableCheckbox></td>
         <td>{{ seance.sprintId }}</td>
         <td>{{ seance.titre }}</td>
         <td>{{ seance.description }}</td>
@@ -46,7 +41,7 @@
   </p-table>
 </div>
 
-<!-- Dialog pour ajouter / modifier une séance -->
+<!-- Dialog ajout/modification -->
 <p-dialog header="{{ isEdit ? 'Modifier Séance' : 'Nouvelle Séance' }}" [(visible)]="seanceDialog" [modal]="true" [closable]="false" [style]="{width: '500px'}">
   <div class="p-fluid">
     <div class="p-field">
@@ -70,8 +65,8 @@
     </div>
 
     <div class="p-field">
-      <label for="sprintId">Sprint </label>
-      <input id="sprintId" type="string" pInputText [(ngModel)]="seance.sprintId" />
+      <label for="sprintId">Sprint</label>
+      <input id="sprintId" type="text" pInputText [(ngModel)]="seance.sprintId" />
     </div>
 
     <div class="p-field">
@@ -86,44 +81,42 @@
   </p-footer>
 </p-dialog>
 
-<!-- Dialog pour confirmer la suppression d'une séance -->
+<!-- Dialog de confirmation suppression -->
 <p-dialog header="Confirmation" [(visible)]="deleteSeanceDialog" [modal]="true" [closable]="false" [style]="{width: '400px'}">
   <div class="confirmation-content">
     <i class="pi pi-exclamation-triangle" style="font-size: 2rem; color: red;"></i>
     <span>Êtes-vous sûr de vouloir supprimer cette séance ?</span>
   </div>
-
   <p-footer>
     <button pButton label="Non" icon="pi pi-times" class="p-button-text" (click)="deleteSeanceDialog = false"></button>
     <button pButton label="Oui" icon="pi pi-check" class="p-button-text" (click)="confirmDelete()"></button>
   </p-footer>
 </p-dialog>
-<!-- Dialog pour affecter des critères -->
-<p-dialog header="Affecter des Critères" [(visible)]="critereDialog" [modal]="true" [closable]="false"  [style]="{ width: '100vw', height: '90vh' }">
-  <div class="p-fluid">
-    <p-dropdown 
-    id="sprint"
-    [options]="sprints" 
-    [(ngModel)]="selectedSprintId" 
-    optionLabel="titre" 
-    optionValue="id" 
-    placeholder="Sélectionner un Sprint"
-    (onChange)="onSprintChange()">
- 
 
-  </p-dropdown>
-  <p-multiSelect
-  [options]="criteresOptions"
-  [(ngModel)]="selectedCriteres"
-  optionLabel="nom"  
-  placeholder="Sélectionner des critères"
->
-</p-multiSelect>
+<!-- Dialog Affectation Critères -->
+<p-dialog header="Affecter des Critères" [(visible)]="critereDialog" [modal]="true" [closable]="false" [style]="{ width: '100vw', height: '90vh' }">
+  <div class="p-fluid">
+    <div class="p-field">
+      <label style="font-weight: bold;">Sprint : {{ seance.sprintId }}</label>
+    </div>
+
+  
+    <label style="font-weight: bold;">Liste des Critères: </label>
+    <div *ngFor="let critere of criteres">
+      <p-checkbox 
+        name="critere"
+        [value]="critere.id"
+        [(ngModel)]="seance.critereIds"
+        [binary]="false"
+        [label]="critere.nom">
+      </p-checkbox>
+    </div>
+    
+  
   </div>
 
   <p-footer>
     <button pButton label="Annuler" icon="pi pi-times" class="p-button-text" (click)="critereDialog = false"></button>
     <button pButton label="Affecter" icon="pi pi-check" class="p-button-text" (click)="saveCriteres()"></button>
-    
   </p-footer>
 </p-dialog>
