@@ -138,43 +138,43 @@
   </p-footer>
 </p-dialog>
 
-<!-- ✅ Dialog Affecter une Note déplacé ici -->
+
 <p-dialog header="Affecter une note" [(visible)]="displayNoteDialog" [modal]="true" [closable]="true" [style]="{width: '400px'}">
   <div class="p-fluid">
+
     <div class="p-field">
-      <label for="seanceTitre">Séance Titre</label>
-      <input id="seanceTitre" type="text" pInputText [value]="currentSeance?.titre" disabled />
+      <label>Séance Titre</label>
+      <input type="text" pInputText [value]="currentSeance?.titre" disabled />
     </div>
 
     <div class="p-field">
-      <label for="studentName">Nom étudiant</label>
-      <input id="studentName" type="text" pInputText value="Sana" disabled />
+      <label>Nom étudiant</label>
+      <input type="text" pInputText value="Sana" disabled />
     </div>
 
     <div class="p-field">
-      <label for="studentName">Id étudiant</label>
-      <input id="studentName" type="text" pInputText value="22EUF1115" disabled />
+      <label>Id étudiant</label>
+      <input type="text" pInputText value="EUT12165451" disabled />
     </div>
 
     <div class="p-field">
-      <label for="groupeName">Groupe</label>
-      <input id="groupeName" type="text" pInputText value="Groupe4" disabled />
-    </div>
-    
-
-
-    <div class="p-field">
-      <label for="typeNote">Type de note</label>
-      <p-dropdown id="typeNote" [options]="typeNoteOptions" [(ngModel)]="seance.typeNote" optionLabel="label" optionValue="value"></p-dropdown>
+      <label>Groupe</label>
+      <input type="text" pInputText value="GROUPE4" disabled />
     </div>
 
     <div class="p-field">
-      <label for="note">Note (/20)</label>
-      <input id="note" type="number" pInputText [(ngModel)]="seance.Note" min="0" max="20" />
+      <label>Type de note</label>
+      <p-dropdown [options]="typeNoteOptions" [(ngModel)]="selectedTypeNote" optionLabel="label" optionValue="value"></p-dropdown>
     </div>
 
     <div class="p-field">
-      <button pButton type="button" label="Affecter Note" ></button>
+      <label>Note (/20)</label>
+      <input type="number" pInputText [(ngModel)]="noteValeur" min="0" max="20" />
     </div>
+
+    <div class="p-fluid">
+      <button pButton label="Affecter Note" (click)="affecterNote()" icon="pi pi-check" class="p-button-text"></button>
+    </div>
+
   </div>
 </p-dialog>

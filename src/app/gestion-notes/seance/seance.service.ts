@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SeanceDTO } from './seance.model';
+import { Note } from './note.model';
 
 @Injectable({ providedIn: 'root' })
 export class SeanceService {
@@ -81,4 +82,14 @@ export class SeanceService {
   getUserRole(id: string): Observable<string> {
     return this.http.get(`${this.apiUrluser}/api/users/${id}/role`, { responseType: 'text' });
   }
+
+
+
+  private apiUrlnotes = 'http://localhost:9091/api/notes';
+
+
+  noterEtudiant(note: Note): Observable<Note> {
+    console.log("Note",note)
+    return this.http.post<Note>(this.apiUrlnotes, note);
+}
 }

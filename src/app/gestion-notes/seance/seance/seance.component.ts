@@ -3,6 +3,7 @@ import { SeanceDTO } from '../seance.model';
 import { SeanceService } from '../seance.service';
 import { CritereEvaluationService } from '../../CritereEvaluation/critere-evaluation.service';
 import { MessageService } from 'primeng/api';
+import { Note } from '../note.model';
 
 @Component({
   templateUrl: './seance.component.html',
@@ -16,7 +17,7 @@ export class SeanceComponent implements OnInit {
   seanceDialog = false;
   deleteSeanceDialog = false;
   isEdit = false;
- 
+ message:any =[];
   user: any;  // Pour stocker les informations de l'utilisateur
   userRole: string = '';
   userId: string = '123';
@@ -33,7 +34,7 @@ export class SeanceComponent implements OnInit {
 
   typeNoteOptions = [
     { label: 'INDIVIDUELLE', value: 'INDIVIDUELLE' },
-    { label: 'NOTE GROUPE', value: 'NOTE GROUPE' },
+    { label: 'GROUPE', value: 'GROUPE' },
   ];
 
   // Critère et sprint
@@ -43,6 +44,9 @@ export class SeanceComponent implements OnInit {
   criteresOptions: any[] = [];
   selectedCriteres: { [id: string]: boolean } = {};
   currentSeance?: SeanceDTO;
+  noteValeur: any;
+  selectedGroupeId?: string;
+  selectedEtudiantId: any;
 
 
   constructor(
@@ -233,8 +237,30 @@ export class SeanceComponent implements OnInit {
   
     }
   }
-  
-  
+  selectedTypeNote: 'INDIVIDUELLE' | 'GROUPE' = 'INDIVIDUELLE';
+
+  affecterNote() {
+    const note: Note = {
+      seanceId: this.currentSeance?.id,
+      etudiantId: "EUT12165451",
+      groupeId: "GROUPE4",
+      valeur: this.noteValeur,
+      typeNote: this.selectedTypeNote
+    };
+
+    this.seanceService.noterEtudiant(note).subscribe({
+      next: res => {
+        alert('Note affecée avec succès');
+        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Critères mis à jour avec succès.' });
+
+        this.displayNoteDialog = false;
+      },
+      error: err => {
+        alert('Erreur lors de l’enregistrement');
+        console.error(err);
+      }
+    });
+  }
   
   
   
