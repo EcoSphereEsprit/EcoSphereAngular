@@ -1,0 +1,40 @@
+<div class="p-field">
+    <label>Nom étudiant</label>
+    <input type="text" pInputText value="Sana" disabled />
+  </div>
+  
+  <div class="p-field">
+    <label>Id étudiant</label>
+    <input type="text" pInputText value="EUT12165451" disabled />
+  </div>
+  
+  <div class="p-field">
+    <label>Groupe</label>
+    <input type="text" pInputText value="GROUPE4" disabled />
+  </div>
+  
+  
+  <table class="p-datatable">
+  <thead>
+    <tr>
+        <th>Sprint</th>
+
+      <th>Seance</th>
+      <th>Type Note</th>
+      <th>Note</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let note of notes">
+        <td>Sprint {{ note.seance?.sprintId }}</td>
+
+      <td>{{ note.seance?.description }}</td>
+      <td>{{ note.seance?.typeNote }}</td>
+      <td>{{ note.valeur }}</td>
+   
+    </tr>
+  </tbody>
+  <h3>Moyenne: {{ moyenne | number:'1.2-2' }}</h3>
+
+</table>
+  

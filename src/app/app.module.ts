@@ -10,6 +10,7 @@ import { SeanceModule } from './gestion-notes/seance/seance.module';
 @NgModule({
     declarations: [
         AppComponent
+        
     ],
     imports: [
         AppRoutingModule,
