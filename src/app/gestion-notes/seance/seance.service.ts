@@ -37,6 +37,9 @@ export class SeanceService {
     return this.http.post<void>(`${this.apiUrlcriteresseances}affecter-criteres/${id}`, criteres);
   }
   
+  deaffecterCriteres(id: string, criteres: string[]): Observable<void> {
+    return this.http.post<void>(`${this.apiUrlcriteresseances}desaffecter-criteres/${id}`, criteres);
+  }
   
 
   

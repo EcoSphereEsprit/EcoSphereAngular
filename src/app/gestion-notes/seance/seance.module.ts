@@ -21,6 +21,8 @@ import { SeanceRoutingModule } from './seance-routing.module';
 import { SeanceComponent } from './seance/seance.component';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CheckboxModule } from 'primeng/checkbox';
+import { MessageModule } from 'primeng/message';
+import { MessageService } from 'primeng/api';
 
 
 @NgModule({
@@ -42,7 +44,8 @@ import { CheckboxModule } from 'primeng/checkbox';
     RadioButtonModule,
     InputNumberModule,
     DialogModule ,SeanceRoutingModule,
-    MultiSelectModule,
-  CheckboxModule ]
+    MultiSelectModule,MessageModule,
+  CheckboxModule ],
+  providers: [MessageService]
 })
 export class SeanceModule { }

@@ -7,6 +7,8 @@ import { MessageService } from 'primeng/api';
 @Component({
   templateUrl: './seance.component.html',
   styleUrls: ['./seance.component.scss'],
+  providers: [MessageService]
+
 })
 export class SeanceComponent implements OnInit {
   seances: SeanceDTO[] = [];
@@ -40,11 +42,14 @@ export class SeanceComponent implements OnInit {
   constructor(
     private seanceService: SeanceService,
     private critereService: CritereEvaluationService,
+    private messageService: MessageService
+
   ) {}
 
 
   ngOnInit(): void {
     this.loadSeances();
+    
   }
 
   loadSeances(): void {
@@ -124,32 +129,89 @@ export class SeanceComponent implements OnInit {
   onSprintChange(sprintId: string) {
     this.loadCriteresBySprint(sprintId);
   }
- 
+
   openCritereDialog(seance: any) {
-    this.seance = { ...seance }; // Clone to avoid direct modifications
-  
-    // Ensure the sprintId is set correctly in the dialog
-    this.selectedSprintId = this.seance.sprintId; // Explicitly set the selectedSprintId (this helps bind the value)
-  
-    // Open the criteria dialog
+    this.seance = { ...seance };  // Cloner l'objet seance pour éviter les effets de bord
+    this.selectedSprintId = this.seance.sprintId;
     this.critereDialog = true;
+    this.currentSeance = seance;
+    
+    // Charger les critères
+    this.critereService.getCriteresBySprintId(this.seance.sprintId).subscribe(data => {
+      this.criteres = data;
   
-    // Load criteres based on the sprintId (as you are already doing)
-    this.loadCriteresBySprint(this.seance.sprintId);
+      // Charger les critères affectés après que les critères sont chargés
+      this.seanceService.getCriteresBySeanceId(this.seance.id!).subscribe(affectes => {
+        this.selectedCriteres = {};  // Réinitialiser selectedCriteres à un objet vide
+        
+        // Vérifier si affectes contient un tableau de critereIds et que critereIds est un tableau
+        if (Array.isArray(affectes.critereIds)) {
+          // Remplir selectedCriteres en comparant les critereIds de la séance avec les critères
+          this.criteres.forEach(c => {
+            this.selectedCriteres[c.nom] = affectes.critereIds.includes(c.id);
+          });
+        } else {
+          console.error('Erreur: affectes.critereIds n\'est pas un tableau.', affectes);
+        }
+      });
+    });
+  }
+  
+  
+  loadSelectedCriteres(seanceId: string): void {
+    this.seanceService.getCriteresBySeanceId(seanceId).subscribe(response => {
+      console.log('Raw API response:', response);
+  
+      const affectes = Array.isArray(response?.critereIds) ? response.critereIds : []; // Assurez-vous que c'est un tableau
+  
+      // Vérifier que `affectes` est un tableau
+      if (!Array.isArray(affectes)) {
+        console.error('affectes is not an array:', affectes);
+        return; // Sortir si `affectes` n'est pas un tableau
+      }
+  
+      // Vérification si le critère est dans affectes
+      this.criteres.forEach(critere => {
+        this.selectedCriteres[critere.id] = affectes.includes(critere.id);
+      });
+    });
   }
   
   saveCriteres(): void {
     if (this.currentSeance?.id) {
-      // On filtre les critères sélectionnés par rapport aux valeurs de selectedCriteres
+      // Identifier les IDs sélectionnés et non sélectionnés
       const selectedIds = Object.keys(this.selectedCriteres).filter(nom => this.selectedCriteres[nom]);
+      const deselectedIds = Object.keys(this.selectedCriteres).filter(nom => !this.selectedCriteres[nom]);
+    
+      // Affection des critères sélectionnés (lorsque la case est cochée)
+      if (selectedIds.length > 0) {
+        this.seanceService.affecterCriteres(this.currentSeance.id, selectedIds).subscribe(() => {
+          this.critereDialog = false;
+          this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Critères mis à jour avec succès.' });
+
+          
+        });
+      }
+    
+      // Désaffection des critères non sélectionnés (lorsque la case est décochée)
+      if (deselectedIds.length > 0) {
+        this.seanceService.deaffecterCriteres(this.currentSeance.id, deselectedIds).subscribe(() => {
+          this.critereDialog = false;
+
+
+        });
+      }
+      this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Critères mis à jour avec succès.' });
+
+      this.loadSeances();
+
   
-      // Envoi des critères sélectionnés ou désélectionnés
-      this.seanceService.affecterCriteres(this.currentSeance.id, selectedIds).subscribe(() => {
-        this.critereDialog = false;  // Fermer le dialog après l'opération
-        this.loadSeances();          // Rafraîchir la liste des séances pour voir les changements
-      });
     }
   }
+  
+  
+  
+  
   
 
 

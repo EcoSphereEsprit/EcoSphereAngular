@@ -29,8 +29,10 @@
         <td>{{ seance.titre }}</td>
         <td>{{ seance.description }}</td>
         <td>{{ seance.date }}</td>
-        <td>{{ seance.typeNote }}</td>
-        <td>{{ seance.Note }}</td>
+        <td>      <p-dropdown id="typeNote" [options]="typeNoteOptions" [(ngModel)]="seance.typeNote" optionLabel="label" optionValue="value"></p-dropdown>
+        </td>
+        <td>      <input id="note" type="double" pInputText [(ngModel)]="seance.Note" />
+        </td>
         <td>
           <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editSeance(seance.id)"></button>
           <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger mr-2" (click)="deleteSeance(seance.id)"></button>
@@ -59,20 +61,13 @@
       <input id="date" type="date" pInputText [(ngModel)]="seance.date" />
     </div>
 
-    <div class="p-field">
-      <label for="typeNote">Type de Note</label>
-      <p-dropdown id="typeNote" [options]="typeNoteOptions" [(ngModel)]="seance.typeNote" optionLabel="label" optionValue="value"></p-dropdown>
-    </div>
 
     <div class="p-field">
       <label for="sprintId">Sprint</label>
       <input id="sprintId" type="text" pInputText [(ngModel)]="seance.sprintId" />
     </div>
 
-    <div class="p-field">
-      <label for="note">Note</label>
-      <input id="note" type="number" pInputText [(ngModel)]="seance.Note" />
-    </div>
+  
   </div>
 
   <p-footer>
@@ -94,8 +89,13 @@
 </p-dialog>
 
 <!-- Dialog Affectation Critères -->
-<p-dialog header="Affecter des Critères" [(visible)]="critereDialog" [modal]="true" [closable]="false" [style]="{ width: '100vw', height: '90vh' }">
+<p-dialog header="Affecter des Critères" [(visible)]="critereDialog" [modal]="true" [closable]="false" [style]="{ width: '50vw', height: '50vh' }">
   <div class="p-fluid">
+
+    <div class="p-field">
+      <label style="font-weight: bold;">Seance : {{ seance.titre }}</label>
+    </div>
+
     <div class="p-field">
       <label style="font-weight: bold;">Sprint : {{ seance.sprintId }}</label>
     </div>
@@ -105,20 +105,26 @@
     <div *ngFor="let critere of criteres">
       <p-checkbox 
       name="critere"
-      [value]="critere.id"
-      [(ngModel)]="selectedCriteres[critere.id]" 
-      [binary]="false"
+      [value]="critere.nom"
+      [(ngModel)]="selectedCriteres[critere.nom]" 
+      [binary]="true"
       [label]="critere.nom">
     </p-checkbox>
     
       
+    
     </div>
     
   
   </div>
 
   <p-footer>
+
     <button pButton label="Annuler" icon="pi pi-times" class="p-button-text" (click)="critereDialog = false"></button>
-    <button pButton label="Affecter" icon="pi pi-check" class="p-button-text" (click)="saveCriteres()"></button>
+
+    <button pButton label="Enregister Affectation " icon="pi pi-check" class="p-button-text" (click)="saveCriteres()"></button>
+
   </p-footer>
+
+  
 </p-dialog>
