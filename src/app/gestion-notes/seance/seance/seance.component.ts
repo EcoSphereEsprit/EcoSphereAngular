@@ -100,11 +100,11 @@ export class SeanceComponent implements OnInit {
       this.isEdit = true;
     });
   }
-  displayNoteDialog: boolean = true;
+  displayNoteDialog: boolean = false;
   
   openNoteDialog(seance: any) {
     this.currentSeance = seance;
-    this.displayNoteDialog = true;
+    this.displayNoteDialog = false;
   }
   
   
