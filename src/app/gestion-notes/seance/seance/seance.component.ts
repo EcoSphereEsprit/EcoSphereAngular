@@ -17,6 +17,11 @@ export class SeanceComponent implements OnInit {
   deleteSeanceDialog = false;
   isEdit = false;
  
+  user: any;  // Pour stocker les informations de l'utilisateur
+  userRole: string = '';
+  userId: string = '123';
+
+
   seance: SeanceDTO = {
     titre: '',
     description: '',
@@ -39,15 +44,18 @@ export class SeanceComponent implements OnInit {
   selectedCriteres: { [id: string]: boolean } = {};
   currentSeance?: SeanceDTO;
 
+
   constructor(
     private seanceService: SeanceService,
     private critereService: CritereEvaluationService,
-    private messageService: MessageService
+    private messageService: MessageService,
 
   ) {}
 
 
   ngOnInit(): void {
+    this.getUserData();
+
     this.loadSeances();
     
   }
@@ -55,7 +63,17 @@ export class SeanceComponent implements OnInit {
   loadSeances(): void {
     this.seanceService.getAll().subscribe(data => this.seances = data);
   }
+  getUserData() {
+    // Récupérer les informations de l'utilisateur
+    this.seanceService.getUserById(this.userId).subscribe(data => {
+      this.user = data;  // Stocker les données dans l'objet user
+    });
 
+    // Récupérer le rôle de l'utilisateur
+    this.seanceService.getUserRole(this.userId).subscribe(role => {
+      this.userRole = role;  // Stocker le rôle dans userRole
+    });
+  }
 
 
   openNew(): void {
@@ -78,7 +96,14 @@ export class SeanceComponent implements OnInit {
       this.isEdit = true;
     });
   }
-
+  displayNoteDialog: boolean = true;
+  
+  openNoteDialog(seance: any) {
+    this.currentSeance = seance;
+    this.displayNoteDialog = true;
+  }
+  
+  
   deleteSeance(id: string): void {
     this.seanceService.getById(id).subscribe(s => {
       this.seance = s;

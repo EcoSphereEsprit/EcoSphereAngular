@@ -5,7 +5,15 @@
       <button pButton label="Supprimer Sélections" icon="pi pi-trash" class="p-button-danger" [disabled]="!selectedSeances || selectedSeances.length === 0" (click)="deleteSelectedSeances()"></button>
     </div>
   </p-toolbar>
-
+  <div class="user-info">
+    <h3>Nom: Sana Ben Hammouda</h3>
+    <p>ID: 22EUF1115</p>
+    <p>Groupe: Groupe 4 </p>
+    <p>Rôle: STUDENT</p>
+  </div>
+  
+  <!-- Le reste de votre code pour afficher les informations de la séance -->
+  
   <p-table [value]="seances" [(selection)]="selectedSeances" dataKey="id" [paginator]="true" [rows]="10">
     <ng-template pTemplate="header">
       <tr>
@@ -16,7 +24,6 @@
         <th>Titre</th>
         <th>Description</th>
         <th>Date</th>
-        <th>Type de Note</th>
         <th>Note</th>
         <th>Actions</th>
       </tr>
@@ -29,14 +36,18 @@
         <td>{{ seance.titre }}</td>
         <td>{{ seance.description }}</td>
         <td>{{ seance.date }}</td>
-        <td>      <p-dropdown id="typeNote" [options]="typeNoteOptions" [(ngModel)]="seance.typeNote" optionLabel="label" optionValue="value"></p-dropdown>
+        <td>     <button pButton icon="pi pi-star" class="p-button-rounded p-button-warning"
+          (click)="openNoteDialog(seance)">
+        </button>
+              
         </td>
-        <td>      <input id="note" type="double" pInputText [(ngModel)]="seance.Note" />
-        </td>
+
+     
         <td>
           <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editSeance(seance.id)"></button>
           <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger mr-2" (click)="deleteSeance(seance.id)"></button>
           <button pButton icon="pi pi-list" class="p-button-rounded p-button-info" (click)="openCritereDialog(seance)"></button>
+
         </td>
       </tr>
     </ng-template>
@@ -125,6 +136,45 @@
     <button pButton label="Enregister Affectation " icon="pi pi-check" class="p-button-text" (click)="saveCriteres()"></button>
 
   </p-footer>
+</p-dialog>
 
-  
+<!-- ✅ Dialog Affecter une Note déplacé ici -->
+<p-dialog header="Affecter une note" [(visible)]="displayNoteDialog" [modal]="true" [closable]="true" [style]="{width: '400px'}">
+  <div class="p-fluid">
+    <div class="p-field">
+      <label for="seanceTitre">Séance Titre</label>
+      <input id="seanceTitre" type="text" pInputText [value]="currentSeance?.titre" disabled />
+    </div>
+
+    <div class="p-field">
+      <label for="studentName">Nom étudiant</label>
+      <input id="studentName" type="text" pInputText value="Sana" disabled />
+    </div>
+
+    <div class="p-field">
+      <label for="studentName">Id étudiant</label>
+      <input id="studentName" type="text" pInputText value="22EUF1115" disabled />
+    </div>
+
+    <div class="p-field">
+      <label for="groupeName">Groupe</label>
+      <input id="groupeName" type="text" pInputText value="Groupe4" disabled />
+    </div>
+    
+
+
+    <div class="p-field">
+      <label for="typeNote">Type de note</label>
+      <p-dropdown id="typeNote" [options]="typeNoteOptions" [(ngModel)]="seance.typeNote" optionLabel="label" optionValue="value"></p-dropdown>
+    </div>
+
+    <div class="p-field">
+      <label for="note">Note (/20)</label>
+      <input id="note" type="number" pInputText [(ngModel)]="seance.Note" min="0" max="20" />
+    </div>
+
+    <div class="p-field">
+      <button pButton type="button" label="Affecter Note" ></button>
+    </div>
+  </div>
 </p-dialog>

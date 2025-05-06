@@ -68,4 +68,17 @@ export class SeanceService {
   }
 
   
+
+   private apiUrluser = 'http://localhost:9090/users';  // Remplacez l'URL par celle de votre service
+
+
+  // Récupérer l'utilisateur par ID
+  getUserById(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrluser}/api/users/${id}`);
+  }
+
+  // Récupérer le rôle de l'utilisateur
+  getUserRole(id: string): Observable<string> {
+    return this.http.get(`${this.apiUrluser}/api/users/${id}/role`, { responseType: 'text' });
+  }
 }
