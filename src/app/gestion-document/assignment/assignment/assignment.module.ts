@@ -20,6 +20,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { AssignmentListComponent } from './assignment.component';
 import { AssignmentRoutingModule } from '../assignment-routing.module';
+import { TagModule } from 'primeng/tag';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,8 @@ import { AssignmentRoutingModule } from '../assignment-routing.module';
         RadioButtonModule,
         InputNumberModule,
         DialogModule,
-          AssignmentRoutingModule
+          AssignmentRoutingModule,
+          TagModule,CalendarModule
   ]
 })
 export class AssignmentModule { }

@@ -1,17 +1,19 @@
 <div class="card">
     <p-toast></p-toast>
     
-    <div class="flex justify-content-between mb-4">
-      <h2>Gestion des Assignments</h2>
-      <button pButton label="Nouveau Assignment" icon="pi pi-plus" (click)="openNew()"></button>
-    </div>
+    <p-toolbar>
+      <div class="p-toolbar-group-left">
+        <button pButton label="Nouveau Assignment" icon="pi pi-plus" class="p-button-success" 
+                (click)="openNew()"></button>
+       
+      </div>
+    </p-toolbar>
   
-    <p-table [value]="assignments" [(selection)]="selectedAssignments" dataKey="id" [paginator]="true" [rows]="10">
+    <p-table [value]="assignments"  dataKey="id" 
+             [paginator]="true" [rows]="10" >
       <ng-template pTemplate="header">
         <tr>
-          <th style="width: 3em">
-            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-          </th>
+         
           <th>Titre</th>
           <th>Description</th>
           <th>Séance</th>
@@ -24,19 +26,18 @@
   
       <ng-template pTemplate="body" let-assignment>
         <tr>
-          <td><p-tableCheckbox [value]="assignment"></p-tableCheckbox></td>
           <td>{{ assignment.titre }}</td>
           <td>{{ assignment.description }}</td>
           <td>{{ assignment.seanceId }}</td>
-          <td>{{ assignment.type }}</td>
+          <td>{{ assignment.typeRendu }}</td>
           <td>{{ assignment.dateLimite | date:'dd/MM/yyyy' }}</td>
-          <td>{{ assignment.statut  }}</td>
-
           <td>
+            <p-tag [severity]="getStatusSeverity(assignment.statut)" 
+                  [value]="assignment.statut"></p-tag>
           </td>
           <td>
             <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" 
-                    (click)="editAssignment(assignment.id)"></button>
+                    (click)="editAssignment(assignment)"></button>
             <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" 
                     (click)="deleteAssignment(assignment.id)"></button>
           </td>
@@ -45,8 +46,54 @@
     </p-table>
   </div>
   
+  <!-- Dialog d'ajout/modification -->
+  <p-dialog header="{{ isEdit ? 'Modifier Assignment' : 'Nouvel Assignment' }}" 
+            [(visible)]="assignmentDialog" [modal]="true" [style]="{width: '500px'}">
+    <div class="p-fluid">
+      <div class="p-field">
+        <label for="titre">Titre</label>
+        <input id="titre" type="text" pInputText [(ngModel)]="currentAssignment.titre" required>
+      </div>
+  
+      <div class="p-field">
+        <label for="description">Description</label>
+        <textarea id="description" pInputTextarea [(ngModel)]="currentAssignment.description" 
+                  rows="3"></textarea>
+      </div>
+  
+      <div class="p-field">
+        <label for="seanceId">Séance</label>
+        <p-dropdown [options]="seanceOptions" [(ngModel)]="currentAssignment.seanceId" 
+                   optionLabel="label" optionValue="value" [showClear]="true"></p-dropdown>
+      </div>
+  
+      <div class="p-field">
+        <label for="typeRendu">Type de rendu</label>
+        <p-dropdown [options]="[
+          {label: 'Fichier', value: 'FICHIER'},
+          {label: 'Lien', value: 'LIEN'},
+          {label: 'Texte', value: 'TEXTE'}
+        ]" [(ngModel)]="currentAssignment.typeRendu"></p-dropdown>
+      </div>
+  
+      <div class="p-field">
+        <label for="dateLimite">Date limite</label>
+        <p-calendar [(ngModel)]="currentAssignment.dateLimite" [showTime]="false" 
+                   dateFormat="dd/mm/yy"></p-calendar>
+      </div>
+    </div>
+  
+    <p-footer>
+      <button pButton label="Annuler" icon="pi pi-times" class="p-button-text" 
+              (click)="assignmentDialog = false"></button>
+      <button pButton label="Enregistrer" icon="pi pi-check" class="p-button-text" 
+              (click)="saveAssignment()"></button>
+    </p-footer>
+  </p-dialog>
+  
   <!-- Dialog de confirmation suppression -->
-  <p-dialog header="Confirmation" [(visible)]="deleteAssignmentDialog" [modal]="true" [style]="{width: '450px'}">
+  <p-dialog header="Confirmation" [(visible)]="deleteAssignmentDialog" [modal]="true" 
+            [style]="{width: '450px'}">
     <div class="confirmation-content">
       <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
       <span>Êtes-vous sûr de vouloir supprimer cet assignment ?</span>
@@ -57,10 +104,4 @@
       <button pButton label="Oui" icon="pi pi-check" class="p-button-text" 
               (click)="confirmDelete()"></button>
     </p-footer>
-  </p-dialog>
-  
-  <!-- Dialog d'ajout/modification -->
-  <p-dialog header="{{ isEdit ? 'Modifier Assignment' : 'Nouvel Assignment' }}" 
-            [(visible)]="assignmentDialog" [modal]="true" [style]="{width: '500px'}">
-   
   </p-dialog>
