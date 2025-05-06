@@ -1,40 +1,62 @@
-<div class="p-field">
-    <label>Nom étudiant</label>
-    <input type="text" pInputText value="Sana" disabled />
+<div class="student-info p-grid p-mb-3">
+    <div class="p-field p-col-12 p-md-4">
+      <label>Nom étudiant</label>
+      <input type="text" pInputText value="Sana" disabled />
+    </div>
+  
+    <div class="p-field p-col-12 p-md-4">
+      <label>Id étudiant</label>
+      <input type="text" pInputText value="EUT12165451" disabled />
+    </div>
+  
+    <div class="p-field p-col-12 p-md-4">
+      <label>Groupe</label>
+      <input type="text" pInputText value="GROUPE4" disabled />
+    </div>
   </div>
   
-  <div class="p-field">
-    <label>Id étudiant</label>
-    <input type="text" pInputText value="EUT12165451" disabled />
-  </div>
-  
-  <div class="p-field">
-    <label>Groupe</label>
-    <input type="text" pInputText value="GROUPE4" disabled />
-  </div>
-  
-  
-  <table class="p-datatable">
-  <thead>
+  <p-table
+  [value]="notes"
+  [responsive]="true"
+  class="p-datatable-striped p-datatable-sm p-shadow-2"
+  styleClass="custom-table"
+>
+  <ng-template pTemplate="header">
     <tr>
-        <th>Sprint</th>
-
-      <th>Seance</th>
-      <th>Type Note</th>
+      <th>Sprint</th>
+      <th>Séance</th>
+      <th>Type de note</th>
       <th>Note</th>
     </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let note of notes">
-        <td>Sprint {{ note.seance?.sprintId }}</td>
+  </ng-template>
 
-      <td>{{ note.seance?.description }}</td>
+  <ng-template pTemplate="body" let-note>
+    <tr>
+      <td><strong>Sprint {{ note.seance?.sprintId }}</strong></td>
+      <td>
+        <div>
+          <div class="p-text-bold">{{ note.seance?.titre }}</div>
+          <small class="p-text-secondary">{{ note.seance?.description }}</small>
+        </div>
+      </td>
+    
       <td>{{ note.seance?.typeNote }}</td>
-      <td>{{ note.valeur }}</td>
-   
+      <td>
+        <span
+          [ngClass]="{
+            'p-tag': true,
+            'p-tag-success': note.valeur >= 10,
+            'p-tag-warning': note.valeur < 10
+          }"
+        >
+          {{ note.valeur }}
+        </span>
+      </td>
     </tr>
-  </tbody>
-  <h3>Moyenne: {{ moyenne | number:'1.2-2' }}</h3>
-
-</table>
+  </ng-template>
+</p-table>
+  
+  <h3 class="p-mt-3">Moyenne générale: 
+    <span class="p-text-bold">{{ moyenne | number: '1.2-2' }}</span>
+  </h3>
   

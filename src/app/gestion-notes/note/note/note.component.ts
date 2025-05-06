@@ -1,4 +1,3 @@
-// note.component.ts
 import { Component, OnInit } from '@angular/core';
 import { NoteService, Note } from '../note.service';
 import { SeanceDTO } from '../../seance/seance.model';
@@ -7,10 +6,11 @@ import { SeanceService } from '../../seance/seance.service';
 @Component({
   selector: 'app-student-notes',
   templateUrl: './note.component.html',
+  styleUrls: ['./note.component.scss']
 })
 export class NoteComponent implements OnInit {
   etudiantId = 'EUT12165451';
-  notes: (Note & { seance?: SeanceDTO })[] = [];
+  notes: (Note & { seance?: SeanceDTO & { criteres?: any[] } })[] = [];
   moyenne: number = 0;
 
   constructor(
@@ -20,16 +20,33 @@ export class NoteComponent implements OnInit {
 
   ngOnInit(): void {
     this.noteService.getNotesParEtudiant(this.etudiantId).subscribe(data => {
-      // Pour chaque note, on récupère la séance
       this.notes = data;
       this.calculerMoyenne();
 
+      // Pour chaque note, récupérer la séance et ses critères
       this.notes.forEach(note => {
-        this.seanceService.getById(note.seanceId).subscribe(seance => {
-          note.seance = seance;
+        this.seanceService.getCriteresBySeanceId(note.seanceId).subscribe(seanceWithCritere => {
+          note.seance = seanceWithCritere;
+          
+          // Associer les notes aux critères correspondants
+          if (note.seance?.criteres) {
+            note.seance.criteres.forEach(critere => {
+              critere.note = this.notes.find(n => 
+                n.seanceId === note.seanceId && 
+                n.critereId === critere.id
+              )?.valeur;
+            });
+          }
         });
       });
     });
+  }
+
+  // Méthode pour récupérer la note spécifique à un critère
+  getNoteForCritere(note: any, critereId: string): number | undefined {
+    if (!note.seance?.criteres) return undefined;
+    const critere = note.seance.criteres.find((c: { id: string; }) => c.id === critereId);
+    return critere?.note;
   }
 
   calculerMoyenne() {
