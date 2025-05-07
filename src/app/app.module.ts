@@ -12,6 +12,7 @@ import { SeanceModule } from './gestion-notes/seance/seance.module';
         AppComponent,
         
         
+        
     ],
     imports: [
         AppRoutingModule,

@@ -17,6 +17,7 @@ const routes: Routes = [
           
             { path: 'notes', loadChildren: () => import('./gestion-notes/note/note/note.module').then(m => m.NoteModule) },
             { path: 'assignment', loadChildren: () => import('./gestion-document/assignment/assignment/assignment.module').then(m => m.AssignmentModule) },
+            { path: 'documents', loadChildren: () => import('./gestion-document/document/document/document.module').then(m => m.DocumentModule) },
 
             { path: 'uikit', data: { breadcrumb: 'UI Kit' }, loadChildren: () => import('./demo/components/uikit/uikit.module').then(m => m.UIkitModule) },
             { path: 'utilities', data: { breadcrumb: 'Utilities' }, loadChildren: () => import('./demo/components/utilities/utilities.module').then(m => m.UtilitiesModule) },
