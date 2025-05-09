@@ -18,9 +18,9 @@
             <label for="description" class="font-medium text-900">Description</label>
             <textarea id="description" type="text" pInputTextarea [(ngModel)]="claim.description" name="description" rows="5" [autoResize]="true"></textarea>
           </div>
-          <div    class="field mb-4 col-12">
+          <div *ngIf="action === 'Update'"   class="field mb-4 col-12">
             <label for="status" class="font-medium text-900">Status</label>
-              <div *ngIf="action === 'Update'" >            <p-dropdown 
+                    <p-dropdown 
                 [options]="claimStatuses" 
                 optionLabel="label" 
                 optionValue="value"
@@ -28,9 +28,6 @@
                 placeholder="Select Status">
               </p-dropdown></div>
 
-          
-
-          </div>
           
   
           <div class="col-12">
