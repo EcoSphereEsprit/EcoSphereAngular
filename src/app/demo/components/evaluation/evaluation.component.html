@@ -1,0 +1,102 @@
+<p-dataView #dv [value]="products" [paginator]="true" [rows]="9" layout="grid">
+  <ng-template pTemplate="header">
+    <div class="flex flex-column md:flex-row md:justify-content-between gap-2">
+      <p-dropdown placeholder="Sort By Price"></p-dropdown>
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input type="search" pInputText placeholder="Search by Name" />
+      </span>
+      <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+    </div>
+  </ng-template>
+
+  <ng-template let-product pTemplate="gridItem">
+    <div class="col-12 md:col-4">
+      <div class="card m-3 border-1 surface-border">
+        <img [src]="'assets/demo/images/product/stage-pfe-tunisie.jpg'" class="w-9 shadow-2 my-3" />
+        <div class="text-2xl font-bold text-center">{{ product.name }}</div>
+        <div class="mb-3 text-center">{{ product.description }}</div>
+        <div class="flex justify-content-between px-3">
+          <p-button icon="pi pi-comments" (onClick)="showDialog(product.id)"></p-button>
+          <p-button icon="pi pi-plus" class="p-button-success" (onClick)="openAddDialog(product.id)"></p-button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-dataView>
+
+
+<p-dialog header="Liste des évaluations" [(visible)]="displayModal" [modal]="true" [style]="{width: '60vw'}">
+  <ng-template pTemplate="content">
+    <div *ngIf="evaluations.length > 0; else noData">
+      <div *ngFor="let eval of evaluations" class="mb-3">
+        <p-card>
+          <ng-template pTemplate="header">
+            <div class="flex justify-content-between align-items-center">
+              <div class="flex align-items-center">
+                <img *ngIf="eval.user" src="assets/avatars/{{ eval.user }}.jpg" alt="Avatar" class="mr-2" style="width: 40px; height: 40px; border-radius: 50%;" />
+                <span>{{ eval.user ? 'Commentaire de ' + eval.user : 'Évaluation' }}</span>
+              </div>
+              <div class="flex gap-2">
+                <button *ngIf="!eval.isEditing" pButton icon="pi pi-pencil" class="p-button-sm p-button-text" (click)="eval.isEditing = true"></button>
+                <button *ngIf="eval.isEditing" pButton icon="pi pi-check" class="p-button-sm p-button-success p-button-text" (click)="onSaveInline(eval)"></button>
+                <button *ngIf="eval.isEditing" pButton icon="pi pi-times" class="p-button-sm p-button-secondary p-button-text" (click)="eval.isEditing = false"></button>
+                <button pButton icon="pi pi-trash" class="p-button-sm p-button-danger p-button-text" (click)="onDelete(eval)"></button>
+              </div>
+            </div>
+          </ng-template>
+
+          <div *ngIf="eval.isEditing; else readMode">
+            <div class="mb-2">
+              <label>Description</label>
+              <input pInputText [(ngModel)]="eval.description" />
+            </div>
+            <div class="mb-2">
+              <label>Critère</label>
+              <p-dropdown [options]="criteres" [(ngModel)]="eval.critere" optionLabel="label" optionValue="value"></p-dropdown>
+            </div>
+            <div class="mb-2">
+              <label>Note</label>
+              <p-rating [(ngModel)]="eval.note" [stars]="5" [cancel]="false"></p-rating>
+            </div>
+          </div>
+
+          <ng-template #readMode>
+            <p><strong>Description:</strong> {{ eval.description }}</p>
+            <p><strong>Critère:</strong> {{ getCritereLabel(eval.critere) }}</p>
+            <p-rating [ngModel]="eval.note" [readonly]="true" [stars]="5" [cancel]="false"></p-rating>
+          </ng-template>
+        </p-card>
+      </div>
+    </div>
+
+    <ng-template #noData>
+      <p>Aucune évaluation trouvée.</p>
+    </ng-template>
+  </ng-template>
+</p-dialog>
+<p-dialog header="Ajouter une évaluation" [(visible)]="displayAddModal" [modal]="true" [style]="{width: '50vw',height:'500px'}">
+  <ng-template pTemplate="content">
+    <div class="p-fluid">
+      <div class="field">
+        <label>Description</label>
+        <input pInputText [(ngModel)]="newEvaluation.description" />
+      </div>
+
+      <div class="field">
+        <label>Note</label>
+        <p-rating [(ngModel)]="newEvaluation.note" [stars]="5" [cancel]="false"></p-rating>
+      </div>
+
+      <div class="field">
+        <label>Critère</label>
+        <p-dropdown [options]="criteres" [(ngModel)]="newEvaluation.critere" optionLabel="label" optionValue="value"></p-dropdown>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Annuler" icon="pi pi-times" class="p-button-text" (click)="displayAddModal = false" />
+    <p-button label="Enregistrer" icon="pi pi-check" (click)="saveEvaluation()" />
+  </ng-template>
+</p-dialog>

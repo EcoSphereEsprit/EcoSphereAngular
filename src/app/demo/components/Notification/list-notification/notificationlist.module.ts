@@ -5,8 +5,8 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { ProfileListComponent } from './profilelist.component';
-import { ProfileListRoutingModule } from './profilelist-routing.module';
+import { ListNotificationComponent } from './list-notification.component';
+import { NotificationListRoutingModule } from './list-notification-routing.module';
 import {MatIconModule} from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DialogModule } from 'primeng/dialog';
@@ -14,19 +14,19 @@ import { DialogModule } from 'primeng/dialog';
 
 
 @NgModule({
-	imports: [
-		CommonModule,
-		ProfileListRoutingModule,
-		RippleModule,
-		ButtonModule,
-		InputTextModule,
-		TableModule,
-		MatIconModule,
-		ProgressBarModule,
-		MatTooltipModule,
-		DialogModule
+    imports: [
+        CommonModule,
+        NotificationListRoutingModule,
+        RippleModule,
+        ButtonModule,
+        InputTextModule,
+        TableModule,
+        MatIconModule,
+        ProgressBarModule,
+        MatTooltipModule,
+        DialogModule
 
-	],
-	declarations: [ProfileListComponent]
+    ],
+    declarations: [ListNotificationComponent]
 })
-export class ProfileListModule { }
+export class NotificationListModule { }

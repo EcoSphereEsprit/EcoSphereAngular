@@ -7,22 +7,20 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { ProfileCreateComponent } from './profilecreate.component';
-import { ProfileCreateRoutingModule } from './profilecreate-routing.module';
-import {MatSelectModule} from '@angular/material/select';
+import { CreateNotificationComponent } from './create-notification.component';
+import { NotificationCreateRoutingModule } from './create-notification-routing.module';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    ProfileCreateRoutingModule,  
+    NotificationCreateRoutingModule,  
     ButtonModule,
     RippleModule,
     InputTextModule,
     DropdownModule,
     FileUploadModule,
-    InputTextareaModule,
-    MatSelectModule
+    InputTextareaModule
   ],
-  declarations: [ProfileCreateComponent],
+  declarations: [CreateNotificationComponent],
 })
-export class ProfileCreateModule {}
+export class NotificationCreateModule {}
