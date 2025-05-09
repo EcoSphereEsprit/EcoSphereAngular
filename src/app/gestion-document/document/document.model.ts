@@ -3,7 +3,7 @@ export interface Document {
     assignmentId: string;
     seanceId: string;
     etudiantId?: string;
-    type: 'LIEN' | 'DOCUMENT' | 'TEXTE';
+    type?: 'LIEN' | 'DOCUMENT' | 'TEXTE';
     contenu: string;
     nomFichier?: string;
     commentaire?: string;
@@ -12,8 +12,9 @@ export interface Document {
   }
   
   export interface DocumentDto {
+    seanceId?: null;
     assignmentId: string;
-    type: 'LIEN' | 'DOCUMENT' | 'TEXTE';
+    typedoc?: 'LIEN' | 'DOCUMENT' | 'TEXTE'|undefined;
     contenu: string;
     nomFichier?: string;
     commentaire?: string;

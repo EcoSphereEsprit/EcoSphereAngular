@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Document, DocumentDto } from '../document.model';
-
 import { DocumentService } from '../document.service';
 import { MessageService } from 'primeng/api';
 import { Assignment } from '../../assignment/assignment.model';
 import { AssignmentService } from '../../assignment/assignment.service';
+import { FileUpload } from 'primeng/fileupload';
 
 @Component({
   selector: 'app-student-assignments',
@@ -16,23 +16,21 @@ export class StudentAssignmentsComponent implements OnInit {
   assignments: Assignment[] = [];
   documents: Document[] = [];
   selectedSeance: string = '';
-  documentDialog: boolean = false;
   currentDocument: DocumentDto = this.emptyDocument();
-  uploadedFile?: File;
-  etudiantId = '123'; // À remplacer par l'ID réel
+  uploadedFile: File | undefined;
+  etudiantId = '123'; 
+  documentDialog: boolean = true;
+  isUrlValid: boolean = true;
+  isSubmitting: boolean = false;
+
+  @ViewChild('fileUpload') fileUpload!: FileUpload;
 
   constructor(
     private assignmentService: AssignmentService,
     private documentService: DocumentService,
     private messageService: MessageService
   ) {}
-  getStatusSeverity(status: string): string {
-    switch(status) {
-      case 'TERMINE': return 'success';
-      case 'EN_COURS': return 'warning';
-      default: return 'danger';
-    }
-  }
+
   ngOnInit() {
     this.loadSeancesAndAssignments();
   }
@@ -40,9 +38,10 @@ export class StudentAssignmentsComponent implements OnInit {
   emptyDocument(): DocumentDto {
     return {
       assignmentId: '',
-      type: 'DOCUMENT',
+      typedoc: 'DOCUMENT',
       contenu: '',
-      commentaire: ''
+      commentaire: '',
+      nomFichier: ''
     };
   }
 
@@ -52,11 +51,6 @@ export class StudentAssignmentsComponent implements OnInit {
     });
   }
 
-
-
- 
-
-
   loadDocuments(seanceId: string) {
     this.documentService.getBySeance(seanceId, this.etudiantId).subscribe(documents => {
       this.documents = documents;
@@ -64,71 +58,102 @@ export class StudentAssignmentsComponent implements OnInit {
   }
 
   openSubmitDialog(assignment: Assignment) {
-    this.currentDocument = {
-      assignmentId: assignment.id!,
-      type: assignment.typeRendu as 'DOCUMENT' | 'LIEN' | 'TEXTE',
-      contenu: '',
-      commentaire: ''
-    };
+    this.resetDialog();
+    this.currentDocument.assignmentId = assignment.id!;
+    this.currentDocument.typedoc = assignment.typeRendu as 'DOCUMENT' | 'LIEN' | 'TEXTE';
     this.documentDialog = true;
   }
 
-  onFileUpload(event: any) {
-    this.uploadedFile = event.files[0];
-    this.currentDocument.nomFichier = this.uploadedFile?.name;
+  resetDialog() {
+    this.currentDocument = this.emptyDocument();
+    this.uploadedFile = undefined;
+    this.isUrlValid = true;
+    if (this.fileUpload) {
+      this.fileUpload.clear();
+    }
   }
 
-  isLinkValid(): boolean {
-    if (this.currentDocument.type !== 'LIEN') return true;
-    try {
-      new URL(this.currentDocument.contenu);
-      return true;
-    } catch {
-      return false;
+  closeDialog() {
+    this.documentDialog = false;
+    this.resetDialog();
+  }
+
+  validateUrl(): void {
+    const pattern = /^(http|https):\/\/[^ "]+$/;
+    this.isUrlValid = pattern.test(this.currentDocument.contenu);
+  }
+
+  onFileSelect(event: any): void {
+    const file = event.files[0];
+    if (file) {
+      this.uploadedFile = file;
+      this.currentDocument.nomFichier = file.name;
+    }
+  }
+
+
+  isFormValid(): boolean {
+    if (!this.currentDocument.assignmentId) return false;
+
+    switch (this.currentDocument.typedoc) {
+      case 'LIEN':
+        return !!this.currentDocument.contenu && this.isUrlValid;
+      case 'DOCUMENT':
+        return !!this.uploadedFile;
+      case 'TEXTE':
+        return !!this.currentDocument.contenu?.trim();
+      default:
+        return false;
     }
   }
 
   submitDocument() {
-    if (this.currentDocument.type === 'LIEN' && !this.isLinkValid()) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Erreur',
-        detail: 'Veuillez entrer un lien valide'
-      });
-      return;
-    }
+ 
+    this.isSubmitting = true;
+    const payload: DocumentDto = {
+      assignmentId: this.currentDocument.assignmentId,
+      typedoc: this.currentDocument.typedoc,
+      contenu: this.currentDocument.contenu,
+      nomFichier: this.currentDocument.nomFichier || this.uploadedFile?.name,
+      commentaire: this.currentDocument.commentaire
+    };
 
-    if (this.currentDocument.type === 'DOCUMENT' && !this.uploadedFile) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Erreur',
-        detail: 'Veuillez sélectionner un fichier'
-      });
-      return;
-    }
-
-    this.documentService.submitDocument(this.currentDocument, this.etudiantId).subscribe({
+    this.documentService.submitDocument(payload).subscribe({
       next: () => {
         this.messageService.add({
           severity: 'success',
           summary: 'Succès',
           detail: 'Document soumis avec succès'
         });
-        this.documentDialog = false;
-        this.loadDocuments(this.selectedSeance);
+        this.closeDialog();
+        if (this.selectedSeance) {
+          this.loadDocuments(this.selectedSeance);
+        }
       },
       error: (err) => {
+        console.error('Error:', err);
         this.messageService.add({
           severity: 'error',
           summary: 'Erreur',
-          detail: err.message || 'Échec de la soumission'
+          detail: err.error?.message || 'Échec de la soumission'
         });
+      },
+      complete: () => {
+        this.isSubmitting = false;
       }
     });
   }
 
+  getStatusSeverity(status: string): string {
+    switch(status) {
+      case 'SOUMIS': return 'success';
+      case 'EN_COURS': return 'warning';
+      default: return 'danger';
+    }
+  }
+
   updateStatut(document: Document, newStatut: 'BROUILLON' | 'SOUMIS' | 'CORRIGE') {
     const updatedDoc = { ...document, statut: newStatut };
-    // Implémentez la mise à jour si votre backend le permet
+    // Implementation depends on your backend
   }
 }

@@ -22,6 +22,9 @@ import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { StyleClassModule } from 'primeng/styleclass';
 import { CalendarModule } from 'primeng/calendar';
+import { CriteresComponent } from '../gestion-notes/CritereEvaluation/critere-evaluation/critere-evaluation.component';
+import { CritereRoutingModule } from '../gestion-notes/CritereEvaluation/critere-evaluation-routing.module';
+import { CriteresModule } from '../gestion-notes/CritereEvaluation/critere-evaluation.module';
 
 @NgModule({
     declarations: [
@@ -32,6 +35,7 @@ import { CalendarModule } from 'primeng/calendar';
         AppProfileSidebarComponent,
         AppMenuComponent,
         AppMenuitemComponent
+        
     ],
     imports: [
         BrowserModule,
@@ -49,7 +53,7 @@ import { CalendarModule } from 'primeng/calendar';
         RouterModule,
         AppConfigModule,
         StyleClassModule,
-        CalendarModule,
+        CalendarModule,CritereRoutingModule
         
     ]
 })

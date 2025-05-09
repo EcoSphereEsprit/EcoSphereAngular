@@ -1,92 +1,97 @@
 <div class="card">
-    <p-toast></p-toast>
-    
-    <h2>Mes Assignments</h2>
-    
+  <p-toast></p-toast>
+  
+  <h2>Mes Assignments</h2>
 
-    <p-table [value]="assignments">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Titre</th>
-          <th>Description</th>
-          <th>Type de rendu</th>
-          <th>Date limite</th>
-          <th>Statut</th>
-          <th>Actions</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-assignment>
-        <tr>
-          <td>{{ assignment.titre }}</td>
-          <td>{{ assignment.description }}</td>
-          <td>{{ assignment.typeRendu }}</td>
-          <td>{{ assignment.dateLimite | date:'dd/MM/yyyy' }}</td>
-          <td>
-            <p-tag [severity]="getStatusSeverity(assignment.statut)" 
-                  [value]="assignment.statut || 'Non soumis'">
-            </p-tag>
-          </td>
-          <td>
-            <button pButton icon="pi pi-upload" class="p-button-rounded p-button-info"
-                    (click)="openSubmitDialog(assignment)"
-                    >
-            </button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-  
-    <!-- Dialog de soumission -->
-    <p-dialog header="Déposer votre travail" [(visible)]="documentDialog" [modal]="true" [style]="{width: '500px'}">
-      <div class="p-fluid">
-        <div class="p-field">
-          <label>Type de rendu: {{ currentDocument.type | uppercase }}</label>
-        </div>
-  
-        <!-- Champ LIEN -->
-        <div class="p-field" *ngIf="currentDocument.type === 'LIEN'">
-          <label for="lien">URL du travail</label>
-          <input id="lien" type="url" pInputText [(ngModel)]="currentDocument.contenu" 
-                 placeholder="https://drive.google.com/..." required>
-          <small *ngIf="currentDocument.contenu" class="p-error">
-            Lien invalide - doit commencer par http:// ou https://
-          </small>
-        </div>
-  
-        <!-- Champ DOCUMENT -->
-        <div class="p-field" *ngIf="currentDocument.type === 'DOCUMENT'">
-          <label for="fichier">Téléverser le document</label>
-          <p-fileUpload mode="basic" name="document" 
-                       accept=".pdf,.doc,.docx,.jpg,.png"
-                     
-                       chooseLabel="Choisir un fichier"
-                       [maxFileSize]="5000000">
-          </p-fileUpload>
-          <small *ngIf="currentDocument.nomFichier" class="p-text-secondary">
-            Fichier sélectionné: {{ currentDocument.nomFichier }} (Max 5MB)
-          </small>
-        </div>
-  
-        <!-- Champ TEXTE -->
-        <div class="p-field" *ngIf="currentDocument.type === 'TEXTE'">
-          <label for="texte">Contenu du travail</label>
-          <textarea id="texte" pInputTextarea [(ngModel)]="currentDocument.contenu" 
-                    rows="5" required></textarea>
-        </div>
-  
-        <!-- Champ commentaire optionnel -->
-        <div class="p-field">
-          <label for="commentaire">Commentaire (optionnel)</label>
-          <textarea id="commentaire" pInputTextarea [(ngModel)]="currentDocument.commentaire" 
-                    rows="2" placeholder="Remarques supplémentaires..."></textarea>
-        </div>
+  <p-table [value]="assignments" [paginator]="true" [rows]="10">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Titre</th>
+        <th>Description</th>
+        <th>Type de rendu</th>
+        <th>Date limite</th>
+        <th>Statut</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-assignment>
+      <tr>
+        <td>{{ assignment.titre }}</td>
+        <td>{{ assignment.description }}</td>
+        <td>{{ assignment.type }}</td>
+        <td>{{ assignment.dateLimite | date:'dd/MM/yyyy' }}</td>
+        <td>
+          <p-tag [severity]="getStatusSeverity(assignment.statut)" 
+                [value]="assignment.statut || 'Non soumis'">
+          </p-tag>
+        </td>
+        <td>
+          <button pButton icon="pi pi-upload" class="p-button-rounded p-button-info"
+                  (click)="openSubmitDialog(assignment)"
+                  [disabled]="assignment.statut === 'SOUMIS'">
+          </button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <!-- Submission Dialog -->
+  <p-dialog header="Déposer votre travail" [(visible)]="documentDialog" [modal]="true" [style]="{width: '500px'}" (onHide)="resetDialog()">
+    <div class="p-fluid">
+      <div class="p-field">
+        <label>Type de rendu: {{ currentDocument.typedoc | uppercase }}</label>
       </div>
-      <p-footer>
-        <button pButton label="Annuler" icon="pi pi-times" class="p-button-text" 
-                ></button>
-        <button pButton label="Soumettre" icon="pi pi-check" class="p-button-success" 
-                (click)="submitDocument()" 
-               ></button>
-      </p-footer>
-    </p-dialog>
-  </div>
+
+      <!-- LINK Field -->
+      <div class="p-field" *ngIf="currentDocument.typedoc === 'LIEN'">
+        <label for="lien">URL du travail</label>
+        <input id="lien" type="url" pInputText [(ngModel)]="currentDocument.contenu" 
+               placeholder="https://drive.google.com/..." required
+               (input)="validateUrl()">
+        <small *ngIf="currentDocument.contenu && !isUrlValid" class="p-error">
+          Lien invalide - doit commencer par http:// ou https://
+        </small>
+      </div>
+
+      <!-- DOCUMENT Field -->
+      <div class="p-field" *ngIf="currentDocument.typedoc === 'DOCUMENT'">
+        <label for="fichier">Téléverser le document</label>
+        <p-fileUpload #fileUpload mode="basic" name="document" 
+                     accept=".pdf,.doc,.docx,.jpg,.png"
+                     (onSelect)="onFileSelect($event)"
+                     chooseLabel="Choisir un fichier"
+                     [maxFileSize]="5000000"
+                     [showUploadButton]="false"
+                     [showCancelButton]="false">
+        </p-fileUpload>
+        <small *ngIf="uploadedFile" class="p-text-secondary">
+          Fichier sélectionné: {{ uploadedFile.name }} 
+        </small>
+        <small *ngIf="!uploadedFile" class="p-error">
+          Veuillez sélectionner un fichier
+        </small>
+      </div>
+
+      <!-- TEXT Field -->
+      <div class="p-field" *ngIf="currentDocument.typedoc === 'TEXTE'">
+        <label for="texte">Contenu du travail</label>
+        <textarea id="texte" pInputTextarea [(ngModel)]="currentDocument.contenu" 
+                  rows="5" required></textarea>
+      </div>
+
+      <!-- Comment field -->
+      <div class="p-field">
+        <label for="commentaire">Commentaire (optionnel)</label>
+        <textarea id="commentaire" pInputTextarea [(ngModel)]="currentDocument.commentaire" 
+                  rows="2" placeholder="Remarques supplémentaires..."></textarea>
+      </div>
+    </div>
+    <p-footer>
+      <button pButton label="Annuler" icon="pi pi-times" class="p-button-text" 
+              (click)="closeDialog()"></button>
+      <button pButton label="Soumettre" icon="pi pi-check" class="p-button-success" 
+              (click)="submitDocument()" 
+            ></button>
+    </p-footer>
+  </p-dialog>
+</div>

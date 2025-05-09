@@ -3,7 +3,7 @@ export interface Assignment {
     titre?: string;
     description?: string;
     seanceId?: string;
-    typeRendu?: 'FICHIER' | 'LIEN' | 'TEXTE';
+    typeRendu?: 'LIEN' | 'DOCUMENT' | 'TEXTE';
     dateLimite?: Date;
     statut?: 'A_FAIRE' | 'EN_COURS' | 'TERMINE';
     createdAt?: Date;
