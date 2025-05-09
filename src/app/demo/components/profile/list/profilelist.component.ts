@@ -1,20 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Table } from 'primeng/table';
-import { Customer } from 'src/app/demo/api/customer';
+import { Customer, Reclamations } from 'src/app/demo/api/customer';
 import { CustomerService } from 'src/app/demo/service/customer.service';
+import { ReclamationService } from 'src/app/demo/service/reclamation.service';
 
 @Component({
     templateUrl: './profilelist.component.html'
 })
 export class ProfileListComponent implements OnInit {
 
-    customers: Customer[] = [];
+    reclamations : Reclamations[] = [];
+    deleteProductDialog: boolean = false;
 
-    constructor(private customerService: CustomerService, private router: Router) { }
+
+    constructor(private reclamtionService: ReclamationService, private router: Router) { }
 
     ngOnInit() {
-        this.customerService.getCustomersLarge().then(customers => this.customers = customers);
+        this.reclamtionService.getAllReclamations().subscribe((data: Reclamations[]) => {
+            this.reclamations = data.reverse();;
+        });
     }
 
     onGlobalFilter(table: Table, event: Event) {
@@ -22,7 +27,30 @@ export class ProfileListComponent implements OnInit {
     }
 
     navigateToCreateUser(){
-        this.router.navigate(['profile/create'])
+        this.router.navigate(['/profile/create'])
     }
+    explore(reclamation: any) {
+        this.router.navigate(['/profile/create'], { state: { reclamation } });
+      }
+
+
+
+      deleteRec()
+      {
+        this.deleteProductDialog = true
+      }
+
+      delete(rec : any)
+      {
+        this.reclamtionService.deleteReclamation(rec.id , rec.userId ).subscribe((data: any) => {
+            this.reclamations = data;
+            this.deleteProductDialog =  false
+
+            this.reclamtionService.getAllReclamations().subscribe((data: Reclamations[]) => {
+                this.reclamations = data;
+            });
+        });
+
+      }
 
 }

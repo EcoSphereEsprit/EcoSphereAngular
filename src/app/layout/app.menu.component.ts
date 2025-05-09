@@ -371,18 +371,34 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
-                label: 'User Management',
+                label: 'Claims Management Details',
                 icon: 'pi pi-fw pi-user',
                 items: [
                     {
-                        label: 'List',
+                        label: 'Claims\' List',
                         icon: 'pi pi-fw pi-list',
                         routerLink: ['profile/list']
                     },
                     {
-                        label: 'Create',
+                        label: 'Create a new claim',
                         icon: 'pi pi-fw pi-plus',
                         routerLink: ['profile/create']
+                    }
+                ]
+            },
+            {
+                label: 'Notifications Management Details',
+                icon: 'pi pi-fw pi-user',
+                items: [
+                    {
+                        label: 'Notifications\' List',
+                        icon: 'pi pi-fw pi-list',
+                        routerLink: ['notification/list']
+                    },
+                    {
+                        label: 'Create a new Notifications',
+                        icon: 'pi pi-fw pi-plus',
+                        routerLink: ['notification/create']
                     }
                 ]
             },

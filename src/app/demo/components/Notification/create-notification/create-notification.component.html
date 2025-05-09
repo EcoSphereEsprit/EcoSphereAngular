@@ -1,0 +1,23 @@
+<div class="card">
+    <span class="text-900 text-xl font-bold mb-4 block">Create a new Notification</span>
+    <div class="grid">
+      <div class="col-12 lg:col-10">
+        <div class="grid formgrid p-fluid">
+          <div class="field mb-4 col-12">
+            <label for="title" class="font-medium text-900">Title</label>
+            <input id="title" type="text" pInputText [(ngModel)]="notif.title" name="title">
+          </div>
+  
+          <div class="field mb-4 col-12">
+            <label for="Message" class="font-medium text-900">Message</label>
+            <textarea id="Message" type="text" pInputTextarea [(ngModel)]="notif.Message" name="Message" rows="5" [autoResize]="true"></textarea>
+          </div>
+  
+          <div class="col-12">
+            <button pButton pRipple (click)="createNotification()" label="{{action}}" class="w-auto mt-3"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
