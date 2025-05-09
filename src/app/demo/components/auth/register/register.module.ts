@@ -9,6 +9,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
 import { AppConfigModule } from 'src/app/layout/config/app.config.module';
 import { PasswordModule } from 'primeng/password';
+import { DropdownModule } from 'primeng/dropdown';
+import { ToastModule } from 'primeng/toast';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
     imports: [
@@ -20,7 +23,10 @@ import { PasswordModule } from 'primeng/password';
         InputTextModule,
         CheckboxModule,
         AppConfigModule,
-        PasswordModule
+        PasswordModule,
+        DropdownModule,
+        ToastModule,
+        DialogModule
     ],
     declarations: [RegisterComponent]
 })

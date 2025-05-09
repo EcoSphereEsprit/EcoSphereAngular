@@ -1,0 +1,274 @@
+<div class="bg-gray-900 min-h-screen p-4 flex justify-center items-center">
+	<p-toast key="tst"></p-toast>
+  <div class="w-full max-w-6xl">
+    <!-- Main Card -->
+    <div class="card bg-gray-800 text-white shadow-lg rounded-lg p-6">
+      <h5 class="text-xl font-semibold mb-4">Groups</h5>
+      <p-toast></p-toast>
+
+      <!-- Add Group Button -->
+      <button
+        *ngIf="LoggedInUserRole === 'ADMIN' || LoggedInUserRole === 'TEACHER'"
+        pButton
+        label="Add Group"
+        icon="pi pi-plus"
+        (click)="showAddGroupDialog()"
+        [disabled]="LoggedInUserRole !== 'ADMIN' && LoggedInUserRole !== 'TEACHER'"
+        class="mb-4"
+      ></button>
+
+      <!-- Groups Table -->
+      <p-table
+        [value]="groups"
+        dataKey="id"
+        [expandedRowKeys]="expandedRows"
+        responsiveLayout="scroll"
+        class="p-datatable-sm"
+      >
+        <ng-template pTemplate="caption">
+          <button
+            pButton
+            icon="pi pi-fw {{ isExpanded ? 'pi-minus' : 'pi-plus' }}"
+            label="{{ isExpanded ? 'Collapse All' : 'Expand All' }}"
+            (click)="expandAll()"
+            class="mb-3"
+          ></button>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem"></th>
+            <th>Name</th>
+            <th>Project Name</th>
+            <th>Encadrant</th>
+            <th>Email</th>
+            <th *ngIf="LoggedInUserRole === 'ADMIN' || LoggedInUserRole === 'TEACHER'">Actions</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-group let-expanded="expanded">
+          <tr>
+            <td>
+              <button
+                type="button"
+                pButton
+                pRipple
+                [pRowToggler]="group"
+                class="p-button-text p-button-rounded p-button-plain"
+                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+              ></button>
+            </td>
+            <td>{{ group.name }}</td>
+            <td>{{ group.projectName }}</td>
+            <td>{{ group.encadrant.name }}</td>
+            <td>{{ group.encadrant.email }}</td>
+            <td>
+              <button
+                *ngIf="LoggedInUserRole === 'ADMIN' || LoggedInUserRole === 'TEACHER'"
+                pButton
+                label="Add Member"
+                icon="pi pi-user-plus"
+                (click)="showAddMemberDialog(group)"
+                class="p-button-sm"
+                [disabled]="LoggedInUserRole !== 'ADMIN' && LoggedInUserRole !== 'TEACHER'"
+              ></button>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="rowexpansion" let-group>
+          <tr>
+            <td colspan="6">
+              <div class="rounded-md p-3" style="background-color: #2a263c;">
+                <p-table [value]="group.members" class="p-datatable-sm w-full" [ngStyle]="{ 'background-color': '#4a5568' }">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Role</th>
+                      <th>Phone</th>
+                      <th>Class</th>
+                      <th>Esprit ID</th>
+                      <th *ngIf="LoggedInUserRole === 'ADMIN' || LoggedInUserRole === 'TEACHER'">Actions</th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-member>
+                    <tr>
+                      <td>{{ member.name }}</td>
+                      <td>{{ member.email }}</td>
+                      <td>{{ member.role }}</td>
+                      <td>{{ member.phone }}</td>
+                      <td>{{ member.className }}</td>
+                      <td>{{ member.espritId }}</td>
+                      <td>
+                        <button
+                          pButton
+                          icon="pi pi-trash"
+                          class="p-button-rounded p-button-danger p-button-sm"
+                          (click)="deleteMember(group.id, member.id)"
+                          label="Delete"
+                          [disabled]="LoggedInUserRole !== 'ADMIN' && LoggedInUserRole !== 'TEACHER'"
+                          *ngIf="LoggedInUserRole === 'ADMIN' || LoggedInUserRole === 'TEACHER'"
+                        ></button>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+
+  <!-- Add Member Dialog -->
+  <p-dialog
+    [(visible)]="addMemberDialogVisible"
+    [style]="{ width: '450px' }"
+    header="Add Member to Group"
+    [closable]="false"
+  >
+    <form #memberForm="ngForm">
+      <div class="p-fluid">
+        <div class="p-field">
+          <label for="memberEspritId">Esprit ID</label>
+          <input
+            id="memberEspritId"
+            type="text"
+            name="espritId"
+            pInputText
+            required
+            minlength="5"
+            [(ngModel)]="newMember.espritId"
+            (blur)="searchMemberByEspritId()"
+            #espritId="ngModel"
+          />
+          <small *ngIf="espritId.invalid && espritId.touched" class="text-red-500">
+            Esprit ID is required and must be at least 5 characters.
+          </small>
+        </div>
+        <div class="p-field">
+          <label for="memberName">Member Name</label>
+          <input id="memberName" type="text" pInputText [(ngModel)]="newMember.name" [disabled]="true" name="name" />
+        </div>
+        <div class="p-field">
+          <label for="memberEmail">Email</label>
+          <input id="memberEmail" type="email" pInputText [(ngModel)]="newMember.email" [disabled]="true" name="email" />
+        </div>
+        <div class="p-field">
+          <label for="memberRole">Role</label>
+          <input id="memberRole" type="text" pInputText [(ngModel)]="newMember.role" [disabled]="true" name="role" />
+        </div>
+        <div class="p-field">
+          <label for="memberPhone">Phone</label>
+          <input id="memberPhone" type="text" pInputText [(ngModel)]="newMember.phone" [disabled]="true" name="phone" />
+        </div>
+        <div class="p-field">
+          <label for="memberClass">Class</label>
+          <input id="memberClass" type="text" pInputText [(ngModel)]="newMember.className" [disabled]="true" name="className" />
+        </div>
+      </div>
+      <p-footer>
+        <button
+          pButton
+          label="Cancel"
+          icon="pi pi-times"
+          (click)="addMemberDialogVisible = false"
+          class="p-button-text"
+        ></button>
+        <button
+          pButton
+          label="Add"
+          icon="pi pi-check"
+          class="p-button-text"
+          [disabled]="memberForm.invalid"
+          (click)="addMember()"
+        ></button>
+      </p-footer>
+    </form>
+  </p-dialog>
+
+  <!-- Add Group Dialog -->
+  <p-dialog
+    [(visible)]="addGroupDialogVisible"
+    [style]="{ width: '450px' }"
+    header="Add New Group"
+    [closable]="false"
+  >
+    <form #groupForm="ngForm">
+      <div class="p-fluid">
+        <div class="p-field">
+          <label for="groupName">Group Name</label>
+          <input
+            id="groupName"
+            type="text"
+            name="name"
+            pInputText
+            required
+            [(ngModel)]="newGroup.name"
+            #name="ngModel"
+          />
+          <small *ngIf="name.invalid && name.touched" class="text-red-500">Group Name is required.</small>
+        </div>
+        <div class="p-field">
+          <label for="projectName">Project Name</label>
+          <input
+            id="projectName"
+            type="text"
+            name="projectName"
+            pInputText
+            required
+            [(ngModel)]="newGroup.projectName"
+            #projectName="ngModel"
+          />
+          <small *ngIf="projectName.invalid && projectName.touched" class="text-red-500">Project Name is required.</small>
+        </div>
+        <div class="p-field">
+          <label for="encadrantName">Encadrant Name</label>
+          <input
+            id="encadrantName"
+            type="text"
+            name="encadrantName"
+            pInputText
+            required
+            [(ngModel)]="newGroup.encadrant.name"
+            #encadrantName="ngModel"
+          />
+          <small *ngIf="encadrantName.invalid && encadrantName.touched" class="text-red-500">Encadrant Name is required.</small>
+        </div>
+        <div class="p-field">
+          <label for="encadrantEmail">Encadrant Email</label>
+          <input
+            id="encadrantEmail"
+            type="email"
+            name="encadrantEmail"
+            pInputText
+            required
+            email
+            [(ngModel)]="newGroup.encadrant.email"
+            #encadrantEmail="ngModel"
+          />
+          <small *ngIf="encadrantEmail.invalid && encadrantEmail.touched" class="text-red-500">Valid Email is required.</small>
+        </div>
+      </div>
+      <p-footer>
+        <button
+          pButton
+          label="Cancel"
+          icon="pi pi-times"
+          (click)="addGroupDialogVisible = false"
+          class="p-button-text"
+        ></button>
+        <button
+          pButton
+          label="Add"
+          icon="pi pi-check"
+          class="p-button-text"
+          [disabled]="groupForm.invalid"
+          (click)="addGroup()"
+        ></button>
+      </p-footer>
+    </form>
+  </p-dialog>
+</div>

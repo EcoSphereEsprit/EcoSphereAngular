@@ -9,6 +9,7 @@ import { RippleModule } from 'primeng/ripple';
 import { AppConfigModule } from 'src/app/layout/config/app.config.module';
 import { InputTextModule } from 'primeng/inputtext';
 import {KeyFilterModule} from 'primeng/keyfilter';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
     imports: [
@@ -20,6 +21,7 @@ import {KeyFilterModule} from 'primeng/keyfilter';
         ButtonModule,
         RippleModule,
         AppConfigModule,
+        ToastModule
     ],
     declarations: [VerificationComponent]
 })

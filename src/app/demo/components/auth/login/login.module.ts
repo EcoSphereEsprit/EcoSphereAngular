@@ -7,7 +7,8 @@ import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FormsModule } from '@angular/forms';
 import { AppConfigModule } from 'src/app/layout/config/app.config.module';
-
+import { ToastModule } from 'primeng/toast';
+import { DialogModule } from 'primeng/dialog';
 @NgModule({
     imports: [
         CommonModule,
@@ -16,7 +17,9 @@ import { AppConfigModule } from 'src/app/layout/config/app.config.module';
         InputTextModule,
         CheckboxModule,
         FormsModule,
-        AppConfigModule
+        AppConfigModule,
+        ToastModule,
+        DialogModule
     ],
     declarations: [LoginComponent]
 })

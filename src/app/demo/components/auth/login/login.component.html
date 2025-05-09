@@ -4,6 +4,7 @@
         <img [src]="'assets/layout/images/pages/login-'+ (layoutService.config.colorScheme === 'dark' ? 'ondark' : 'onlight') + '.png'"
             alt="atlantis" class=" h-screen w-full">
     </div>
+    <p-toast key="tst"></p-toast>
     <div class="login-panel w-full" style="background:var(--surface-ground)">
         <div class="p-fluid min-h-screen bg-auto md:bg-contain bg-no-repeat text-center w-full flex align-items-center md:align-items-start justify-content-center flex-column bg-auto md:bg-contain bg-no-repeat"
             style=" padding: 20% 10% 20% 10%;background:var(--exception-pages-image)">
@@ -17,20 +18,20 @@
                 <div class="form-container">
                     <span class="p-input-icon-left">
                         <i class="pi pi-envelope"></i>
-                        <input type="text" autocomplete="off" pInputText placeholder="Email" class="block mb-3" style="   max-width: 320px;
+                        <input type="text" [(ngModel)]="email" autocomplete="off" pInputText placeholder="Email" class="block mb-3" style="   max-width: 320px;
                     min-width: 270px;">
                     </span>
                     <span class="p-input-icon-left">
                         <i class="pi pi-key"></i>
-                        <input type="password" autocomplete="off" pInputText placeholder="Password" class="block mb-3"
+                        <input type="password" [(ngModel)]="password" autocomplete="off" pInputText placeholder="Password" class="block mb-3"
                             style="   max-width: 320px;
                     min-width: 270px;">
                     </span>
                     <a href="#" class="flex text-color-secondary mb-4 text-sm">Forgot your password?</a>
                 </div>
                 <div class="button-container">
-                    <button type="button" pButton label="Login" [routerLink]="['/']" class="block" style="max-width: 320px;
-                margin-bottom: 32px;"></button>
+                    <button  (click)="login()" Logintype="button" pButton label="Login" class="block" style="max-width: 320px;
+                margin-bottom: 32px;"> </button>
                     <span class="flex text-sm text-color-secondary">Don’t have an account?<a
                             class="cursor-pointer ml-1">Sign-up here</a></span>
                 </div>

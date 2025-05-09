@@ -1,0 +1,75 @@
+<form #userForm="ngForm" (ngSubmit)="updateUser()" novalidate>
+	<p-toast key="tst"></p-toast>
+  <div class="bg-gray-900 min-h-screen p-4 flex justify-content-center align-items-center">
+    <div class="grid" style="width: 100%; max-width: 1200px;">
+      
+      <!-- QR Code Dialog -->
+      <p-dialog header="Scan QR Code" [(visible)]="showQRCodeDialog" [modal]="true" [closable]="true" [style]="{width: '350px'}">
+        <div class="flex justify-content-center">
+          <img *ngIf="qrCodeImage" [src]="'data:image/png;base64,' + qrCodeImage" alt="QR Code" style="max-width: 100%; height: auto;" />
+        </div>
+        <ng-template pTemplate="footer">
+          <button pButton icon="pi pi-check" (click)="navigateToVerification()" label="Once scanned click me!" class="p-button-outlined"></button>
+        </ng-template>
+      </p-dialog>
+
+      <div class="col-12 md:col-6 mx-auto">
+        <div class="card p-fluid">
+          <h5 class="text-white">User informations</h5>
+
+          <!-- Name Field -->
+          <div class="field">
+            <label for="name1" class="text-white">Name</label>
+            <input 
+              pInputText id="name1" name="name" [(ngModel)]="UserData.name"
+              required minlength="3" maxlength="50" class="w-full" #name="ngModel"
+              [ngClass]="{'p-invalid': name.invalid && name.touched}"
+            />
+            <small *ngIf="name.invalid && name.touched" class="text-red-400">Name is required (3-50 characters).</small>
+          </div>
+
+          <!-- Email Field -->
+          <div class="field">
+            <label for="email1" class="text-white">Email</label>
+            <input 
+              pInputText id="email1" name="email" [(ngModel)]="UserData.email"
+              required email class="w-full" #email="ngModel"
+              [ngClass]="{'p-invalid': email.invalid && email.touched}"
+            />
+            <small *ngIf="email.errors?.['required'] && email.touched" class="text-red-400">Email is required.</small>
+            <small *ngIf="email.errors?.['email'] && email.touched" class="text-red-400">Invalid email format.</small>
+          </div>
+
+          <!-- Phone Field -->
+          <div class="field">
+            <label for="phoneNumber" class="text-white">Phone number</label>
+            <input 
+              pInputText id="phoneNumber" name="phone" [(ngModel)]="UserData.phone"
+              required pattern="^[0-9]{8,15}$" class="w-full" #phone="ngModel"
+              [ngClass]="{'p-invalid': phone.invalid && phone.touched}"
+            />
+            <small *ngIf="phone.errors?.['required'] && phone.touched" class="text-red-400">Phone is required.</small>
+            <small *ngIf="phone.errors?.['pattern'] && phone.touched" class="text-red-400">Invalid phone number (8–15 digits).</small>
+          </div>
+
+          <!-- 2FA Toggle -->
+          <div class="card">
+            <h5>2FA enabled</h5>
+            <p-toggleButton [(ngModel)]="UserData.is2FAEnabled" name="is2FAEnabled"
+              (ngModelChange)="onToggle2FA($event)"
+              onLabel="Yes" offLabel="No" [style]="{'width': '10em'}">
+            </p-toggleButton>
+
+            <!-- Submit Button -->
+            <button 
+              pButton icon="pi pi-check" label="Update Informations"
+              class="p-button-outlined mt-3"
+              type="submit"
+              [disabled]="userForm.invalid"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

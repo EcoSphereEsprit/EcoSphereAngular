@@ -4,6 +4,7 @@
         <img [src]="'assets/layout/images/pages/verification-'+ (layoutService.config.colorScheme === 'dark' ? 'ondark' : 'onlight') + '.png'"
             alt="atlantis" class=" h-screen w-full">
     </div>
+
     <div class="w-full" style="background:var(--surface-ground)">
         <div class="p-fluid min-h-screen bg-auto md:bg-contain bg-no-repeat text-center w-full flex align-items-center md:align-items-start justify-content-center flex-column bg-auto md:bg-contain bg-no-repeat"
             style=" padding: 20% 10% 20% 10%;background:var(--exception-pages-image)">
@@ -14,22 +15,27 @@
                     <img [src]="'assets/layout/images/appname-'+ (layoutService.config.colorScheme === 'light' ? 'dark' : 'light') + '.png'"
                         class="login-appname ml-3" style="width: 100px;" />
                 </div>
+                <p-toast key="tst"></p-toast>
                 <div class="form-container text-left" style="   max-width: 320px;
                 min-width: 270px;">
                     <h4 class="text-900 font-bold mb-2">Verification</h4>
-                    <span class="text-600 font-medium">We have sent code to you email:</span>
+                    <span class="text-600 font-medium">Use the code in your app if you havent activated or lost please contact our support:</span>
                     <div class="flex align-items-center mt-1 mb-4">
                         <i class="pi pi-envelope text-600"></i>
-                        <span class="text-900 font-bold ml-2">dm**@gmail.com</span>
+                        <span class="text-900 font-bold ml-2">google 2FA or microsoft 2fa</span>
                     </div>
                     <div class="flex justify-content-between w-full align-items-center  gap-3">
-                        <input pInputText (ngModel)="val1" pKeyFilter="num" class="w-3rem text-center " maxlength="1"
+                        <input pInputText [(ngModel)]="val1" class="w-3rem text-center " maxlength="1"
                             (keyup)="onDigitInput($event)">
-                        <input pInputText (ngModel)="val2" pKeyFilter="num" class="w-3rem text-center " maxlength="1"
+                        <input pInputText [(ngModel)]="val2"  class="w-3rem text-center " maxlength="1"
                             (keyup)="onDigitInput($event)">
-                        <input pInputText (ngModel)="val3" pKeyFilter="num" class="w-3rem text-center" maxlength="1"
+                        <input pInputText [(ngModel)]="val3"  class="w-3rem text-center" maxlength="1"
                             (keyup)="onDigitInput($event)">
-                        <input pInputText (ngModel)="val4" pKeyFilter="num" class="w-3rem text-center " maxlength="1"
+                        <input pInputText [(ngModel)]="val4" class="w-3rem text-center " maxlength="1"
+                            (keyup)="onDigitInput($event)">
+                        <input pInputText [(ngModel)]="val5" class="w-3rem text-center " maxlength="1"
+                            (keyup)="onDigitInput($event)">
+                        <input pInputText [(ngModel)]="val6"  class="w-3rem text-center " maxlength="1"
                             (keyup)="onDigitInput($event)">
                     </div>
 
@@ -41,7 +47,7 @@
                         <button type="button" pButton label="Cancel" [routerLink]="['/']"
                             class="block p-button-danger p-button-outlined" style="max-width: 320px;
                         margin-bottom: 32px;"></button>
-                        <button type="button" pButton label="Verify" [routerLink]="['/']" class="block" style="max-width: 320px;
+                        <button  (click)="onsubmit()" type="button" pButton label="Verify" class="block" style="max-width: 320px;
                         margin-bottom: 32px;"></button>
                     </div>
 
