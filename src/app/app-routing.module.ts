@@ -13,6 +13,7 @@ const routes: Routes = [
         children: [
             { path: 'evaluation', component: EvaluationComponent },
             { path: '', loadChildren: () => import('./demo/components/dashboards/dashboards.module').then(m => m.DashboardsModule) },
+            { path: 'criteres', loadChildren: () => import('./gestion-notes/CritereEvaluation/critere-evaluation.module').then(m => m.CriteresModule) },
             { path: 'uikit', data: { breadcrumb: 'UI Kit' }, loadChildren: () => import('./demo/components/uikit/uikit.module').then(m => m.UIkitModule) },
             { path: 'utilities', data: { breadcrumb: 'Utilities' }, loadChildren: () => import('./demo/components/utilities/utilities.module').then(m => m.UtilitiesModule) },
             { path: 'pages', data: { breadcrumb: 'Pages' }, loadChildren: () => import('./demo/components/pages/pages.module').then(m => m.PagesModule) },
@@ -24,10 +25,11 @@ const routes: Routes = [
             { path: 'apps', data: { breadcrumb: 'Apps' }, loadChildren: () => import('./demo/components/apps/apps.module').then(m => m.AppsModule) }
         ]
     },
+
     { path: 'landing', loadChildren: () => import('./demo/components/landing/landing.module').then(m => m.LandingModule) },
     { path: 'auth', data: { breadcrumb: 'Auth' }, loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule) },
     { path: 'notfound', loadChildren: () => import('./demo/components/notfound/notfound.module').then(m => m.NotfoundModule) },
-    { path: '**', redirectTo: '/notfound' }
+        { path: '**', redirectTo: '/notfound' }
 ];
 
 @NgModule({
