@@ -16,12 +16,14 @@ export class StudentAssignmentsComponent implements OnInit {
   assignments: Assignment[] = [];
   documents: Document[] = [];
   selectedSeance: string = '';
-  currentDocument: DocumentDto = this.emptyDocument();
-  uploadedFile: File | undefined;
+  currentDocument: DocumentDto;
+  uploadedFile?: File ;
   etudiantId = '123'; 
-  documentDialog: boolean = true;
+ documentDialog: boolean = false;;
   isUrlValid: boolean = true;
-  isSubmitting: boolean = false;
+  isSubmitting: boolean = true;
+  currentAssignment: Assignment |any;
+  currentType:any= '';
 
   @ViewChild('fileUpload') fileUpload!: FileUpload;
 
@@ -29,21 +31,29 @@ export class StudentAssignmentsComponent implements OnInit {
     private assignmentService: AssignmentService,
     private documentService: DocumentService,
     private messageService: MessageService
-  ) {}
+  ) {    this.currentDocument = this.emptyDocument();
+ 
+}
 
   ngOnInit() {
     this.loadSeancesAndAssignments();
   }
 
-  emptyDocument(): DocumentDto {
+  emptyDocument(assignment?: Assignment): DocumentDto {
+    // Use the assignment's type if available, otherwise default to 'DOCUMENT'
+    const type = assignment?.typeRendu || 'LIEN';
+    
     return {
-      assignmentId: '',
-      typedoc: 'DOCUMENT',
+      assignmentId: assignment?.id || '',
+      typedoc: type,
       contenu: '',
       commentaire: '',
       nomFichier: ''
     };
   }
+
+   
+
 
   loadSeancesAndAssignments() {
     this.assignmentService.getAll().subscribe(assignments => {
@@ -58,14 +68,20 @@ export class StudentAssignmentsComponent implements OnInit {
   }
 
   openSubmitDialog(assignment: Assignment) {
-    this.resetDialog();
-    this.currentDocument.assignmentId = assignment.id!;
-    this.currentDocument.typedoc = assignment.typeRendu as 'DOCUMENT' | 'LIEN' | 'TEXTE';
+    console.log('Assignment data:', assignment); // Debug log
+    
+    this.currentAssignment = assignment;
+    this.currentDocument = this.emptyDocument(assignment);
+    this.currentType = this.currentDocument.typedoc; // Set currentType
+    
+    console.log('Document type:', this.currentDocument.typedoc);
+    console.log('ASS type:', this.currentAssignment.typeRendu); // Should show 'LIEN'
+    // Should show 'LIEN'
     this.documentDialog = true;
   }
-
+  
   resetDialog() {
-    this.currentDocument = this.emptyDocument();
+    this.currentDocument = this.emptyDocument(); // Reset without assignment
     this.uploadedFile = undefined;
     this.isUrlValid = true;
     if (this.fileUpload) {
@@ -73,7 +89,7 @@ export class StudentAssignmentsComponent implements OnInit {
     }
   }
 
-  closeDialog() {
+    closeDialog() {
     this.documentDialog = false;
     this.resetDialog();
   }
@@ -111,7 +127,7 @@ export class StudentAssignmentsComponent implements OnInit {
  
     this.isSubmitting = true;
     const payload: DocumentDto = {
-      assignmentId: this.currentDocument.assignmentId,
+      assignmentId: this.currentAssignment?.id,
       typedoc: this.currentDocument.typedoc,
       contenu: this.currentDocument.contenu,
       nomFichier: this.currentDocument.nomFichier || this.uploadedFile?.name,

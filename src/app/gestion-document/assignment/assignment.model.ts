@@ -7,6 +7,7 @@ export interface Assignment {
     dateLimite?: Date;
     statut?: 'A_FAIRE' | 'EN_COURS' | 'TERMINE';
     createdAt?: Date;
+ 
   }
   
   export interface AssignmentDialogData {

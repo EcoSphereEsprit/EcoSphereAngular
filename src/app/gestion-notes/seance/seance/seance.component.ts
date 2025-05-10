@@ -104,7 +104,7 @@ export class SeanceComponent implements OnInit {
   
   openNoteDialog(seance: any) {
     this.currentSeance = seance;
-    this.displayNoteDialog = false;
+    this.displayNoteDialog = true;
   }
   
   

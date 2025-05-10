@@ -1,8 +1,9 @@
 import { HttpClient, HttpEvent, HttpEventType, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Document, DocumentDto } from './document.model';
+import { Assignment } from '../assignment/assignment.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,22 @@ export class DocumentService {
     });
   }
 
+  private apiAss = 'http://localhost:9096/api/assignments';
+
+  // document.service.ts
+getSubmittedDocumentsBySeance(seanceId: string): Observable<Document[]> {
+  return this.http.get<Document[]>(`${this.apiUrl}/seance/${seanceId}/submitted`, {
+    headers: this.getHeaders()
+  }).pipe(
+    catchError(this.handleError)
+  );
+}
+  getAssignmentType(id: any): Observable<any> {
+    return this.http.get<Assignment>(`${this.apiAss}/${id}`).pipe(
+      map(assignment => assignment.typeRendu), // Extract just the type
+      catchError(() => of('DOCUMENT')) // Fallback to default
+    );
+  }
   submitDocument(dto: DocumentDto ): Observable<any> {
     const headers = new HttpHeaders({
       'X-User-ID': "EUT12165451",
@@ -59,7 +76,7 @@ export class DocumentService {
       case 'DOCUMENT': return 'PDF';
       case 'LIEN': return 'LIEN';
       case 'TEXTE': return 'TEXTE';
-      default: return 'PDF';
+      default: return 'LIEN';
     }
   }
 

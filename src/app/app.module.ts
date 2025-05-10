@@ -5,12 +5,12 @@ import { AppComponent } from './app.component';
 import { AppLayoutModule } from './layout/app.layout.module';
 import { SeanceComponent } from './gestion-notes/seance/seance/seance.component';
 import { SeanceModule } from './gestion-notes/seance/seance.module';
-
+ 
 
 @NgModule({
     declarations: [
         AppComponent,
-        
+         
         
         
     ],

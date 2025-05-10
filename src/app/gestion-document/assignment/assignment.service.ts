@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Assignment } from "./assignment.model";
-import { Observable } from "rxjs";
+import { catchError, map, Observable, throwError } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -59,8 +59,17 @@ export class AssignmentService {
   }
 
 
-  getById(assignmentId: string): Observable<Assignment[]> {
+  getById(assignmentId: any): Observable<Assignment[]> {
     return this.http.get<Assignment[]>(`${this.apiUrl}/${assignmentId}`);
   }
-  
+  // assignment.service.ts
+getAssignmentTypeById(assignmentId: any): Observable<any> {
+  return this.http.get<Assignment>(`${this.apiUrl}/${assignmentId}`).pipe(
+    map(assignment => assignment.typeRendu), // Extract just the type
+    catchError(error => {
+      console.error('Error fetching assignment type:', error);
+      return throwError(() => new Error('Failed to fetch assignment type'));
+    })
+  );
+}
 }
