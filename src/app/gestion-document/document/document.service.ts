@@ -39,7 +39,7 @@ getSubmittedDocumentsBySeance(seanceId: string): Observable<Document[]> {
 }
   getAssignmentType(id: any): Observable<any> {
     return this.http.get<Assignment>(`${this.apiAss}/${id}`).pipe(
-      map(assignment => assignment.typeRendu), // Extract just the type
+      map(assignment => assignment.type), // Extract just the type
       catchError(() => of('DOCUMENT')) // Fallback to default
     );
   }

@@ -40,8 +40,9 @@ export class StudentAssignmentsComponent implements OnInit {
   }
 
   emptyDocument(assignment?: Assignment): DocumentDto {
-    // Use the assignment's type if available, otherwise default to 'DOCUMENT'
-    const type = assignment?.typeRendu || 'LIEN';
+
+console.log(assignment)  ;
+  const type = assignment?.type || 'LIEN';
     
     return {
       assignmentId: assignment?.id || '',

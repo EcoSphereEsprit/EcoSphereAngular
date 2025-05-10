@@ -43,7 +43,7 @@ export class AssignmentListComponent implements OnInit {
       titre: '',
       description: '',
       seanceId: '',
-      typeRendu: 'DOCUMENT',
+      type: 'DOCUMENT',
       dateLimite: new Date(),
       statut: 'A_FAIRE',
       createdAt: new Date()

@@ -65,7 +65,7 @@ export class AssignmentService {
   // assignment.service.ts
 getAssignmentTypeById(assignmentId: any): Observable<any> {
   return this.http.get<Assignment>(`${this.apiUrl}/${assignmentId}`).pipe(
-    map(assignment => assignment.typeRendu), // Extract just the type
+    map(assignment => assignment.type), // Extract just the type
     catchError(error => {
       console.error('Error fetching assignment type:', error);
       return throwError(() => new Error('Failed to fetch assignment type'));

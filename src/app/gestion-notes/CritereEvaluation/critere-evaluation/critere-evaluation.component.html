@@ -27,10 +27,11 @@
               <th style="width: 3rem">
                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
               </th>
+              <th>Affectée à Sprint</th>
+
               <th>Nom</th>
               <th>Description</th>
               <th>Coefficient</th>
-              <th>Affectée à Sprint</th>
 
               <th>Actions</th>
             </tr>
@@ -40,10 +41,11 @@
               <td>
                 <p-tableCheckbox [value]="critere"></p-tableCheckbox>
               </td>
+              <td>{{critere.sprintId}}</td>
+
               <td>{{critere.nom}}</td>
               <td>{{critere.description}}</td>
               <td>{{critere.coefficient}}</td>
-              <td>{{critere.sprintId}}</td>
 
               <td>
                 <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editCritere(critere)"></button>
