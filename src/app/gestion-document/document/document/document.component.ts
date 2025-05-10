@@ -53,14 +53,17 @@ console.log(assignment)  ;
     };
   }
 
-   
   isPastDeadline(assignment: Assignment): boolean {
     if (!assignment.dateLimite) {
-      return false; // ou true, selon ton besoin métier si dateLimite est absente
+      return false; // No deadline, not past
     }
+  
     const now = new Date();
+    now.setDate(now.getDate() - 1); // Go back 1 day
+    const yesterdayMidnight = new Date(now.setHours(0, 0, 0, 0));
+  
     const deadline = new Date(assignment.dateLimite);
-    return deadline < now;
+    return deadline < yesterdayMidnight; 
   }
   
 
