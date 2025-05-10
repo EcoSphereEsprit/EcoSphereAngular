@@ -31,7 +31,7 @@ export class AppMenuComponent implements OnInit {
                                 routerLink: ['/apps/criteres/list']
                             },
                             {
-                                label: 'Etduiant-List',
+                                label: 'Etudiants-List',
                                 icon: 'pi pi-fw pi-pencil',
                                 routerLink: ['/apps/notes/list']
                             }
