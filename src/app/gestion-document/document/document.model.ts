@@ -18,4 +18,5 @@ export interface Document {
     contenu?: any;
     nomFichier: any;
     commentaire?: string;
+    statut?:any;
   }

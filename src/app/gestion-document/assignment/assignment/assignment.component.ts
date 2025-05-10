@@ -19,7 +19,9 @@ export class AssignmentListComponent implements OnInit {
   assignmentToDelete: string | null = null;
   currentAssignment: Assignment = this.emptyAssignment();
   seanceOptions: any[] = [];
+  minDate: Date = new Date();
 
+ 
   constructor(
     private assignmentService: AssignmentService,
     private seanceClient: SeanceService,
@@ -32,7 +34,22 @@ export class AssignmentListComponent implements OnInit {
       default: return 'danger';
     }
   }
-  ngOnInit() {
+
+  getAssignmentStatus(assignment: Assignment): string {
+    const now = new Date();
+    const deadline = assignment.dateLimite ? new Date(assignment.dateLimite) : null;
+  
+    if (assignment.statut) {
+      return 'A_FAIRE';
+    } else if (deadline && deadline < now) {
+      return 'En A_FAIRE';
+    } else {
+      return 'A_FAIRE';
+    }
+  }
+  
+  ngOnInit() {    
+    this.minDate.setHours(12, 0, 0,0);
     this.loadAssignments();
     this.loadSeances();
   }
@@ -60,7 +77,7 @@ export class AssignmentListComponent implements OnInit {
     this.seanceClient.getAll().subscribe({
       next: (seances) => {
         this.seanceOptions = seances.map(s => ({
-          label: `Séance ${s.id} - ${s.titre}`,
+          label: `Séance    ${s.titre}`,
           value: s.id
         }));
       },

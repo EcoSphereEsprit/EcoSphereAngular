@@ -1,107 +1,122 @@
 <div class="card">
-    <p-toast></p-toast>
-    
-    <p-toolbar>
-      <div class="p-toolbar-group-left">
-        <button pButton label="Nouveau Assignment" icon="pi pi-plus" class="p-button-success" 
-                (click)="openNew()"></button>
-       
-      </div>
-    </p-toolbar>
-  
-    <p-table [value]="assignments"  dataKey="id" 
-             [paginator]="true" [rows]="10" >
-      <ng-template pTemplate="header">
-        <tr>
-         
-          <th>Titre</th>
-          <th>Description</th>
-          <th>Séance</th>
-          <th>Type</th>
-          <th>Date Limite</th>
-          <th>Statut</th>
-          <th>Actions</th>
-        </tr>
-      </ng-template>
-  
-      <ng-template pTemplate="body" let-assignment>
-        <tr>
-          <td>{{ assignment.titre }}</td>
-          <td>{{ assignment.description }}</td>
-          <td>{{ assignment.seanceId }}</td>
-          <td>{{ assignment.typeRendu }}</td>
-          <td>{{ assignment.dateLimite | date:'dd/MM/yyyy' }}</td>
-          <td>
-            <p-tag [severity]="getStatusSeverity(assignment.statut)" 
-                  [value]="assignment.statut"></p-tag>
-          </td>
-          <td>
-            <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" 
-                    (click)="editAssignment(assignment)"></button>
-            <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" 
-                    (click)="deleteAssignment(assignment.id)"></button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </div>
-  
-  <!-- Dialog d'ajout/modification -->
-  <p-dialog header="{{ isEdit ? 'Modifier Assignment' : 'Nouvel Assignment' }}" 
-            [(visible)]="assignmentDialog" [modal]="true" [style]="{width: '500px'}">
-    <div class="p-fluid">
-      <div class="p-field">
-        <label for="titre">Titre</label>
-        <input id="titre" type="text" pInputText [(ngModel)]="currentAssignment.titre" required>
-      </div>
-  
-      <div class="p-field">
-        <label for="description">Description</label>
-        <textarea id="description" pInputTextarea [(ngModel)]="currentAssignment.description" 
-                  rows="3"></textarea>
-      </div>
-  
-      <div class="p-field">
-        <label for="seanceId">Séance</label>
-        <p-dropdown [options]="seanceOptions" [(ngModel)]="currentAssignment.seanceId" 
-                   optionLabel="label" optionValue="value" [showClear]="true"></p-dropdown>
-      </div>
-  
-      <div class="p-field">
-        <label for="typeRendu">Type de rendu</label>
-        <p-dropdown [options]="[
-          {label: 'Fichier', value: 'FICHIER'},
-          {label: 'Lien', value: 'LIEN'},
-          {label: 'Texte', value: 'TEXTE'}
-        ]" [(ngModel)]="currentAssignment.type"></p-dropdown>
-      </div>
-  
-      <div class="p-field">
-        <label for="dateLimite">Date limite</label>
-        <p-calendar [(ngModel)]="currentAssignment.dateLimite" [showTime]="false" 
-                   dateFormat="dd/mm/yy"></p-calendar>
-      </div>
+  <p-toast></p-toast>
+  <h2>Devoirs demandés:</h2>
+
+  <p-toolbar>
+    <div class="p-toolbar-group-left">
+      <button pButton label="Nouveau Assignment" icon="pi pi-plus" class="p-button-success" 
+              (click)="openNew()"></button>
     </div>
-  
+  </p-toolbar>
+
+  <p-table [value]="assignments" dataKey="id" [paginator]="true" [rows]="10">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Titre</th>
+        <th>Description</th>
+        <th>Type</th>
+        <th>Date Limite</th>
+        <th>Statut</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-assignment>
+      <tr>
+        <td>{{ assignment.titre }}</td>
+        <td>{{ assignment.description }}</td>
+        <td>{{ assignment.type }}</td>
+        <td>{{ assignment.dateLimite | date:'dd/MM/yyyy' }}</td>
+        <td>
+          <p-tag 
+          [severity]="getStatusSeverity(getAssignmentStatus(assignment))" 
+          [value]="getAssignmentStatus(assignment)">
+        </p-tag>
+                </td>
+        <td>
+          <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" 
+                  (click)="editAssignment(assignment)"></button>
+          <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" 
+                  (click)="deleteAssignment(assignment.id)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<!-- Dialog d'ajout/modification -->
+<p-dialog header="{{ isEdit ? 'Modifier Assignment' : 'Nouvel Assignment' }}" 
+          [(visible)]="assignmentDialog" [modal]="true" [style]="{width: '500px', height: '850px'}">
+  <form #form="ngForm" class="p-fluid" (ngSubmit)="saveAssignment()" novalidate>
+
+    <div class="p-field">
+      <label for="titre">Titre </label>
+      <input id="titre" type="text" pInputText [(ngModel)]="currentAssignment.titre" 
+             name="titre" required #titre="ngModel">
+      <small *ngIf="titre.invalid && titre.touched" class="p-error">Titre est requis</small>
+    </div>
+
+    <div class="p-field">
+      <label for="description">Description </label>
+      <textarea id="description" pInputTextarea [(ngModel)]="currentAssignment.description" 
+                name="description" required rows="3" #description="ngModel"></textarea>
+      <small *ngIf="description.invalid && description.touched" class="p-error">Description est requise</small>
+    </div>
+
+    <div class="p-field">
+      <label for="seanceId">Séance </label>
+      <p-dropdown [options]="seanceOptions" [(ngModel)]="currentAssignment.seanceId" 
+                  name="seanceId" optionLabel="label" optionValue="value" 
+                   #seanceId="ngModel" [showClear]="true">
+      </p-dropdown>
+      <small *ngIf="seanceId.invalid && seanceId.touched" class="p-error">Séance est requise</small>
+    </div>
+
+    <div class="p-field">
+      <label for="type">Type de rendu </label>
+      <p-dropdown [options]="[
+        {label: 'Fichier', value: 'DOCUMENT'},
+        {label: 'Lien', value: 'LIEN'},
+        {label: 'Texte', value: 'TEXTE'}
+      ]" [(ngModel)]="currentAssignment.type" name="type"  #type="ngModel"></p-dropdown>
+      <small *ngIf="type.invalid && type.touched" class="p-error">Type de rendu requis</small>
+    </div>
+
+    <div class="p-field">
+      <label for="dateLimite">Date limite </label>
+      
+                  <p-calendar [(ngModel)]="currentAssignment.dateLimite"
+            name="dateLimite"
+            #dateLimite="ngModel"
+            [showTime]="false"
+            dateFormat="dd/mm/yy"
+            [minDate]="minDate">
+</p-calendar>
+
+      <small *ngIf="dateLimite.invalid && dateLimite.touched" class="p-error">Date limite requise</small>
+    </div>
+
     <p-footer>
-      <button pButton label="Annuler" icon="pi pi-times" class="p-button-text" 
+      <button pButton type="submit" label="Enregistrer" icon="pi pi-check" class="p-button-text" 
+      [disabled]="form.invalid"></button>
+      <button pButton type="button" label="Annuler" icon="pi pi-times" class="p-button-text" 
               (click)="assignmentDialog = false"></button>
-      <button pButton label="Enregistrer" icon="pi pi-check" class="p-button-text" 
-              (click)="saveAssignment()"></button>
-    </p-footer>
-  </p-dialog>
   
-  <!-- Dialog de confirmation suppression -->
-  <p-dialog header="Confirmation" [(visible)]="deleteAssignmentDialog" [modal]="true" 
-            [style]="{width: '450px'}">
-    <div class="confirmation-content">
-      <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-      <span>Êtes-vous sûr de vouloir supprimer cet assignment ?</span>
-    </div>
-    <p-footer>
-      <button pButton label="Non" icon="pi pi-times" class="p-button-text" 
-              (click)="deleteAssignmentDialog = false"></button>
-      <button pButton label="Oui" icon="pi pi-check" class="p-button-text" 
-              (click)="confirmDelete()"></button>
     </p-footer>
-  </p-dialog>
+  </form>
+</p-dialog>
+
+<!-- Dialog de confirmation suppression -->
+<p-dialog header="Confirmation" [(visible)]="deleteAssignmentDialog" [modal]="true" 
+          [style]="{width: '450px'}">
+  <div class="confirmation-content">
+    <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+    <span>Êtes-vous sûr de vouloir supprimer cet assignment ?</span>
+  </div>
+  <p-footer>
+    <button pButton label="Non" icon="pi pi-times" class="p-button-text" 
+            (click)="deleteAssignmentDialog = false"></button>
+    <button pButton label="Oui" icon="pi pi-check" class="p-button-text" 
+            (click)="confirmDelete()"></button>
+  </p-footer>
+</p-dialog>

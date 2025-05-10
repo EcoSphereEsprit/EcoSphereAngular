@@ -54,7 +54,15 @@ console.log(assignment)  ;
   }
 
    
-
+  isPastDeadline(assignment: Assignment): boolean {
+    if (!assignment.dateLimite) {
+      return false; // ou true, selon ton besoin métier si dateLimite est absente
+    }
+    const now = new Date();
+    const deadline = new Date(assignment.dateLimite);
+    return deadline < now;
+  }
+  
 
   loadSeancesAndAssignments() {
     this.assignmentService.getAll().subscribe(assignments => {
@@ -73,11 +81,10 @@ console.log(assignment)  ;
     
     this.currentAssignment = assignment;
     this.currentDocument = this.emptyDocument(assignment);
-    this.currentType = this.currentDocument.typedoc; // Set currentType
+    this.currentType = this.currentDocument.typedoc; 
     
     console.log('Document type:', this.currentDocument.typedoc);
-    console.log('ASS type:', this.currentAssignment.typeRendu); // Should show 'LIEN'
-    // Should show 'LIEN'
+    console.log('ASS type:', this.currentAssignment.typeRendu);  
     this.documentDialog = true;
   }
   

@@ -60,8 +60,7 @@ export class CriteresComponent implements OnInit {
 
   saveCritere() {
     if (this.critere.id) {
-      // Mettre à jour le critère avec le titre du sprint (sprintId)
-      this.critere.sprintId = this.selectedSprintId.titre; // Utiliser le titre du sprint, pas un ID numérique
+      this.critere.sprintId = this.selectedSprintId.id;  
       this.critereService.update(this.critere.id, this.critere).subscribe(
         (response) => {
           console.log('Critère modifié:', response);
@@ -75,9 +74,8 @@ export class CriteresComponent implements OnInit {
         }
       );
     } else {
-      // Créer un nouveau critère avec sprintId (titre du sprint)
-      this.critere.sprintId = this.selectedSprintId.titre; 
-      console.log(this.critere);// Utiliser le titre du sprint
+      this.critere.sprintId = this.selectedSprintId.id; 
+      console.log(this.critere); 
       this.critereService.create(this.critere).subscribe(
         (response) => {
           console.log('Critère ajouté:', response);
