@@ -1,0 +1,24 @@
+:host ::ng-deep {
+    .p-dropdown, .p-inputtext, .p-inputtextarea {
+      width: 100%;
+    }
+    
+    .p-fileupload-choose {
+      width: 100%;
+    }
+    
+    .p-dialog-footer button {
+      margin: 0 0.5rem;
+    }
+  }
+  
+  .user-info {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+    
+    h3, p {
+      margin: 0.25rem 0;
+    }
+  }
