@@ -47,8 +47,8 @@
       <!-- LINK Field -->
       <div class="p-field" *ngIf="currentDocument.typedoc === 'LIEN'">
         <label for="lien">URL du travail</label>
-        <input id="lien" type="url" pInputText [(ngModel)]="currentDocument.contenu" 
-               placeholder="https://drive.google.com/..." required
+        <input id="lien" type="url" pInputText [(ngModel)]="currentDocument.nomFichier" 
+               placeholder="https://github.com/..." required
                (input)="validateUrl()">
         <small *ngIf="currentDocument.contenu && !isUrlValid" class="p-error">
           Lien invalide - doit commencer par http:// ou https://
