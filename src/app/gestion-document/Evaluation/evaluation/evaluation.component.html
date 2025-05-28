@@ -1,0 +1,76 @@
+<div *ngFor="let seance of (documentsGrouped | keyvalue)" class="p-mb-5">
+    <!-- Titre séance -->
+    <h2 class="p-text-primary p-mb-4">📘 Séance : {{ seance.key }}</h2>
+  
+    <div *ngFor="let etudiant of (seance.value | keyvalue)" class="p-mb-4 p-p-3 p-shadow-1" style="border-radius:8px; background:#0c0a662d;">
+      <!-- Titre étudiant -->
+      <h3 class="p-text-secondary p-mb-3">👤 Étudiant : {{ etudiant.key }}</h3>
+  
+      <div *ngFor="let doc of etudiant.value" class="p-card p-mb-4 p-shadow-2" style="border-radius:6px;">
+        <div class="p-card-body">
+     
+          <div class="p-mb-3">
+            <ng-container [ngSwitch]="doc.type">
+  
+              <!-- LIEN : lien cliquable -->
+              <a *ngSwitchCase="'LIEN'" [href]="doc.nomFichier" target="_blank" class="p-button p-button-text p-mb-2">
+                🔗 {{ doc.nomFichier }}
+              </a>
+  
+              <!-- DOCUMENT : PDF ou TXT -->
+              <ng-container *ngSwitchCase="'DOCUMENT'">
+                <!-- PDF -->
+                <iframe *ngIf="doc.nomFichier.toLowerCase().endsWith('.pdf')" 
+                        [src]="sanitizeUrl(doc.nomFichier)" 
+                        width="100%" height="500px" style="border:none;">
+                </iframe>
+  
+                <!-- TXT -->
+                <pre *ngIf="doc.nomFichier.toLowerCase().endsWith('.txt')" 
+                     style="background:#d3e8eb; border:1px solid #ddd; padding:10px; max-height:400px; overflow:auto;">
+                  {{ doc.contenu }}
+                </pre>
+  
+                <!-- Autre type document -->
+                <div *ngIf="!doc.nomFichier.toLowerCase().endsWith('.pdf') && !doc.nomFichier.toLowerCase().endsWith('.txt')">
+                  <p>Format non supporté pour la visualisation.</p>
+                  <a [href]="doc.nomFichier" target="_blank" class="p-button p-button-text p-mb-2">Télécharger</a>
+                </div>
+              </ng-container>
+  
+              <!-- TEXTE : contenu simple -->
+              <pre *ngSwitchCase="'TEXTE'" 
+                   style="background:#3442bb; color:white; border:1px solid #ddd; padding:10px; white-space: pre-wrap;">
+                {{ doc.contenu }}
+              </pre>
+  
+              <!-- Par défaut : lien téléchargement -->
+              <div *ngSwitchDefault>
+                <a [href]="doc.nomFichier" target="_blank" class="p-button p-button-text p-mb-2">Télécharger</a>
+              </div>
+  
+            </ng-container>
+          </div>
+  
+          <!-- Évaluation -->
+          <div class="p-grid p-formgrid p-fluid p-align-center">
+            <div class="p-field p-col-12 p-md-3">
+              <label>Note</label>
+              <input type="number" pInputText [(ngModel)]="doc.note" min="0" max="20" />
+            </div>
+  
+            <div class="p-field p-col-12 p-md-6">
+              <label>Suggestion</label>
+              <input type="text" pInputText [(ngModel)]="doc.suggestion" placeholder="Ex: Bon travail, mais améliore le format SQL..." />
+            </div>
+  
+            <div class="p-field p-col-12 p-md-3 p-d-flex p-jc-end p-ai-end">
+              <button pButton type="button" label="✅ Évaluer" class="p-button-success" (click)="submitEvaluation(doc)"></button>
+            </div>
+          </div>
+  
+        </div>
+      </div>
+    </div>
+  </div>
+  

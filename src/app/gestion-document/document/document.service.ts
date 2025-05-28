@@ -54,14 +54,13 @@ getSubmittedDocumentsBySeance(seanceId: string): Observable<Document[]> {
 
     const payload = {
       assignmentId: dto.assignmentId,
-      seanceId: dto.seanceId || null, // Optional field
-      type: backendType, // Converted type
+      seanceId: dto.seanceId || null,
+      type: backendType,
       contenu: dto.contenu,
       nomFichier: dto.nomFichier,
-      commentaire: dto.commentaire || '', // Ensure non-null
-      statut: 'SOUMIS', // Default status
-      dateSoumission: new Date().toISOString()
+      commentaire: dto.commentaire || ''
     };
+    
 
     return this.http.post(this.apiUrl, payload, { headers }).pipe(
       catchError(error => {
@@ -73,7 +72,7 @@ getSubmittedDocumentsBySeance(seanceId: string): Observable<Document[]> {
 
   private mapToBackendType(frontendType: any): string {
     switch(frontendType) {
-      case 'DOCUMENT': return 'PDF';
+      case 'DOCUMENT': return 'DOCUMENT';
       case 'LIEN': return 'LIEN';
       case 'TEXTE': return 'TEXTE';
       default: return 'LIEN';

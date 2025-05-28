@@ -31,20 +31,20 @@ export class AssignmentListComponent implements OnInit {
     switch(status) {
       case 'TERMINE': return 'success';
       case 'EN_COURS': return 'warning';
-      default: return 'danger';
+      default: return 'info';
     }
   }
-
+  
   getAssignmentStatus(assignment: Assignment): string {
     const now = new Date();
     const deadline = assignment.dateLimite ? new Date(assignment.dateLimite) : null;
   
-    if (assignment.statut) {
-      return 'A_FAIRE';
+    if (assignment.statut === 'TERMINE') {
+      return 'TERMINE';
     } else if (deadline && deadline < now) {
-      return 'En A_FAIRE';
+      return 'TERMINE';
     } else {
-      return 'A_FAIRE';
+      return 'EN_COURS';
     }
   }
   

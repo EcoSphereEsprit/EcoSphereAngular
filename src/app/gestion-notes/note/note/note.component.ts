@@ -23,12 +23,10 @@ export class NoteComponent implements OnInit {
       this.notes = data;
       this.calculerMoyenne();
 
-      // Pour chaque note, récupérer la séance et ses critères
       this.notes.forEach(note => {
         this.seanceService.getCriteresBySeanceId(note.seanceId).subscribe(seanceWithCritere => {
           note.seance = seanceWithCritere;
           
-          // Associer les notes aux critères correspondants
           if (note.seance?.criteres) {
             note.seance.criteres.forEach(critere => {
               critere.note = this.notes.find(n => 

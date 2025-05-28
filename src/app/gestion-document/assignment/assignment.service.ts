@@ -62,6 +62,10 @@ export class AssignmentService {
   getById(assignmentId: any): Observable<Assignment[]> {
     return this.http.get<Assignment[]>(`${this.apiUrl}/${assignmentId}`);
   }
+
+  getByIdForEval(assignmentId: any): Observable<Assignment> {
+    return this.http.get<Assignment>(`${this.apiUrl}/${assignmentId}`);
+  }
   // assignment.service.ts
 getAssignmentTypeById(assignmentId: any): Observable<any> {
   return this.http.get<Assignment>(`${this.apiUrl}/${assignmentId}`).pipe(

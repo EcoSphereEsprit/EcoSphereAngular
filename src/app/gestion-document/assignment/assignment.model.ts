@@ -1,7 +1,7 @@
 export interface Assignment {
     id: string;
     titre?: string;
-    description?: string;
+    description?: any;
     seanceId?: string;
     type?: 'LIEN' | 'DOCUMENT' | 'TEXTE';
     dateLimite?: Date;
