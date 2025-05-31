@@ -1,8 +1,8 @@
 // src/app/demo/service/auth.service.ts
 
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { firstValueFrom, Observable } from 'rxjs';
 import { UserResponseDTO } from '../api/groups';
 
 @Injectable({
@@ -11,6 +11,7 @@ import { UserResponseDTO } from '../api/groups';
 export class UserService {
 
   private baseUrl = 'http://localhost:9090/users';
+  private baseUrlImageService = 'http://localhost:9090';
   constructor(private http: HttpClient) {}
 
    loginUser(email: string, password: string) {
@@ -64,7 +65,27 @@ export class UserService {
   getUserByEspritId(espritId: string) {
     return this.http.get<any>(this.baseUrl+`/espritid/${espritId}`).toPromise();
   }
+  sendForPassWordMail(mail: string) {
+    return this.http.get<any>(this.baseUrl+`/SendforgetPasswordMail?email=${mail}`).toPromise();
+  }
   updateUserInfo(userId: string, userInfos : any) : Observable<any>{
     return this.http.put(this.baseUrl+`/${userId}`, userInfos);
   }
+
+   resetPassword(email: string, password: string, otp: string) {
+  const url = `${this.baseUrl}/resetPassword?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&otp=${encodeURIComponent(otp)}`;
+  return this.http.get<any>(url, { observe: 'response' }); // 👈 observe full response
+}
+
+  saveAuthImage(base64Image: string, email: string) {
+    return this.http.post(this.baseUrlImageService +'/uploadImage', { base64Image, email });
+  }
+  saveAuthImagecopy(base64Image: string, email: string) {
+    return this.http.post(this.baseUrlImageService +'/uploadImageCopy', { base64Image, email });
+  }
+
+  verifyImage(base64Image: string, email: string) {
+    return this.http.post(this.baseUrlImageService +'/verify-faces', { base64Image, email });
+  }
+  
 }

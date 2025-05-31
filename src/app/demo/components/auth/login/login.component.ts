@@ -41,12 +41,15 @@ export class LoginComponent {
                 localStorage.setItem('token', res.token);
 				localStorage.setItem('email', res.email);
 				localStorage.setItem('id', res.id);
-				if(res.is2FAEnabled){
-					this.router.navigate(['/auth/verification']);
+				localStorage.setItem('active', res.active);
+				console.log(res.active)
+				if(!res.active){
+					this.router.navigate(['/auth/verifyotpforpassword']);
 				}
 				else{
-					this.router.navigate(['/landing']);
+					this.router.navigate(['/auth/verifypicture']);
 				}
+				
 				
             },
             error: (err) => {
