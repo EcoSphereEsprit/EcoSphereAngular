@@ -7,15 +7,87 @@
       <p-toast></p-toast>
 
       <!-- Add Group Button -->
+      <div class="flex gap-2 mb-4">
+    <button
+      *ngIf="LoggedInUserRole === 'ADMIN' || LoggedInUserRole === 'TEACHER'"
+      pButton
+      label="Add Group"
+      icon="pi pi-plus"
+      (click)="showAddGroupDialog()"
+      [disabled]="LoggedInUserRole !== 'ADMIN' && LoggedInUserRole !== 'TEACHER'"
+    ></button>
+    <button
+      pButton
+      label="Genrate groups"
+      icon="pi pi-star"
+      (click)="generateGroupsDialogVisible = true"
+    ></button>
+  </div>
+
+  <p-dialog
+  header="Group Assignment Results"
+  [(visible)]="feedbackDialogVisible"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+>
+  <p *ngIf="feedbackResults.length === 0">No results to show.</p>
+  
+  <ul *ngIf="feedbackResults.length > 0" style="max-height: 300px; overflow-y: auto; padding-left: 1rem;">
+    <li *ngFor="let result of feedbackResults">
+      <span [style.color]="result.success ? 'green' : 'red'">
+        {{ result.message }}
+      </span>
+    </li>
+  </ul>
+
+  <p-footer>
+    <button pButton label="Close" (click)="feedbackDialogVisible = false" class="p-button-sm"></button>
+  </p-footer>
+</p-dialog>
+<p-dialog
+  [(visible)]="generateGroupsDialogVisible"
+  [style]="{ width: '400px' }"
+  header="Generate Groups"
+  [modal]="true"
+  [closable]="false"
+>
+  <form #generateForm="ngForm">
+    <div class="p-fluid">
+      <div class="p-field">
+        <label for="groupClass">Group Class</label>
+        <input
+          id="groupClass"
+          name="groupClass"
+          type="text"
+          pInputText
+          required
+          [(ngModel)]="groupClass"
+          #groupClassModel="ngModel"
+        />
+        <small *ngIf="groupClassModel.invalid && groupClassModel.touched" class="text-red-500">
+          Group Class is required.
+        </small>
+      </div>
+    </div>
+    <p-footer>
       <button
-        *ngIf="LoggedInUserRole === 'ADMIN' || LoggedInUserRole === 'TEACHER'"
         pButton
-        label="Add Group"
-        icon="pi pi-plus"
-        (click)="showAddGroupDialog()"
-        [disabled]="LoggedInUserRole !== 'ADMIN' && LoggedInUserRole !== 'TEACHER'"
-        class="mb-4"
+        label="Cancel"
+        icon="pi pi-times"
+        (click)="generateGroupsDialogVisible = false"
+        class="p-button-text"
       ></button>
+      <button
+        pButton
+        label="Submit"
+        icon="pi pi-check"
+        class="p-button-text"
+        [disabled]="generateForm.invalid"
+        (click)="submitGeneratedGroups()"
+      ></button>
+    </p-footer>
+  </form>
+</p-dialog>
 
       <!-- Groups Table -->
       <p-table
@@ -271,4 +343,5 @@
       </p-footer>
     </form>
   </p-dialog>
+  
 </div>

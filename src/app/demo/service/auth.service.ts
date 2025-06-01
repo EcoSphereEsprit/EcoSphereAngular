@@ -87,5 +87,9 @@ export class UserService {
   verifyImage(base64Image: string, email: string) {
     return this.http.post(this.baseUrlImageService +'/verify-faces', { base64Image, email });
   }
+
+  generateGroups(className : string){
+    return this.http.get<any>(this.baseUrl+`/getGroupRepartition?groupName=${className}`).toPromise();
+  }
   
 }

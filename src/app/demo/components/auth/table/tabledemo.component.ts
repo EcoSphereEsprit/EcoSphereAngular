@@ -70,7 +70,10 @@ export class TableDemoComponent implements OnInit {
     idFrozen: boolean = false;
 
     loading: boolean = true;
-
+    generateGroupsDialogVisible: boolean = false;
+    groupClass: string = '';
+    feedbackDialogVisible: boolean = false;
+    feedbackResults: { success: boolean; message: string }[] = [];
     @ViewChild('filter') filter!: ElementRef;
 
     constructor(private customerService: CustomerService, private productService: ProductService, private GroupsService :GroupsService, private UserService : UserService, private MessageService : MessageService) { }
@@ -314,5 +317,107 @@ deleteMember(groupId : string , memberId : string){
             });
 }
 
-    
+    async submitGeneratedGroups() {
+    try {
+        const generatedGroups: any[][] = await this.UserService.generateGroups(this.groupClass);
+
+        // Flatten all generated members into one list
+        const allGeneratedMembers = generatedGroups.flat().filter(m => m);
+        const groups: Group[] = this.groups;
+        const emptyGroups = groups.filter(g => !g.members || g.members.length === 0);
+
+        if (emptyGroups.length === 0) {
+        window.alert("⚠️ There are no empty groups to assign members.");
+        this.MessageService.add({ key: 'tst', severity: 'error', summary: 'warning', detail: '⚠️ There are no empty groups to assign members.' });
+        return;
+        }
+
+        if (allGeneratedMembers.length === 0) {
+        window.alert("⚠️ No members were generated.");
+        return;
+        }
+
+        if (emptyGroups.length < generatedGroups.length) {
+        const confirmProceed = window.confirm(
+            `You have only ${emptyGroups.length} empty groups but ${generatedGroups.length} generated member lists.\n` +
+            `Proceed with assigning all members to the available groups anyway?`
+        );
+        if (!confirmProceed) {
+            return;
+        }
+        }
+
+        let memberIndex = 0;
+        const membersPerGroup = Math.ceil(allGeneratedMembers.length / emptyGroups.length);
+        this.feedbackResults = []; // Clear previous results
+
+        for (const group of emptyGroups) {
+        const membersForGroup = allGeneratedMembers.slice(memberIndex, memberIndex + membersPerGroup);
+
+        for (const memberData of membersForGroup) {
+            const isAlreadyInClassGroup = groups.some(g =>
+            g.members?.some(m => m.email === memberData.email && m.className === memberData.className)
+            );
+
+            if (isAlreadyInClassGroup) {
+            this.feedbackResults.push({
+                success: false,
+                message: `❌ Skipping ${memberData.name} - already in a group with class ${memberData.className}.`
+            });
+            continue;
+            }
+
+            this.newMember = {
+            id: memberData.id,
+            name: memberData.name,
+            email: memberData.email,
+            role: memberData.role,
+            phone: memberData.phone || '',
+            className: memberData.className || '',
+            espritId: memberData.espritId || ''
+            };
+
+            await new Promise((resolve) => {
+            this.GroupsService.addMember(this.newMember, group.id ?? '').subscribe({
+                next: (res) => {
+                this.feedbackResults.push({
+                    success: true,
+                    message: `✅ Added ${this.newMember.name} to ${group.name}`
+                });
+                resolve(res);
+                },
+                error: (err) => {
+                this.feedbackResults.push({
+                    success: false,
+                    message: `❌ Failed to add ${this.newMember.name} to ${group.name}`
+                });
+                resolve(null);
+                }
+            });
+            });
+        }
+
+        memberIndex += membersPerGroup;
+
+        if (memberIndex >= allGeneratedMembers.length) {
+            break;
+        }
+        }
+
+        this.groups = await this.GroupsService.getGroups();
+        this.generateGroupsDialogVisible = false;
+        this.feedbackDialogVisible = true; // Show popup with all results
+
+    } catch (error) {
+        console.error('Error generating and assigning groups:', error);
+        window.alert(' Something went wrong during group generation.');
+    }
 }
+
+}
+
+
+
+
+
+    
