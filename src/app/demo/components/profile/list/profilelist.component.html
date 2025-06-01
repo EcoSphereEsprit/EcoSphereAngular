@@ -2,6 +2,7 @@
     <p-table #dt [value]="reclamations" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" responsiveLayout="scroll"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
         [globalFilterFields]="['title','status','representative.name']">
+        
         <ng-template pTemplate="caption">
             <div class="flex flex-wrap gap-2 align-items-center justify-content-between">
                 <span class="p-input-icon-left w-full sm:w-20rem flex-order-1 sm:flex-order-0">
@@ -11,72 +12,49 @@
                 <button (click)="navigateToCreateUser()" pButton class="p-button-outlined w-full sm:w-auto flex-order-0 sm:flex-order-1" icon="pi pi-user-plus" label="Create a new claim"></button>
             </div>
         </ng-template>
+        
         <ng-template pTemplate="header">
             <tr>
                 <th pSortableColumn="title" class="white-space-nowrap" style="width:25%">Title <p-sortIcon field="title"></p-sortIcon></th>
-                <th pSortableColumn="status" class="white-space-nowrap" style="width:25%">status <p-sortIcon field="status"></p-sortIcon></th>
-                <th pSortableColumn="createdAt" class="white-space-nowrap" style="width:25%">createdAt<p-sortIcon field="createdAt"></p-sortIcon></th>
+                <th pSortableColumn="status" class="white-space-nowrap" style="width:25%">Status <p-sortIcon field="status"></p-sortIcon></th>
+                <th pSortableColumn="createdAt" class="white-space-nowrap" style="width:25%">Created At <p-sortIcon field="createdAt"></p-sortIcon></th>
                 <th pSortableColumn="userId" class="white-space-nowrap" style="width:25%">Created By <p-sortIcon field="userId"></p-sortIcon></th>
-                <th  class="white-space-nowrap" style="width:25%">Action</th>
-
+                <th class="white-space-nowrap" style="width:25%">Action</th>
             </tr>
         </ng-template>
+        
         <ng-template pTemplate="body" let-reclamation>
             <tr>
                 <td>{{reclamation.title}}</td>
                 <td>
-                    <mat-icon *ngIf="reclamation.status === 'PENDING'" 
-                    color="warn" 
-                    matTooltip="Pending">
-            hourglass_empty
-          </mat-icon>
-          
-          <mat-icon *ngIf="reclamation.status === 'IN_PROGRESS'" 
-                    color="accent" 
-                    matTooltip="In Progress">
-            autorenew
-          </mat-icon>
-          
-          <mat-icon *ngIf="reclamation.status === 'RESOLVED'" 
-                    color="primary" 
-                    style="color: green;"
-                    matTooltip="Resolved">
-            check_circle
-          </mat-icon>
-          
-          <mat-icon *ngIf="reclamation.status === 'REJECTED'" 
-                    color="warn" 
-                    matTooltip="Rejected">
-            cancel
-          </mat-icon>
-          
-                    
+                    <mat-icon *ngIf="reclamation.status === 'PENDING'" color="warn" matTooltip="Pending">hourglass_empty</mat-icon>
+                    <mat-icon *ngIf="reclamation.status === 'IN_PROGRESS'" color="accent" matTooltip="In Progress">autorenew</mat-icon>
+                    <mat-icon *ngIf="reclamation.status === 'RESOLVED'" color="primary" style="color: green;" matTooltip="Resolved">check_circle</mat-icon>
+                    <mat-icon *ngIf="reclamation.status === 'REJECTED'" color="warn" matTooltip="Rejected">cancel</mat-icon>
                 </td>
                 <td>{{reclamation.createdAt | date: 'MM/dd/yyyy'}}</td>
                 <td>
-                <!-- {{reclamation.userId}} -->
-                 Imen Sebteoui
+                    <!-- Static name for now -->
+                    Imen Sebteoui
                 </td>
                 <td style="display: flex;">
-                    <mat-icon matTooltip="Explore" (click)="explore(reclamation)" style="cursor: pointer;">
-                        open_in_new
-                    </mat-icon>
-                    <mat-icon matTooltip="Delete" (click)="deleteRec()" style="cursor: pointer;">
-                        delete
-                    </mat-icon>
-                    <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
-                        <div class="flex align-items-center justify-content-center">
-                            <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                            <span >Are you sure you want to delete this reclamation ?</span>
-                        </div>
-                        <ng-template pTemplate="footer">
-                            <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
-                            <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="delete(reclamation)"></button>
-                        </ng-template>
-                    </p-dialog>
-                  </td>
-                  
+                    <mat-icon matTooltip="Explore" (click)="explore(reclamation)" style="cursor: pointer;">open_in_new</mat-icon>
+                    <mat-icon matTooltip="Delete" (click)="confirmDelete(reclamation)" style="cursor: pointer;">delete</mat-icon>
+                </td>
             </tr>
         </ng-template>
+        
     </p-table>
+    
+    <!-- Dialog for deletion confirmation -->
+    <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+        <div class="flex align-items-center justify-content-center">
+            <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+            <span>Are you sure you want to delete this reclamation?</span>
+        </div>
+        <ng-template pTemplate="footer">
+            <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
+            <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="deleteSelectedReclamation()"></button>
+        </ng-template>
+    </p-dialog>
 </div>

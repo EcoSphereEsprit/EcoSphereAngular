@@ -25,5 +25,6 @@ export interface Reclamations {
     description : string;
     status : any;
     userId : string;
+    email : string ;
     createdAt : string;
 }

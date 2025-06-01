@@ -20,6 +20,7 @@ export class ProfileCreateComponent implements OnInit {
         id : '',
         title: '',
         description: '',
+        email : '',
         userId : '',
         status : '',
         createdAt : ''
@@ -59,6 +60,7 @@ export class ProfileCreateComponent implements OnInit {
                 description: this.claim.description,
                 status: 'PENDING', 
                 userId: 'user123', //hard coded to be changed when integrate the user management Imen sebteoui
+                email :"sebteouii@gmail.com",
                 createdAt: new Date().toISOString() 
               };
               
@@ -79,12 +81,15 @@ export class ProfileCreateComponent implements OnInit {
                 description: this.claim.description,
                 status: this.claim.status, 
                 userId:  this.claim.userId , //hard coded to be changed when integrate the user management Imen sebteoui
+                email : this.claim.email ,
                 createdAt: this.claim.createdAt,
 
               };
               
                 this.reclamtionService.editReclamation(editedReclamation , this.claim.id).subscribe((data:any) => {
-                        this.router.navigate(['/profile/list']);
+                        
+                  
+                  this.router.navigate(['/profile/list']);
                 });
 
         }

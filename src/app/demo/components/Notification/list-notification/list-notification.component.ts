@@ -12,6 +12,7 @@ export class ListNotificationComponent {
 
     notifications : any[] = [];
     deleteProductDialog: boolean = false;
+    notificationToDelete: any = null;
 
 
     constructor(private notificationService: NotificationService, private router: Router) { }
@@ -37,7 +38,7 @@ export class ListNotificationComponent {
             this.deleteProductDialog =  false
 
             this.notificationService.getAllNotifictions().subscribe((data: any[]) => {
-                this.notifications = data;
+                this.notifications = data.reverse();
             });
         });
 
@@ -72,6 +73,10 @@ export class ListNotificationComponent {
                 this.notifications = data.reverse();
             });
         });
+      }
+      confirmDelete(notification: any) {
+        this.notificationToDelete = notification;
+        this.deleteProductDialog = true;
       }
 
 }

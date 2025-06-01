@@ -1,34 +1,30 @@
 <ul class="list-none p-0 m-0">
     <li
-    *ngFor="let notif of notifications"
-    class="flex justify-between items-start p-3 mb-3 border-1 border-round cursor-pointer"
-    [ngClass]="{ 'surface-border': notif.read, 'surface-300': !notif.read }"
-    (click)="markAsRead(notif)"
-  >
-          <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
-            <div class="flex align-items-center justify-content-center">
-                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span >Are you sure you want to delete this Notification ?</span>
-            </div>
-            <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="deleteNotification(notif.id)"></button>
-            </ng-template>
-        </p-dialog>
-      
-        <div class="flex" >
-        <!-- <img [src]="notif.image" class="w-3rem h-3rem mr-3 flex-shrink-0" /> -->
+      *ngFor="let notif of notifications"
+      class="flex justify-between items-start p-3 mb-3 border-1 border-round cursor-pointer"
+      [ngClass]="{ 'surface-border': notif.read, 'surface-300': !notif.read }"
+      (click)="markAsRead(notif)"
+    >
+      <div class="flex">
         <div>
           <span class="font-semibold text-900">{{ notif.title }}</span>
           <p class="font-semibold text-600 m-0 text-sm">{{ formatDate(notif.createdAt) }}</p>
           <p class="line-height-3 mb-0 my-3">{{ notif.message }}</p>
-          <mat-icon (click)="deleteProductDialog = true">delete</mat-icon>
-
+          <mat-icon (click)="confirmDelete(notif)">delete</mat-icon>
         </div>
-
       </div>
-
-        
     </li>
-
   </ul>
+  
+  <!-- Dialog placed outside *ngFor -->
+  <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+    <div class="flex align-items-center justify-content-center">
+      <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+      <span>Are you sure you want to delete this notification?</span>
+    </div>
+    <ng-template pTemplate="footer">
+      <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
+      <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="deleteNotification(notificationToDelete?.id)"></button>
+    </ng-template>
+  </p-dialog>
+  

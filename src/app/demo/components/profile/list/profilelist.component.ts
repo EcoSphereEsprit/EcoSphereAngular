@@ -12,13 +12,14 @@ export class ProfileListComponent implements OnInit {
 
     reclamations : Reclamations[] = [];
     deleteProductDialog: boolean = false;
+    selectedReclamation: any = null;
 
 
     constructor(private reclamtionService: ReclamationService, private router: Router) { }
 
     ngOnInit() {
         this.reclamtionService.getAllReclamations().subscribe((data: Reclamations[]) => {
-            this.reclamations = data.reverse();;
+            this.reclamations = data.reverse();
         });
     }
 
@@ -39,15 +40,18 @@ export class ProfileListComponent implements OnInit {
       {
         this.deleteProductDialog = true
       }
-
-      delete(rec : any)
+      confirmDelete(reclamation: any): void {
+        this.selectedReclamation = reclamation;
+        this.deleteProductDialog = true;
+      }
+      deleteSelectedReclamation()
       {
-        this.reclamtionService.deleteReclamation(rec.id , rec.userId ).subscribe((data: any) => {
+        this.reclamtionService.deleteReclamation( this.selectedReclamation.id ,  this.selectedReclamation.userId ).subscribe((data: any) => {
             this.reclamations = data;
             this.deleteProductDialog =  false
 
             this.reclamtionService.getAllReclamations().subscribe((data: Reclamations[]) => {
-                this.reclamations = data;
+                this.reclamations = data.reverse();
             });
         });
 

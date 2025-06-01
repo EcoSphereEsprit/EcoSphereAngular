@@ -31,7 +31,7 @@
           
   
           <div class="col-12">
-            <button pButton pRipple (click)="createClaim()" [disabled]="claim.title === '' || claim.description === ''" label="{{action}}" class="w-auto mt-3"></button>
+            <button pButton pRipple (click)="createClaim()" [disabled]="claim.title === '' || claim.description === ''|| (titleModel.invalid && titleModel.dirty)" label="{{action}}" class="w-auto mt-3"></button>
           </div>
         </div>
       </div>
