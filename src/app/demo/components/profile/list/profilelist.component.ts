@@ -27,7 +27,7 @@ export class ProfileListComponent implements OnInit {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains')
     }
 
-    navigateToCreateUser(){
+    navigateToCreateUser(){      // navigate to create user
         this.router.navigate(['/profile/create'])
     }
     explore(reclamation: any) {
