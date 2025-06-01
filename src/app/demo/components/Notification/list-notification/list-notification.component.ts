@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { NotificationService } from 'src/app/demo/service/notification-service.service';
 
 @Component({
@@ -14,10 +15,20 @@ export class ListNotificationComponent {
     deleteProductDialog: boolean = false;
     notificationToDelete: any = null;
 
+  private subscription!: Subscription;
 
     constructor(private notificationService: NotificationService, private router: Router) { }
 
     ngOnInit() {
+      
+    this.notificationService.connect();
+
+    this.subscription = this.notificationService.notifications$.subscribe((data) => {
+      console.log('Notification received in component:', data);
+      // Optionally merge into your list
+       this.notifications = [...data , ...this.notifications ];
+    });
+        
         this.notificationService.getAllNotifictions().subscribe((data: any[]) => {
             this.notifications = data.reverse();
         });

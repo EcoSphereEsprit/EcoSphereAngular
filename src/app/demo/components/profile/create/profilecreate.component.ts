@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { Reclamations } from 'src/app/demo/api/customer';
 import { NotificationService } from 'src/app/demo/service/notification-service.service';
 import { ReclamationService } from 'src/app/demo/service/reclamation.service';
@@ -15,7 +16,8 @@ export class ProfileCreateComponent implements OnInit {
       { label: 'Resolved', value: 'RESOLVED' },
       { label: 'Rejected', value: 'REJECTED' }
     ];
-    
+      private wsSubscription: Subscription | undefined;
+
     claim = {
         id : '',
         title: '',
@@ -42,12 +44,14 @@ export class ProfileCreateComponent implements OnInit {
     }
     ngOnInit() {
 
-       // this.notificationService.connect();
+    //this.notificationService.connect();
 
-    this.notificationService.notifications$.subscribe((notifications) => {
-      //this.notifications = notifications;
-      console.log('Received notifications:', notifications);
-    });
+    // Subscribe to real-time notifications
+    // this.wsSubscription = this.notificationService.notifications$.subscribe((data) => {
+    //   console.log('Notification received in component:', data);
+    //   // Optionally merge into your list
+    // //  this.notifications = [...this.notifications, ...data];
+    // });
         
     }
     createClaim()
@@ -96,7 +100,8 @@ export class ProfileCreateComponent implements OnInit {
         
        
     }
-    ngOnDestroy() {
-        // this.notificationService.disconnect();
-      }
+    ngOnDestroy(): void {
+    this.wsSubscription?.unsubscribe();
+   // this.notificationService.disconnect(); 
+  }
 }
