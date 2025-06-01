@@ -1,41 +1,60 @@
 <div class="card">
-    <p-table #dt [value]="customers" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" responsiveLayout="scroll"
+    <p-table #dt [value]="reclamations" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" responsiveLayout="scroll"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
-        [globalFilterFields]="['name','country.name','representative.name']">
+        [globalFilterFields]="['title','status','representative.name']">
+        
         <ng-template pTemplate="caption">
             <div class="flex flex-wrap gap-2 align-items-center justify-content-between">
                 <span class="p-input-icon-left w-full sm:w-20rem flex-order-1 sm:flex-order-0">
                     <i class="pi pi-search"></i>
                     <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Global Search" class="w-full" />
                 </span>
-                <button (click)="navigateToCreateUser()" pButton class="p-button-outlined w-full sm:w-auto flex-order-0 sm:flex-order-1" icon="pi pi-user-plus" label="Add New"></button>
+                <button (click)="navigateToCreateUser()" pButton class="p-button-outlined w-full sm:w-auto flex-order-0 sm:flex-order-1" icon="pi pi-user-plus" label="Create a new claim"></button>
             </div>
         </ng-template>
+        
         <ng-template pTemplate="header">
             <tr>
-                <th pSortableColumn="name" class="white-space-nowrap" style="width:25%">Name <p-sortIcon field="name"></p-sortIcon></th>
-                <th pSortableColumn="country.name" class="white-space-nowrap" style="width:25%">Country <p-sortIcon field="country.name"></p-sortIcon></th>
-                <th pSortableColumn="date" class="white-space-nowrap" style="width:25%">Join Date <p-sortIcon field="date"></p-sortIcon></th>
-                <th pSortableColumn="representative.name" class="white-space-nowrap" style="width:25%">Created By <p-sortIcon field="representative.name"></p-sortIcon></th>
-                <th pSortableColumn="activity" class="white-space-nowrap" style="width:25%">Activity <p-sortIcon field="activity"></p-sortIcon></th>
+                <th pSortableColumn="title" class="white-space-nowrap" style="width:25%">Title <p-sortIcon field="title"></p-sortIcon></th>
+                <th pSortableColumn="status" class="white-space-nowrap" style="width:25%">Status <p-sortIcon field="status"></p-sortIcon></th>
+                <th pSortableColumn="createdAt" class="white-space-nowrap" style="width:25%">Created At <p-sortIcon field="createdAt"></p-sortIcon></th>
+                <th pSortableColumn="userId" class="white-space-nowrap" style="width:25%">Created By <p-sortIcon field="userId"></p-sortIcon></th>
+                <th class="white-space-nowrap" style="width:25%">Action</th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-customer>
+        
+        <ng-template pTemplate="body" let-reclamation>
             <tr>
-                <td>{{customer.name}}</td>
+                <td>{{reclamation.title}}</td>
                 <td>
-                    <img src="assets/demo/images/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" class="w-2rem mr-2">
-                    <span class="image-text">{{customer.country.name}}</span>
+                    <mat-icon *ngIf="reclamation.status === 'PENDING'" color="warn" matTooltip="Pending">hourglass_empty</mat-icon>
+                    <mat-icon *ngIf="reclamation.status === 'IN_PROGRESS'" color="accent" matTooltip="In Progress">autorenew</mat-icon>
+                    <mat-icon *ngIf="reclamation.status === 'RESOLVED'" color="primary" style="color: green;" matTooltip="Resolved">check_circle</mat-icon>
+                    <mat-icon *ngIf="reclamation.status === 'REJECTED'" color="warn" matTooltip="Rejected">cancel</mat-icon>
                 </td>
-                <td>{{customer.date | date: 'MM/dd/yyyy'}}</td>
+                <td>{{reclamation.createdAt | date: 'MM/dd/yyyy'}}</td>
                 <td>
-                    <div class="inline-flex align-items-center">
-                        <img [alt]="customer.representative.name" src="assets/demo/images/avatar/{{customer.representative.image}}" class="w-2rem mr-2" />
-                        <span>{{customer.representative.name}}</span>
-                    </div>
+                    <!-- Static name for now -->
+                    Imen Sebteoui
                 </td>
-                <td><p-progressBar [value]="customer.activity" [showValue]="false" [style]="{'height':'.5rem'}"></p-progressBar></td>
+                <td style="display: flex;">
+                    <mat-icon matTooltip="Explore" (click)="explore(reclamation)" style="cursor: pointer;">open_in_new</mat-icon>
+                    <mat-icon matTooltip="Delete" (click)="confirmDelete(reclamation)" style="cursor: pointer;">delete</mat-icon>
+                </td>
             </tr>
         </ng-template>
+        
     </p-table>
+    
+    <!-- Dialog for deletion confirmation -->
+    <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+        <div class="flex align-items-center justify-content-center">
+            <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+            <span>Are you sure you want to delete this reclamation?</span>
+        </div>
+        <ng-template pTemplate="footer">
+            <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
+            <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="deleteSelectedReclamation()"></button>
+        </ng-template>
+    </p-dialog>
 </div>

@@ -18,3 +18,13 @@ export interface Customer {
     activity?: number;
     representative?: Representative;
 }
+
+export interface Reclamations {
+    id ?: string;
+    title : string;
+    description : string;
+    status : any;
+    userId : string;
+    email : string ;
+    createdAt : string;
+}
